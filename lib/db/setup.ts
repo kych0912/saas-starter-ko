@@ -4,8 +4,6 @@ import { promisify } from 'node:util';
 import readline from 'node:readline';
 import crypto from 'node:crypto';
 import path from 'node:path';
-import os from 'node:os';
-
 const execAsync = promisify(exec);
 
 function question(query: string): Promise<string> {
@@ -22,63 +20,8 @@ function question(query: string): Promise<string> {
   );
 }
 
-async function checkStripeCLI() {
-  console.log(
-    'Step 1: Checking if Stripe CLI is installed and authenticated...'
-  );
-  try {
-    await execAsync('stripe --version');
-    console.log('Stripe CLI is installed.');
-
-    // Check if Stripe CLI is authenticated
-    try {
-      await execAsync('stripe config --list');
-      console.log('Stripe CLI is authenticated.');
-    } catch (error) {
-      console.log(
-        'Stripe CLI is not authenticated or the authentication has expired.'
-      );
-      console.log('Please run: stripe login');
-      const answer = await question(
-        'Have you completed the authentication? (y/n): '
-      );
-      if (answer.toLowerCase() !== 'y') {
-        console.log(
-          'Please authenticate with Stripe CLI and run this script again.'
-        );
-        process.exit(1);
-      }
-
-      // Verify authentication after user confirms login
-      try {
-        await execAsync('stripe config --list');
-        console.log('Stripe CLI authentication confirmed.');
-      } catch (error) {
-        console.error(
-          'Failed to verify Stripe CLI authentication. Please try again.'
-        );
-        process.exit(1);
-      }
-    }
-  } catch (error) {
-    console.error(
-      'Stripe CLI is not installed. Please install it and try again.'
-    );
-    console.log('To install Stripe CLI, follow these steps:');
-    console.log('1. Visit: https://docs.stripe.com/stripe-cli');
-    console.log(
-      '2. Download and install the Stripe CLI for your operating system'
-    );
-    console.log('3. After installation, run: stripe login');
-    console.log(
-      'After installation and authentication, please run this setup script again.'
-    );
-    process.exit(1);
-  }
-}
-
 async function getPostgresURL(): Promise<string> {
-  console.log('Step 2: Setting up Postgres');
+  console.log('Step 1: Setting up Postgres');
   const dbChoice = await question(
     'Do you want to use a local Postgres instance with Docker (L) or a remote Postgres instance (R)? (L/R): '
   );
@@ -147,35 +90,28 @@ volumes:
   }
 }
 
-async function getStripeSecretKey(): Promise<string> {
-  console.log('Step 3: Getting Stripe Secret Key');
+async function getPortOneSecretKey(): Promise<string> {
+  console.log('Step 2: Getting PortOne Secret Key');
   console.log(
-    'You can find your Stripe Secret Key at: https://dashboard.stripe.com/test/apikeys'
+    'You can find your PortOne Secret Key at: https://admin.portone.io/integration-v2/manage/api-keys?version=v2'
   );
-  return await question('Enter your Stripe Secret Key: ');
+  return await question('Enter your PortOne Secret Key: ');
 }
 
-async function createStripeWebhook(): Promise<string> {
-  console.log('Step 4: Creating Stripe webhook...');
-  try {
-    const { stdout } = await execAsync('stripe listen --print-secret');
-    const match = stdout.match(/whsec_[a-zA-Z0-9]+/);
-    if (!match) {
-      throw new Error('Failed to extract Stripe webhook secret');
-    }
-    console.log('Stripe webhook created.');
-    return match[0];
-  } catch (error) {
-    console.error(
-      'Failed to create Stripe webhook. Check your Stripe CLI installation and permissions.'
-    );
-    if (os.platform() === 'win32') {
-      console.log(
-        'Note: On Windows, you may need to run this script as an administrator.'
-      );
-    }
-    throw error;
-  }
+async function getPortOneChannelKey(): Promise<string> {
+  console.log('Step 3: Getting PortOne Channel Key');
+  console.log(
+    'You can find your PortOne Channel Key at: https://admin.portone.io/integration-v2/manage/channel'
+  );
+  return await question('Enter your PortOne Channel Key: ');
+}
+
+async function getPortOneStoreId(): Promise<string> {
+  console.log('Step 4: Getting PortOne Store ID');
+  console.log(
+    'You can find your PortOne Store ID at: https://admin.portone.io/integration-v2/manage/channel'
+  );
+  return await question('Enter your PortOne Store ID: ');
 }
 
 function generateAuthSecret(): string {
@@ -194,18 +130,18 @@ async function writeEnvFile(envVars: Record<string, string>) {
 }
 
 async function main() {
-  await checkStripeCLI();
-
   const POSTGRES_URL = await getPostgresURL();
-  const STRIPE_SECRET_KEY = await getStripeSecretKey();
-  const STRIPE_WEBHOOK_SECRET = await createStripeWebhook();
+  const PORTONE_SECRET_KEY = await getPortOneSecretKey();
+  const PORTONE_CHANNEL_KEY = await getPortOneChannelKey();
+  const PORTONE_STORE_ID = await getPortOneStoreId();
   const BASE_URL = 'http://localhost:3000';
   const AUTH_SECRET = generateAuthSecret();
 
   await writeEnvFile({
     POSTGRES_URL,
-    STRIPE_SECRET_KEY,
-    STRIPE_WEBHOOK_SECRET,
+    PORTONE_SECRET_KEY,
+    PORTONE_CHANNEL_KEY,
+    PORTONE_STORE_ID,
     BASE_URL,
     AUTH_SECRET,
   });

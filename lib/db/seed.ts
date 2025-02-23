@@ -1,49 +1,14 @@
 import { stripe } from '../payments/stripe';
 import { db } from './drizzle';
-import { users, teams, teamMembers } from './schema';
+import { users, teams, teamMembers, products, prices } from './schema';
 import { hashPassword } from '@/lib/auth/session';
-
-async function createStripeProducts() {
-  console.log('Creating Stripe products and prices...');
-
-  const baseProduct = await stripe.products.create({
-    name: 'Base',
-    description: 'Base subscription plan',
-  });
-
-  await stripe.prices.create({
-    product: baseProduct.id,
-    unit_amount: 800, // $8 in cents
-    currency: 'usd',
-    recurring: {
-      interval: 'month',
-      trial_period_days: 7,
-    },
-  });
-
-  const plusProduct = await stripe.products.create({
-    name: 'Plus',
-    description: 'Plus subscription plan',
-  });
-
-  await stripe.prices.create({
-    product: plusProduct.id,
-    unit_amount: 1200, // $12 in cents
-    currency: 'usd',
-    recurring: {
-      interval: 'month',
-      trial_period_days: 7,
-    },
-  });
-
-  console.log('Stripe products and prices created successfully.');
-}
 
 async function seed() {
   const email = 'test@test.com';
   const password = 'admin123';
   const passwordHash = await hashPassword(password);
 
+  //test user seed
   const [user] = await db
     .insert(users)
     .values([
@@ -57,6 +22,7 @@ async function seed() {
 
   console.log('Initial user created.');
 
+  //test team seed
   const [team] = await db
     .insert(teams)
     .values({
@@ -64,13 +30,32 @@ async function seed() {
     })
     .returning();
 
+  //test team member seed
   await db.insert(teamMembers).values({
     teamId: team.id,
     userId: user.id,
     role: 'owner',
   });
 
-  await createStripeProducts();
+  //test product seed
+  await db.insert(products).values({
+    id: 'prod_12212058',
+    name: 'Base',
+    description: 'Base subscription plan',
+    active: true,
+  });
+
+  await db.insert(prices).values({
+    id: 'price_12212058',
+    productId: 'prod_12212058',
+    currency: 'usd',
+    unitAmount: '800',
+    trialPeriodDays: 14,
+    interval: 'month',
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
 }
 
 seed()
