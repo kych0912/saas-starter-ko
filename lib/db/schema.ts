@@ -5,6 +5,8 @@ import {
   text,
   timestamp,
   integer,
+  decimal,
+  boolean,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -67,6 +69,36 @@ export const invitations = pgTable('invitations', {
   invitedAt: timestamp('invited_at').notNull().defaultNow(),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
+
+export const products = pgTable('products', {
+  id: varchar('id').primaryKey(), // Product ID
+  name: text('name').notNull(),
+  description: text('description'),
+  active: boolean('active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const prices = pgTable('prices', {
+  id: varchar('id').primaryKey(), // Price ID
+  productId: varchar('product_id').references(() => products.id),
+  currency: varchar('currency').notNull(),
+  unitAmount: decimal('unit_amount').notNull(), // (10000 = 100.00 USD)
+  trialPeriodDays: integer('trial_period_days'), // trial period
+  interval: varchar('interval'), // 'month' or 'year' (for subscription)
+  intervalCount: integer('interval_count'), // interval frequency
+  active: boolean('active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+//1:1 relations between products and prices
+export const pricesRelations = relations(prices, ({ one }) => ({
+  product: one(products, {
+    fields: [prices.productId],
+    references: [products.id],
+  }),
+}));
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
