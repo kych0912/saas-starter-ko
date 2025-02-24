@@ -92,6 +92,36 @@ export const prices = pgTable('prices', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const subscriptions = pgTable('subscriptions', {
+  id: serial('id').primaryKey(),
+  teamId: integer('team_id').references(() => teams.id),
+  priceId: varchar('price_id').references(() => prices.id),
+  productId: varchar('product_id').references(() => products.id),
+  status: varchar('status', { length: 20 }).notNull().default('active'),
+  startDate: timestamp('start_date').defaultNow(),
+  endDate: timestamp('end_date'),
+  lastBillingDate: timestamp('last_billing_date'),
+  nextBillingDate: timestamp('next_billing_date'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+//팀 마다 빌링키
+export const billingKeys = pgTable('billing_keys', {
+  id: serial('id').primaryKey(),
+  teamId: integer('team_id').references(() => teams.id),
+  key: varchar('key', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const billingKeysRelations = relations(billingKeys, ({ one }) => ({
+  team: one(teams, {
+    fields: [billingKeys.teamId],
+    references: [teams.id],
+  }),
+}));
+
 //1:1 relations between products and prices
 export const pricesRelations = relations(prices, ({ one }) => ({
   product: one(products, {

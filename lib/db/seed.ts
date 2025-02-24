@@ -1,6 +1,5 @@
-import { stripe } from '../payments/stripe';
 import { db } from './drizzle';
-import { users, teams, teamMembers, products, prices } from './schema';
+import { users, teams, teamMembers, products, prices, billingKeys } from './schema';
 import { hashPassword } from '@/lib/auth/session';
 
 async function seed() {
@@ -38,14 +37,20 @@ async function seed() {
   });
 
   //test product seed
-  await db.insert(products).values({
+  await db.insert(products).values([{
     id: 'prod_12212058',
     name: 'Base',
     description: 'Base subscription plan',
     active: true,
-  });
+  },{
+    id: 'prod_12212059',
+    name: 'Plus',
+    description: 'Plus subscription plan',
+    active: true, 
+  }]);
 
-  await db.insert(prices).values({
+  //test price seed
+  await db.insert(prices).values([{
     id: 'price_12212058',
     productId: 'prod_12212058',
     currency: 'usd',
@@ -55,7 +60,18 @@ async function seed() {
     active: true,
     createdAt: new Date(),
     updatedAt: new Date(),
-  });
+  },{
+    id: 'price_12212059',
+    productId: 'prod_12212059',
+    currency: 'usd',
+    unitAmount: '1200',
+    trialPeriodDays: 14,
+    interval: 'month',
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }]);
+  
 }
 
 seed()
