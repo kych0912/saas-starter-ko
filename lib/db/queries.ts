@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import { activityLogs, billingKeys, prices, products, teamMembers, teams, users } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -127,3 +127,42 @@ export async function getTeamForUser(userId: number) {
 
   return result?.teamMembers[0]?.team || null;
 }
+
+export async function getProducts(){
+  const result = await db.select({
+    productId: products.id,
+    productName: products.name,
+    productDescription: products.description,
+    productActive: products.active,
+    priceId: prices.id,
+    priceUnitAmount: prices.unitAmount,
+    priceInterval: prices.interval,
+    priceTrialPeriodDays: prices.trialPeriodDays,
+  })
+  .from(products)
+  .innerJoin(prices, eq(products.id, prices.productId))
+  .orderBy(prices.unitAmount);
+  
+  return result;
+}
+
+export async function insertBillingKey(teamId: number, key: string) {
+  console.log('insertBillingKey', teamId, key);
+  
+  const teamBillingKeys = await db
+  .select()
+  .from(billingKeys)
+  .where(eq(billingKeys.teamId, teamId));
+
+  console.log(teamBillingKeys);
+
+  if (teamBillingKeys.length > 0) {
+    return;
+  }
+
+  await db.insert(billingKeys).values({
+    teamId,
+    key,
+  });
+}
+
