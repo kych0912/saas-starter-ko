@@ -11,6 +11,9 @@ importers:
       '@portone/browser-sdk':
         specifier: ^0.0.13
         version: 0.0.13
+      '@portone/server-sdk':
+        specifier: ^0.12.0
+        version: 0.12.0
       '@radix-ui/react-avatar':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -580,6 +583,9 @@ packages:
 
   '@portone/browser-sdk@0.0.13':
     resolution: {integrity: sha512-B74stKPEYGXoVaBrWnQCPAs8N3bPHsHt5fxcunQmNqmEhWn3KWjXS8D6nkq7O15KljJA1qLOBr6bBH7vDP0kCQ==}
+
+  '@portone/server-sdk@0.12.0':
+    resolution: {integrity: sha512-62gRDlrntWFdb7nBu+Y03EAxaG0VtJm/uNtau41CqVZS2noEOUyENZn+JMzSnnwh0to9oiXuxX9Opa2GS3rW9Q==}
 
   '@radix-ui/number@1.1.0':
     resolution: {integrity: sha512-V3gRzhVNU1ldS5XhAPTom1fOIo4ccrjjJgmE+LI2h/WaFpHmx0MQApT+KZHnx8abG6Avtfcz4WoEciMnpFT3HQ==}
@@ -1867,6 +1873,8 @@ snapshots:
     optional: true
 
   '@portone/browser-sdk@0.0.13': {}
+
+  '@portone/server-sdk@0.12.0': {}
 
   '@radix-ui/number@1.1.0': {}
 
