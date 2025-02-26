@@ -8,6 +8,7 @@ import { useActionState } from 'react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember } from '@/app/(login)/actions';
 import { InviteTeamMember } from './invite-team';
+import Link from 'next/link';
 
 type ActionState = {
   error?: string;
@@ -46,11 +47,11 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                       : 'No active subscription'}
                 </p>
               </div>
-              <form action={customerPortalAction}>
+              <Link href="/billing" passHref>
                 <Button type="submit" variant="outline">
                   Manage Subscription
                 </Button>
-              </form>
+              </Link>
             </div>
           </div>
         </CardContent>
