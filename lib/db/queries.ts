@@ -157,6 +157,10 @@ export async function insertBillingKey(teamId: number, key: string) {
   console.log(teamBillingKeys);
 
   if (teamBillingKeys.length > 0) {
+    await db.update(billingKeys).set({
+      key,
+      updatedAt: new Date(),
+    }).where(eq(billingKeys.teamId, teamId));
     return;
   }
 
@@ -164,5 +168,20 @@ export async function insertBillingKey(teamId: number, key: string) {
     teamId,
     key,
   });
+}
+
+export async function getPriceById(priceId: string) {
+  const result = await db.select().from(prices).where(eq(prices.id, priceId));
+  return result[0];
+}
+
+export async function getProductById(productId: string) {
+  const result = await db.select().from(products).where(eq(products.id, productId));
+  return result[0];
+}
+
+export async function getBillingKeysByTeamId(teamId: number) {
+  const result = await db.select().from(billingKeys).where(eq(billingKeys.teamId, teamId));
+  return result;
 }
 

@@ -1,10 +1,10 @@
 'use client';
 
 import { Button } from "@/components/ui/button";    
-import { createBillingKeyAndPayment } from "@/lib/payments/portone";
+import { createBillingKey } from "@/lib/payments/portone";
 
-export function AddCardButton({ priceId, teamId }: { priceId: string, teamId: number }) {
+export function AddCardButton() {
     return <Button onClick={() => {
-        createBillingKeyAndPayment(priceId, window.location.href);
-    }}>Checkout</Button>;
+        createBillingKey();
+    }}>{"ADD PAYMENT METHOD"}</Button>;
 }
