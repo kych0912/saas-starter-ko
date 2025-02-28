@@ -26,9 +26,9 @@ export const teams = pgTable('teams', {
   name: varchar('name', { length: 100 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-  stripeCustomerId: text('stripe_customer_id').unique(),
-  stripeSubscriptionId: text('stripe_subscription_id').unique(),
-  stripeProductId: text('stripe_product_id'),
+  customerId: text('customer_id').unique(),
+  subscriptionId: text('subscription_id').unique(),
+  productId: text('product_id'),
   planName: varchar('plan_name', { length: 50 }),
   subscriptionStatus: varchar('subscription_status', { length: 20 }),
 });
@@ -102,6 +102,18 @@ export const subscriptions = pgTable('subscriptions', {
   endDate: timestamp('end_date'),
   lastBillingDate: timestamp('last_billing_date'),
   nextBillingDate: timestamp('next_billing_date'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+//checkout session information
+export const session = pgTable('session', {
+  id: serial('id').primaryKey(),
+  teamId: integer('team_id').references(() => teams.id),
+  scheduleId: varchar('schedule_id').notNull(),
+  customerId: varchar('customer_id').notNull(),
+  productId: varchar('product_id').references(() => products.id),
+  priceId: varchar('price_id').references(() => prices.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
