@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, billingKeys, prices, products, teamMembers, teams, users } from './schema';
+import { activityLogs, billingKeys, prices, products, session, teamMembers, teams, users } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -36,11 +36,11 @@ export async function getUser() {
   return user[0];
 }
 
-export async function getTeamByStripeCustomerId(customerId: string) {
+export async function getTeamByCustomerId(customerId: string) {
   const result = await db
     .select()
     .from(teams)
-    .where(eq(teams.stripeCustomerId, customerId))
+    .where(eq(teams.customerId, customerId))
     .limit(1);
 
   return result.length > 0 ? result[0] : null;
@@ -180,8 +180,27 @@ export async function getProductById(productId: string) {
   return result[0];
 }
 
-export async function getBillingKeysByTeamId(teamId: number) {
+type billingKey = typeof billingKeys.$inferSelect;
+
+export async function getBillingKeysByTeamId(teamId: number): Promise<billingKey[] | []> {
   const result = await db.select().from(billingKeys).where(eq(billingKeys.teamId, teamId));
   return result;
 }
 
+export async function createCheckoutSession(
+  teamId: number, 
+  customerId: string, 
+  scheduleId: string,
+  productId: string, 
+  priceId: string): Promise<typeof session.$inferSelect> {
+
+  const _session = await db.insert(session).values({
+    teamId,
+    customerId,
+    scheduleId,
+    productId,
+    priceId,
+  }).returning();
+
+  return _session[0];
+}

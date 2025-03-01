@@ -1,114 +1,69 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
-import { Team } from '@/lib/db/schema';
+import { products, Team } from '@/lib/db/schema';
 import {
-  getTeamByStripeCustomerId,
+  getTeamByCustomerId,
   getUser,
-  updateTeamSubscription
+  updateTeamSubscription,
+  getPriceById,
+  createCheckoutSession,
+  getProductById
 } from '@/lib/db/queries';
+import { BillingKeyInfo } from '@portone/server-sdk/payment/billingKey';
+import { db } from '../db/drizzle';
+import { eq } from 'drizzle-orm';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia'
-});
-
-export async function createCheckoutSession({
-  team,
-  priceId
+export async function createPayMentsByBillingKey({
+  team,   
+  priceId,
+  billingKey
 }: {
-  team: Team | null;
+  team: Team;
   priceId: string;
-}) {
-  const user = await getUser();
+  billingKey: string;
+}){
+  const price = await getPriceById(priceId);
+  const paymentId = `${Date.now()}-${team.id}-${price.id}`;
 
-  if (!team || !user) {
+  if (!team) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
   }
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1
-      }
-    ],
-    mode: 'subscription',
-    success_url: `${process.env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.BASE_URL}/pricing`,
-    customer: team.stripeCustomerId || undefined,
-    client_reference_id: user.id.toString(),
-    allow_promotion_codes: true,
-    subscription_data: {
-      trial_period_days: 14
-    }
-  });
-
-  redirect(session.url!);
-}
-
-export async function createCustomerPortalSession(team: Team) {
-  if (!team.stripeCustomerId || !team.stripeProductId) {
-    redirect('/pricing');
-  }
-
-  let configuration: Stripe.BillingPortal.Configuration;
-  const configurations = await stripe.billingPortal.configurations.list();
-
-  if (configurations.data.length > 0) {
-    configuration = configurations.data[0];
-  } else {
-    const product = await stripe.products.retrieve(team.stripeProductId);
-    if (!product.active) {
-      throw new Error("Team's product is not active in Stripe");
-    }
-
-    const prices = await stripe.prices.list({
-      product: product.id,
-      active: true
-    });
-    if (prices.data.length === 0) {
-      throw new Error("No active prices found for the team's product");
-    }
-
-    configuration = await stripe.billingPortal.configurations.create({
-      business_profile: {
-        headline: 'Manage your subscription'
-      },
-      features: {
-        subscription_update: {
-          enabled: true,
-          default_allowed_updates: ['price', 'quantity', 'promotion_code'],
-          proration_behavior: 'create_prorations',
-          products: [
-            {
-              product: product.id,
-              prices: prices.data.map((price) => price.id)
-            }
-          ]
+  try {
+      const response = await fetch(
+        `https://api.portone.io/payments/${encodeURIComponent(paymentId)}/billing-key`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `PortOne ${process.env.PORTONE_SECRET_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            billingKey,
+            orderName: "월간 이용권 정기결제",
+            customer: {
+              id: team.id.toString(),
+              email: "kyt031522@gmail.com",
+              name: {
+                full:team.name,
+              }
+            },
+            amount: {
+              total: Number(price.unitAmount) * 100,
+            },
+            currency: "KRW",
+          }),
         },
-        subscription_cancel: {
-          enabled: true,
-          mode: 'at_period_end',
-          cancellation_reason: {
-            enabled: true,
-            options: [
-              'too_expensive',
-              'missing_features',
-              'switched_service',
-              'unused',
-              'other'
-            ]
-          }
-        }
-      }
-    });
-  }
+      );
 
-  return stripe.billingPortal.sessions.create({
-    customer: team.stripeCustomerId,
-    return_url: `${process.env.BASE_URL}/dashboard`,
-    configuration: configuration.id
-  });
+      console.log(await response.json());
+      if(!response.ok){
+        throw new Error("Payment failed");
+      }
+  } catch (error) {
+    console.error('Error processing payment:', error);
+    redirect(`/pricing?error=payment_failed`);
+  }
 }
 
 export async function handleSubscriptionChange(
@@ -118,7 +73,7 @@ export async function handleSubscriptionChange(
   const subscriptionId = subscription.id;
   const status = subscription.status;
 
-  const team = await getTeamByStripeCustomerId(customerId);
+  const team = await getTeamByCustomerId(customerId);
 
   if (!team) {
     console.error('Team not found for Stripe customer:', customerId);
@@ -143,37 +98,165 @@ export async function handleSubscriptionChange(
   }
 }
 
-export async function getStripePrices() {
-  const prices = await stripe.prices.list({
-    expand: ['data.product'],
-    active: true,
-    type: 'recurring'
-  });
-
-  return prices.data.map((price) => ({
-    id: price.id,
-    productId:
-      typeof price.product === 'string' ? price.product : price.product.id,
-    unitAmount: price.unit_amount,
-    currency: price.currency,
-    interval: price.recurring?.interval,
-    trialPeriodDays: price.recurring?.trial_period_days
-  }));
+export async function getBillingKeyInfo(billingKey: string): Promise<
+  BillingKeyInfo
+  >{
+  try {
+    const response = await fetch(`https://api.portone.io/billing-keys/${billingKey}`, {
+      headers: {
+        Authorization: `PortOne ${process.env.PORTONE_SECRET_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('빌링키 정보 조회 중 오류 발생:', error);
+    throw error;
+  }
 }
 
-export async function getStripeProducts() {
-  const products = await stripe.products.list({
-    active: true,
-    expand: ['data.default_price']
+export async function createPortOneCheckout({
+  team,
+  priceId
+}: {
+  team: Team;
+  priceId: string;
+}) {
+  const user = await getUser();
+
+  if (!team || !user) {
+    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+  }
+
+  redirect(`/checkout?teamId=${team.id}&priceId=${priceId}`)
+}
+
+interface CreateCheckoutScheduleResponse {
+  schedule: {
+    id: string;
+  }
+}
+
+export async function createCheckoutSchedule({
+  team,
+  priceId,
+  billingKey,
+  needTrial = false
+}:{
+  team: Team,
+  priceId: string,
+  billingKey: string,
+  needTrial: boolean
+}): Promise<CreateCheckoutScheduleResponse>{
+  const price = await getPriceById(priceId);
+  const trialPeriod = needTrial && price.trialPeriodDays ? price.trialPeriodDays : 0;
+  const teamId = team.id.toString();
+  const paymentId = `${Date.now()}-${team.id}-${price.id}`;
+
+  try{
+    const response = await fetch(`https://api.portone.io/payments/${encodeURIComponent(paymentId)}/schedule`,
+    {
+      method: "POST",
+    headers: {
+      Authorization: `PortOne ${process.env.PORTONE_SECRET_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      payment: {
+        billingKey: billingKey,
+        orderName: "월간 이용권 정기결제",
+        customer: {
+          id: teamId,
+          name: {
+            full: team.name,
+          }
+        },
+        amount: {
+          total: Number(price.unitAmount) * 100,
+        },
+        currency: "USD",
+      },
+      timeToPay: new Date(Date.now() + 1000 * 60 * 60 * 24 * trialPeriod).toISOString(),
+    }),
   });
 
-  return products.data.map((product) => ({
-    id: product.id,
-    name: product.name,
-    description: product.description,
-    defaultPriceId:
-      typeof product.default_price === 'string'
-        ? product.default_price
-        : product.default_price?.id
-  }));
+    const data = await response.json();
+    console.log(data);
+  if(!response.ok){
+    throw new Error("Failed to create checkout schedule");
+  }
+
+    return data;
+  } catch (error) {
+    console.error('Error creating checkout schedule:', error);
+    throw error;
+  }
+}
+
+
+// create checkout and create schedule
+// insert data to subscription table
+// get subscription id 
+export async function createCheckoutSubscription({
+  team,
+  priceId,
+  billingKey
+}:{
+  team: Team;
+  priceId: string;
+  billingKey: string;
+}){
+  const price = await getPriceById(priceId);
+
+  if(!price.productId){
+    redirect(`/pricing?error=product_not_found`);
+  }
+
+  const product = await getProductById(price.productId);
+  const shouldTrial = team.shouldTrial;
+  const user = await getUser();
+  //만약 trial을 진행했다면 결제 진행 후 schedule 생성
+
+  if(!user) {
+    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+  }
+
+  if(shouldTrial){
+    await createPayMentsByBillingKey({
+      team,
+      priceId,
+      billingKey
+    });
+
+    const schedule = await createCheckoutSchedule({
+      team,
+      priceId,
+      billingKey,
+      needTrial: true
+    });
+
+    const scheduleId = schedule.schedule.id;
+
+    const session = await createCheckoutSession(team.id, user.id.toString(), scheduleId, product.id, priceId);
+    redirect(`/api/portone/checkout?sessionId=${session.id}`)
+  }
+
+  //진행하지 않았다면 trial 기간 만료 후 결제 schedule 생성
+  const schedule = await createCheckoutSchedule({
+    team,
+    priceId,
+    billingKey,
+    needTrial: false
+  });
+
+  const scheduleId = schedule.schedule.id;
+  const session = await createCheckoutSession(team.id, user.id.toString(), scheduleId, price.id, priceId);
+
+  redirect(`/api/portone/checkout?sessionId=${session.id}`)
 }
