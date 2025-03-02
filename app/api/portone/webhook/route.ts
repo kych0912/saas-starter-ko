@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       console.log(webhook);
       console.log(paymentResponse);
 
-      if (Number(price.unitAmount) === amount.total) {
+      if (Number(price.unitAmount) * 100 === amount.total) {
         console.log(_session);
         console.log(webhook);
         console.log(paymentResponse);
