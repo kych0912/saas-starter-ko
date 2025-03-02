@@ -8,7 +8,7 @@ import { session, teams } from "@/lib/db/schema";
 import { createCheckoutSchedule } from "@/lib/payments/portone-server";
 
 const portone = PortOne.PortOneClient({
-    secret: process.env.PORTONE_WEBHOOK_SECRET!,
+    secret: process.env.PORTONE_SECRET_KEY!,
 });
 
 //Verify Payment Webhook
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     // 결제 관련 정보일 경우만 처리합니다.
     if ( "data" in webhook && "paymentId" in webhook.data) {
       const { paymentId } = webhook.data;
-      const paymentResponse = await portone.payment.getPayment({ paymentId });
+      const paymentResponse = await portone.payment.getPayment({ paymentId: paymentId });
 
       if (paymentResponse === null || !("id" in paymentResponse)) {
         // 웹훅 정보와 일치하는 결제건이 실제로는 존재하지 않는 경우
