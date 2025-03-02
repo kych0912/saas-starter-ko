@@ -30,7 +30,8 @@ export const teams = pgTable('teams', {
   subscriptionId: text('subscription_id').unique(),
   productId: text('product_id'),
   planName: varchar('plan_name', { length: 50 }),
-  subscriptionStatus: varchar('subscription_status', { length: 20 }),
+  subscriptionStatus: varchar('subscription_status', { length: 20 }), // active, inactive, canceled, unpaid
+  shouldTrial: boolean('should_trial').default(true),
 });
 
 export const teamMembers = pgTable('team_members', {
@@ -109,11 +110,11 @@ export const subscriptions = pgTable('subscriptions', {
 //checkout session information
 export const session = pgTable('session', {
   id: serial('id').primaryKey(),
-  teamId: integer('team_id').references(() => teams.id),
+  teamId: integer('team_id').notNull().references(() => teams.id),
   scheduleId: varchar('schedule_id').notNull(),
   customerId: varchar('customer_id').notNull(),
-  productId: varchar('product_id').references(() => products.id),
-  priceId: varchar('price_id').references(() => prices.id),
+  productId: varchar('product_id').notNull().references(() => products.id),
+  priceId: varchar('price_id').notNull().references(() => prices.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
