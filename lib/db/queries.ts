@@ -180,6 +180,11 @@ export async function getProductById(productId: string) {
   return result[0];
 }
 
+export async function getTeamById(teamId: number) {
+  const result = await db.select().from(teams).where(eq(teams.id, teamId));
+  return result[0];
+}
+
 type billingKey = typeof billingKeys.$inferSelect;
 
 export async function getBillingKeysByTeamId(teamId: number): Promise<billingKey[] | []> {
@@ -190,17 +195,19 @@ export async function getBillingKeysByTeamId(teamId: number): Promise<billingKey
 export async function createCheckoutSession(
   teamId: number, 
   customerId: string, 
-  scheduleId: string,
   productId: string, 
-  priceId: string
+  priceId: string,
+  paymentId: string,
+  billingKey: string
 ): Promise<typeof session.$inferSelect> {
 
   const _session = await db.insert(session).values({
     teamId,
     customerId,
-    scheduleId,
     productId,
     priceId,
+    paymentId,
+    billingKey
   }).returning();
 
   return _session[0];

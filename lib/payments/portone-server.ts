@@ -1,29 +1,33 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
-import { products, Team } from '@/lib/db/schema';
+import { products, teams, Team } from '@/lib/db/schema';
 import {
   getTeamByCustomerId,
   getUser,
   updateTeamSubscription,
   getPriceById,
   createCheckoutSession,
-  getProductById
+  getProductById,
+  getTeamById
 } from '@/lib/db/queries';
 import { BillingKeyInfo } from '@portone/server-sdk/payment/billingKey';
 import { db } from '../db/drizzle';
 import { eq } from 'drizzle-orm';
+import { PayWithBillingKeyResponse } from '@portone/server-sdk/payment';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function createPayMentsByBillingKey({
   team,   
   priceId,
-  billingKey
+  billingKey,
+  paymentId
 }: {
   team: Team;
   priceId: string;
   billingKey: string;
+  paymentId: string;
 }){
   const price = await getPriceById(priceId);
-  const paymentId = `${Date.now()}-${team.id}-${price.id}`;
 
   if (!team) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
@@ -56,10 +60,13 @@ export async function createPayMentsByBillingKey({
         },
       );
 
-      console.log(await response.json());
+      const data: PayWithBillingKeyResponse = await response.json();
+      console.log(data);
       if(!response.ok){
         throw new Error("Payment failed");
       }
+
+      return data;
   } catch (error) {
     console.error('Error processing payment:', error);
     redirect(`/pricing?error=payment_failed`);
@@ -111,7 +118,7 @@ export async function getBillingKeyInfo(billingKey: string): Promise<
     });
     
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -146,19 +153,20 @@ interface CreateCheckoutScheduleResponse {
 }
 
 export async function createCheckoutSchedule({
-  team,
+  teamId,
   priceId,
   billingKey,
-  period
+  period,
+  paymentId
 }:{
-  team: Team,
+  teamId: string,
   priceId: string,
   billingKey: string,
-  period: number
+  period: number,
+  paymentId: string
 }): Promise<CreateCheckoutScheduleResponse>{
   const price = await getPriceById(priceId);
-  const teamId = team.id.toString();
-  const paymentId = `${Date.now()}-${team.id}-${price.id}`;
+  const team = await getTeamById(Number(teamId));
 
   try{
     const response = await fetch(`https://api.portone.io/payments/${encodeURIComponent(paymentId)}/schedule`,
@@ -181,7 +189,7 @@ export async function createCheckoutSchedule({
         amount: {
           total: Number(price.unitAmount) * 100,
         },
-        currency: "USD",
+        currency: "KRW",
       },
       timeToPay: new Date(Date.now() + 1000 * 60 * 60 * 24 * period).toISOString(),
     }),
@@ -201,9 +209,16 @@ export async function createCheckoutSchedule({
 }
 
 
-// create checkout and create schedule
-// insert data to subscription table
-// get subscription id 
+/**
+ * plan 결제 후 결제 정보 생성
+ * 
+ * 1. 결제 진행
+ * 
+ * 2-1. 만약 결제되면 checkout api로 redirect후 session 검증
+ * 
+ * 2-2. 만약 trial일 경우 team 정보 업데이트 후 session 생성, checkout api로 redirect
+ */
+
 export async function createCheckoutSubscription({
   team,
   priceId,
@@ -223,57 +238,63 @@ export async function createCheckoutSubscription({
   const shouldTrial = team.shouldTrial;
   const user = await getUser();
 
-  //만약 trial을 진행했다면 결제 진행 후 schedule 생성
-
+  //만약 trial을 진행했다면 결제 진행 후 session 생성
   if(!user) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
   }
 
   if(!shouldTrial){
-    const period = price.interval === 'month' ? 30 : 365;
+    const paymentId = uuidv4();
 
+    //결제 진행
     await createPayMentsByBillingKey({
       team,
       priceId,
-      billingKey
-    });
-
-    const schedule = await createCheckoutSchedule({
-      team,
-      priceId,
       billingKey,
-      period
+      paymentId
     });
 
-    const scheduleId = schedule.schedule.id;
-
+    //session 생성
     const session = await createCheckoutSession(
       team.id, 
       user.id.toString(), 
-      scheduleId, 
       product.id, 
-      priceId
+      priceId,
+      paymentId,
+      billingKey
     );
+
     redirect(`/api/portone/checkout?sessionId=${session.id}`)
   }
 
-  //진행하지 않았다면 trial 기간 만료 후 결제 schedule 생성
+  //진행하지 않았다면 schedule 생성 후 team 정보 업데이트
   const period = price.trialPeriodDays || 14;
-  const schedule = await createCheckoutSchedule({
-    team,
+  const paymentId = uuidv4();
+  await createCheckoutSchedule({
+    teamId: team.id.toString(),
     priceId,
     billingKey,
-    period
+    period,
+    paymentId
   });
 
-  const scheduleId = schedule.schedule.id;
+  //session 생성
   const session = await createCheckoutSession(
     team.id, 
     user.id.toString(), 
-    scheduleId, 
     product.id, 
-    priceId
+    priceId,
+    paymentId,
+    billingKey
   );
 
-  redirect(`/api/portone/checkout?sessionId=${session.id}`)
+  //team 정보 업데이트
+  await db.update(teams).set({
+    subscriptionStatus: 'trial',
+    productId: product.id,
+    planName: product.name,
+    shouldTrial: false
+  }).where(eq(teams.id, team.id));
+
+  redirect(`/api/portone/checkout?sessionId=${session.id}`);
 }
