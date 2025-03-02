@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
       body,
       headers,
     );
+    console.log(webhook);
 
     // 결제 관련 정보일 경우만 처리합니다.
     if ( "data" in webhook && "paymentId" in webhook.data) {
@@ -38,14 +39,14 @@ export async function POST(req: NextRequest) {
       }
 
       const { status, amount, scheduleId } = paymentResponse;
-
+      console.log(paymentResponse);
       // 예약 결제가 아닐 경우 skip
       if(!scheduleId){
         return;
       }
       
       const _session = await db.select().from(session).where(eq(session.scheduleId, scheduleId));
-      
+      console.log(_session);
       if(!_session){
         return NextResponse.json(
           { message: "Session not found" }, 
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
               subscriptionId: scheduleId,
               productId: _session[0].productId,
               planName: product.name,
+              shouldTrial:false,
             }).where(eq(teams.id, _session[0].teamId));
             break;
           }

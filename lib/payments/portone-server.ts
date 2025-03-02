@@ -102,6 +102,7 @@ export async function getBillingKeyInfo(billingKey: string): Promise<
   BillingKeyInfo
   >{
   try {
+    console.log(process.env.PORTONE_SECRET_KEY);
     const response = await fetch(`https://api.portone.io/billing-keys/${billingKey}`, {
       headers: {
         Authorization: `PortOne ${process.env.PORTONE_SECRET_KEY}`,
@@ -109,11 +110,12 @@ export async function getBillingKeyInfo(billingKey: string): Promise<
       },
     });
     
+    const data = await response.json();
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
-    const data = await response.json();
+
     return data;
   } catch (error) {
     console.error('빌링키 정보 조회 중 오류 발생:', error);
