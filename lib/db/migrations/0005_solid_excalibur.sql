@@ -1,0 +1,1 @@
+ALTER TABLE "teams" ADD COLUMN "should_trial" boolean DEFAULT true;
