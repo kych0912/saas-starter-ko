@@ -114,13 +114,21 @@ async function getPortOneStoreId(): Promise<string> {
   return await question('Enter your PortOne Store ID: ');
 }
 
+async function getPortOneWebhookSecret(): Promise<string> {
+  console.log('Step 5: Getting PortOne Webhook Secret');
+  console.log(
+    'You can find your PortOne Webhook Secret at: https://admin.portone.io/integration-v2/manage/webhook'
+  );
+  return await question('Enter your PortOne Webhook Secret: ');
+}
+
 function generateAuthSecret(): string {
-  console.log('Step 5: Generating AUTH_SECRET...');
+  console.log('Step 6: Generating AUTH_SECRET...');
   return crypto.randomBytes(32).toString('hex');
 }
 
 async function writeEnvFile(envVars: Record<string, string>) {
-  console.log('Step 6: Writing environment variables to .env');
+  console.log('Step 7: Writing environment variables to .env');
   const envContent = Object.entries(envVars)
     .map(([key, value]) => `${key}=${value}`)
     .join('\n');
@@ -133,7 +141,8 @@ async function main() {
   const POSTGRES_URL = await getPostgresURL();
   const PORTONE_SECRET_KEY = await getPortOneSecretKey();
   const PORTONE_CHANNEL_KEY = await getPortOneChannelKey();
-  const PORTONE_STORE_ID = await getPortOneStoreId();
+  const NEXT_PUBLIC_PORTONE_STORE_ID = await getPortOneStoreId();
+  const PORTONE_WEBHOOK_SECRET = await getPortOneWebhookSecret();
   const BASE_URL = 'http://localhost:3000';
   const AUTH_SECRET = generateAuthSecret();
 
@@ -141,7 +150,8 @@ async function main() {
     POSTGRES_URL,
     PORTONE_SECRET_KEY,
     PORTONE_CHANNEL_KEY,
-    PORTONE_STORE_ID,
+    NEXT_PUBLIC_PORTONE_STORE_ID,
+    PORTONE_WEBHOOK_SECRET,
     BASE_URL,
     AUTH_SECRET,
   });

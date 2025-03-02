@@ -1,5 +1,5 @@
 import { db } from './drizzle';
-import { users, teams, teamMembers, products, prices, billingKeys } from './schema';
+import { users, teams, teamMembers, products, prices } from './schema';
 import { hashPassword } from '@/lib/auth/session';
 
 async function seed() {
