@@ -53,6 +53,10 @@ export async function POST(req: NextRequest) {
       const price = await getPriceById(_session[0].priceId);
       const product = await getProductById(_session[0].productId);
 
+      console.log(_session);
+      console.log(webhook);
+      console.log(paymentResponse);
+      
       if (Number(price.unitAmount) === amount.total) {
         console.log(_session);
         console.log(webhook);
