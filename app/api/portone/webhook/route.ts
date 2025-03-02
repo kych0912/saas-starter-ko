@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
       "webhook-signature": req.headers.get("webhook-signature")!,
     };
 
+    console.log(headers);
     // 웹훅 메시지를 검증합니다.
     const webhook = await PortOne.Webhook.verify(
       process.env.PORTONE_WEBHOOK_SECRET!,
