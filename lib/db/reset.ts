@@ -9,6 +9,7 @@ async function resetDatabase() {
   await db.delete(schema.invitations);
   await db.delete(schema.billingKeys);
   await db.delete(schema.teamMembers);
+  await db.delete(schema.session);
   await db.delete(schema.teams);
   await db.delete(schema.users);
   await db.delete(schema.prices);

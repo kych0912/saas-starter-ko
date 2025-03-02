@@ -30,7 +30,7 @@ export const teams = pgTable('teams', {
   subscriptionId: text('subscription_id').unique(),
   productId: text('product_id'),
   planName: varchar('plan_name', { length: 50 }),
-  subscriptionStatus: varchar('subscription_status', { length: 20 }), // active, inactive, canceled, unpaid
+  subscriptionStatus: varchar('subscription_status', { length: 20 }), // active, inactive, canceled, unpaid, trial
   shouldTrial: boolean('should_trial').default(true),
 });
 
@@ -110,8 +110,9 @@ export const subscriptions = pgTable('subscriptions', {
 //checkout session information
 export const session = pgTable('session', {
   id: serial('id').primaryKey(),
+  paymentId: varchar('payment_id').notNull(),
+  billingKey: varchar('billing_key', { length: 255 }).notNull(),
   teamId: integer('team_id').notNull().references(() => teams.id),
-  scheduleId: varchar('schedule_id').notNull(),
   customerId: varchar('customer_id').notNull(),
   productId: varchar('product_id').notNull().references(() => products.id),
   priceId: varchar('price_id').notNull().references(() => prices.id),

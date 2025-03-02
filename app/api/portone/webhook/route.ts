@@ -5,6 +5,7 @@ import { getSessionById, getPriceById, getProductById } from "@/lib/db/queries";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { session, teams } from "@/lib/db/schema";
+import { createCheckoutSchedule } from "@/lib/payments/portone-server";
 
 const portone = PortOne.PortOneClient({
     secret: process.env.PORTONE_WEBHOOK_SECRET!,
@@ -20,14 +21,12 @@ export async function POST(req: NextRequest) {
       "webhook-signature": req.headers.get("webhook-signature")!,
     };
 
-    console.log(headers);
     // 웹훅 메시지를 검증합니다.
     const webhook = await PortOne.Webhook.verify(
       process.env.PORTONE_WEBHOOK_SECRET!,
       body,
       headers,
     );
-    console.log(webhook);
 
     // 결제 관련 정보일 경우만 처리합니다.
     if ( "data" in webhook && "paymentId" in webhook.data) {
@@ -39,15 +38,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Payment not found" }, { status: 200 });
       }
 
-      const { status, amount, scheduleId } = paymentResponse;
-      console.log(paymentResponse);
-      // 예약 결제가 아닐 경우 skip
-      if(!scheduleId){
-        return;
-      }
+      const { status, amount } = paymentResponse;
+      const pyamentId = webhook.data.paymentId;
       
-      const _session = await db.select().from(session).where(eq(session.scheduleId, scheduleId));
-      console.log(_session);
+      const _session = await db.select().from(session).where(eq(session.paymentId, pyamentId));
+
       if(!_session){
         return NextResponse.json(
           { message: "Session not found" }, 
@@ -61,9 +56,19 @@ export async function POST(req: NextRequest) {
       if (Number(price.unitAmount) === amount.total) {
         switch (status) {
           case "PAID": {
+            //schedule 생성
+            const response = await createCheckoutSchedule({
+              teamId: _session[0].teamId.toString(),
+              priceId: _session[0].priceId,
+              billingKey: _session[0].billingKey,
+              period: price.trialPeriodDays || 30,
+              paymentId: _session[0].paymentId
+            });
+
+            //team 정보 업데이트
             await db.update(teams).set({
               subscriptionStatus: 'active',
-              subscriptionId: scheduleId,
+              subscriptionId: response.schedule.id,
               productId: _session[0].productId,
               planName: product.name,
               shouldTrial:false,

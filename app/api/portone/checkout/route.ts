@@ -32,12 +32,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/pricing?error=no_team', request.url));
   }
 
-  const scheduleId = _session[0].scheduleId;
+  const paymentId = _session[0].paymentId;
   const productId = _session[0].productId;
   const priceId = _session[0].priceId;
 
-  if(!scheduleId || !productId || !priceId){
-    return NextResponse.redirect(new URL('/pricing?error=no_scheduleId', request.url));
+  if(!paymentId || !productId || !priceId){
+    return NextResponse.redirect(new URL('/pricing?error=no_verify_session', request.url));
   }
 
   return NextResponse.redirect(new URL(`/dashboard`, request.url));
