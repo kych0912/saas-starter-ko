@@ -54,6 +54,9 @@ export async function POST(req: NextRequest) {
       const product = await getProductById(_session[0].productId);
 
       if (Number(price.unitAmount) === amount.total) {
+        console.log(_session);
+        console.log(webhook);
+        console.log(paymentResponse);
         switch (status) {
           case "PAID": {
             //schedule 생성
