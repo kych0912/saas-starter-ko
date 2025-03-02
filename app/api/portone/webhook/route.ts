@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       body,
       headers,
     );
+    console.log(webhook);
 
     // 결제 관련 정보일 경우만 처리합니다.
     if ( "data" in webhook && "paymentId" in webhook.data) {
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
       console.log(_session);
       console.log(webhook);
       console.log(paymentResponse);
-      
+
       if (Number(price.unitAmount) === amount.total) {
         console.log(_session);
         console.log(webhook);
