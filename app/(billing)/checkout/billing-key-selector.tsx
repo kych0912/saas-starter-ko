@@ -1,5 +1,5 @@
 import { billingKeys } from '@/lib/db/schema'
-import { getBillingKeyInfo } from '@/lib/payments/stripe';
+import { getBillingKeyInfo } from '@/lib/payments/portone-server';
 import { Card } from '@portone/server-sdk/common';
 type BillingKey = typeof billingKeys.$inferSelect;
 
