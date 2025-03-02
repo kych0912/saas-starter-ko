@@ -1,6 +1,3 @@
-// import { checkoutAction } from '@/lib/payments/actions';
-import { Check } from 'lucide-react';
-import { SubmitButton } from './submit-button';
 import { getProducts } from '@/lib/db/queries';
 import PricingCard from './PricingCard';
 
