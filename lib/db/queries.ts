@@ -192,7 +192,8 @@ export async function createCheckoutSession(
   customerId: string, 
   scheduleId: string,
   productId: string, 
-  priceId: string): Promise<typeof session.$inferSelect> {
+  priceId: string
+): Promise<typeof session.$inferSelect> {
 
   const _session = await db.insert(session).values({
     teamId,
@@ -204,3 +205,9 @@ export async function createCheckoutSession(
 
   return _session[0];
 }
+
+export async function getSessionById(sessionId: number) {
+  const result = await db.select().from(session).where(eq(session.id, sessionId));
+  return result[0];
+}
+

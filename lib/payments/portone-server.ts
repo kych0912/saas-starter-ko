@@ -147,15 +147,14 @@ export async function createCheckoutSchedule({
   team,
   priceId,
   billingKey,
-  needTrial = false
+  period
 }:{
   team: Team,
   priceId: string,
   billingKey: string,
-  needTrial: boolean
+  period: number
 }): Promise<CreateCheckoutScheduleResponse>{
   const price = await getPriceById(priceId);
-  const trialPeriod = needTrial && price.trialPeriodDays ? price.trialPeriodDays : 0;
   const teamId = team.id.toString();
   const paymentId = `${Date.now()}-${team.id}-${price.id}`;
 
@@ -182,7 +181,7 @@ export async function createCheckoutSchedule({
         },
         currency: "USD",
       },
-      timeToPay: new Date(Date.now() + 1000 * 60 * 60 * 24 * trialPeriod).toISOString(),
+      timeToPay: new Date(Date.now() + 1000 * 60 * 60 * 24 * period).toISOString(),
     }),
   });
 
@@ -221,13 +220,16 @@ export async function createCheckoutSubscription({
   const product = await getProductById(price.productId);
   const shouldTrial = team.shouldTrial;
   const user = await getUser();
+
   //만약 trial을 진행했다면 결제 진행 후 schedule 생성
 
   if(!user) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
   }
 
-  if(shouldTrial){
+  if(!shouldTrial){
+    const period = price.interval === 'month' ? 30 : 365;
+
     await createPayMentsByBillingKey({
       team,
       priceId,
@@ -238,25 +240,38 @@ export async function createCheckoutSubscription({
       team,
       priceId,
       billingKey,
-      needTrial: true
+      period
     });
 
     const scheduleId = schedule.schedule.id;
 
-    const session = await createCheckoutSession(team.id, user.id.toString(), scheduleId, product.id, priceId);
+    const session = await createCheckoutSession(
+      team.id, 
+      user.id.toString(), 
+      scheduleId, 
+      product.id, 
+      priceId
+    );
     redirect(`/api/portone/checkout?sessionId=${session.id}`)
   }
 
   //진행하지 않았다면 trial 기간 만료 후 결제 schedule 생성
+  const period = price.trialPeriodDays || 14;
   const schedule = await createCheckoutSchedule({
     team,
     priceId,
     billingKey,
-    needTrial: false
+    period
   });
 
   const scheduleId = schedule.schedule.id;
-  const session = await createCheckoutSession(team.id, user.id.toString(), scheduleId, price.id, priceId);
+  const session = await createCheckoutSession(
+    team.id, 
+    user.id.toString(), 
+    scheduleId, 
+    product.id, 
+    priceId
+  );
 
   redirect(`/api/portone/checkout?sessionId=${session.id}`)
 }
