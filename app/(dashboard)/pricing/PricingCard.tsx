@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { SubmitButton } from './submit-button';
-import { checkoutAction } from '@/lib/payments/actions';
+import { createPortOneCheckoutAction } from '@/lib/payments/actions';
 
 export default function PricingCard({
     name,
@@ -38,9 +38,8 @@ export default function PricingCard({
             </li>
           ))}
         </ul>
-        <form action={checkoutAction}>
+        <form action={createPortOneCheckoutAction}>
           <input type="hidden" name="priceId" value={priceId} />
-          <input type="hidden" name="billingKey" value="" />
           <SubmitButton />
         </form>
       </div>
