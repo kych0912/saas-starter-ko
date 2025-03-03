@@ -31,15 +31,15 @@ export async function createPayMentsByBillingKey({
   const user = await getUser();
 
   if(!user){
-    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+    throw new Error("User not found");
   }
 
   if (!team) {
-    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+    throw new Error("Team not found");
   }
 
   if(!price.productId){
-    redirect(`/pricing?error=product_not_found`);
+    throw new Error("Product not found");
   }
 
   try {
@@ -87,7 +87,7 @@ export async function createPayMentsByBillingKey({
       return [data, session];
   } catch (error) {
     console.error('Error processing payment:', error);
-    redirect(`/pricing?error=payment_failed`);
+    throw error;
   }
 }
 
@@ -188,11 +188,11 @@ export async function createCheckoutSchedule({
   const user = await getUser();
 
   if(!user){
-    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+    throw new Error("User not found");
   }
 
   if(!price.productId){
-    redirect(`/pricing?error=product_not_found`);
+    throw new Error("Product not found");
   }
 
   try{
@@ -312,5 +312,5 @@ export async function createCheckoutSubscription({
     shouldTrial: false
   }).where(eq(teams.id, team.id));
 
-  redirect(`/api/portone/checkout?sessionId=${session.id}`);
+  redirect(`/api/portone/checkout?sessionId=${session.id}&isTrial=true`);
 }
