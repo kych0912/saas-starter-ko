@@ -55,28 +55,37 @@ export async function POST(req: NextRequest) {
       const product = await getProductById(_session[0].productId);
 
       if (Number(price.unitAmount) * 100 === amount.total) {
-        console.log(_session);
-        console.log(webhook);
-        console.log(paymentResponse);
         switch (status) {
           case "PAID": {
             const uuid = uuidv4();
             //schedule 생성
-            const [data, session] = await createCheckoutSchedule({
+            await createCheckoutSchedule({
               teamId: _session[0].teamId.toString(),
               priceId: _session[0].priceId,
               billingKey: _session[0].billingKey,
               period: price.trialPeriodDays || 30,
               paymentId: uuid
             });
-            
+
             //team 정보 업데이트
             await db.update(teams).set({
               subscriptionStatus: 'active',
-              subscriptionId: data.schedule.id,
+              subscriptionId: uuid,
               productId: _session[0].productId,
               planName: product.name,
-              shouldTrial:false,
+              shouldTrial: false,
+            }).where(eq(teams.id, _session[0].teamId));
+            
+            break;
+          }
+
+          default:{
+            await db.update(teams).set({
+              subscriptionStatus: 'canceled',
+              subscriptionId: null,
+              productId: null,
+              planName: null,
+              shouldTrial: false,
             }).where(eq(teams.id, _session[0].teamId));
             break;
           }
