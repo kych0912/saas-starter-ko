@@ -18,21 +18,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function createPayMentsByBillingKey({
   team,   
+  customerId,
   priceId,
   billingKey,
   paymentId
 }: {
   team: Team;
+  customerId: string;
   priceId: string;
   billingKey: string;
   paymentId: string;
 }): Promise<[PayWithBillingKeyResponse, typeof session.$inferSelect]>{
-  const price = await getPriceById(priceId);
-  const user = await getUser();
-
-  if(!user){
-    throw new Error("User not found");
-  }
+  const price = await getPriceById(priceId);  
 
   if (!team) {
     throw new Error("Team not found");
@@ -77,7 +74,7 @@ export async function createPayMentsByBillingKey({
 
       const session = await createCheckoutSession(
         team.id,
-        user.id.toString(),
+        customerId,
         price.productId,
         priceId,
         paymentId,
@@ -172,12 +169,14 @@ interface CreateCheckoutScheduleResponse {
 
 export async function createCheckoutSchedule({
   teamId,
+  customerId,
   priceId,
   billingKey,
   period,
   paymentId
 }:{
   teamId: string,
+  customerId: string,
   priceId: string,
   billingKey: string,
   period: number,
@@ -285,6 +284,7 @@ export async function createCheckoutSubscription({
     //결제 진행
     const [_, session] = await createPayMentsByBillingKey({
       team,
+      customerId: user.id.toString(),
       priceId,
       billingKey,
       paymentId
@@ -298,6 +298,7 @@ export async function createCheckoutSubscription({
   const paymentId = uuidv4();
   const [_, session] = await createCheckoutSchedule({
     teamId: team.id.toString(),
+    customerId: user.id.toString(),
     priceId,
     billingKey,
     period,

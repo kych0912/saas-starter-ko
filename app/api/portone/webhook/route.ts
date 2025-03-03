@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
             //schedule 생성
             await createCheckoutSchedule({
               teamId: _session[0].teamId.toString(),
+              customerId: _session[0].customerId,
               priceId: _session[0].priceId,
               billingKey: _session[0].billingKey,
               period: price.trialPeriodDays || 30,
