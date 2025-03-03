@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
-import { products, teams, Team } from '@/lib/db/schema';
+import { products, teams, Team, session } from '@/lib/db/schema';
 import {
   getTeamByCustomerId,
   getUser,
@@ -26,11 +26,20 @@ export async function createPayMentsByBillingKey({
   priceId: string;
   billingKey: string;
   paymentId: string;
-}){
+}): Promise<[PayWithBillingKeyResponse, typeof session.$inferSelect]>{
   const price = await getPriceById(priceId);
+  const user = await getUser();
+
+  if(!user){
+    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+  }
 
   if (!team) {
     redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+  }
+
+  if(!price.productId){
+    redirect(`/pricing?error=product_not_found`);
   }
 
   try {
@@ -66,7 +75,16 @@ export async function createPayMentsByBillingKey({
         throw new Error("Payment failed");
       }
 
-      return data;
+      const session = await createCheckoutSession(
+        team.id,
+        user.id.toString(),
+        price.productId,
+        priceId,
+        paymentId,
+        billingKey
+      );
+
+      return [data, session];
   } catch (error) {
     console.error('Error processing payment:', error);
     redirect(`/pricing?error=payment_failed`);
@@ -164,9 +182,18 @@ export async function createCheckoutSchedule({
   billingKey: string,
   period: number,
   paymentId: string
-}): Promise<CreateCheckoutScheduleResponse>{
+}): Promise<[CreateCheckoutScheduleResponse, typeof session.$inferSelect]>{
   const price = await getPriceById(priceId);
   const team = await getTeamById(Number(teamId));
+  const user = await getUser();
+
+  if(!user){
+    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+  }
+
+  if(!price.productId){
+    redirect(`/pricing?error=product_not_found`);
+  }
 
   try{
     const response = await fetch(`https://api.portone.io/payments/${encodeURIComponent(paymentId)}/schedule`,
@@ -196,12 +223,21 @@ export async function createCheckoutSchedule({
   });
 
     const data = await response.json();
-    console.log(data);
-  if(!response.ok){
-    throw new Error("Failed to create checkout schedule");
-  }
 
-    return data;
+    if(!response.ok){
+      throw new Error("Failed to create checkout schedule");
+    }
+
+    const session = await createCheckoutSession(
+      team.id,
+      user.id.toString(),
+      price.productId,
+      priceId,
+      paymentId,
+      billingKey
+    );  
+
+    return [data, session];
   } catch (error) {
     console.error('Error creating checkout schedule:', error);
     throw error;
@@ -247,22 +283,12 @@ export async function createCheckoutSubscription({
     const paymentId = uuidv4();
 
     //결제 진행
-    await createPayMentsByBillingKey({
+    const [_, session] = await createPayMentsByBillingKey({
       team,
       priceId,
       billingKey,
       paymentId
     });
-
-    //session 생성
-    const session = await createCheckoutSession(
-      team.id, 
-      user.id.toString(), 
-      product.id, 
-      priceId,
-      paymentId,
-      billingKey
-    );
 
     redirect(`/api/portone/checkout?sessionId=${session.id}`)
   }
@@ -270,23 +296,13 @@ export async function createCheckoutSubscription({
   //진행하지 않았다면 schedule 생성 후 team 정보 업데이트
   const period = price.trialPeriodDays || 14;
   const paymentId = uuidv4();
-  await createCheckoutSchedule({
+  const [_, session] = await createCheckoutSchedule({
     teamId: team.id.toString(),
     priceId,
     billingKey,
     period,
     paymentId
   });
-
-  //session 생성
-  const session = await createCheckoutSession(
-    team.id, 
-    user.id.toString(), 
-    product.id, 
-    priceId,
-    paymentId,
-    billingKey
-  );
 
   //team 정보 업데이트
   await db.update(teams).set({
