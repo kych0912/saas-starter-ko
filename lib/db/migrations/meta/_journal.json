@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1726443359662,
-      "tag": "0000_soft_the_anarchist",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1740257069064,
-      "tag": "0001_common_magneto",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1740284250662,
-      "tag": "0002_curvy_lockjaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1740407253231,
-      "tag": "0003_amusing_butterfly",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1740741451547,
-      "tag": "0004_small_gamora",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1740764534398,
-      "tag": "0005_solid_excalibur",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1740909050466,
-      "tag": "0006_magical_green_goblin",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1740940989458,
-      "tag": "0007_bumpy_marvel_apes",
+      "when": 1741009769137,
+      "tag": "0000_smooth_skullbuster",
       "breakpoints": true
     }
   ]
