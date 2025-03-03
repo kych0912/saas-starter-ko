@@ -52,7 +52,7 @@ export async function createPayMentsByBillingKey({
             billingKey,
             orderName: "월간 이용권 정기결제",
             customer: {
-              id: team.id.toString(),
+              id: customerId,
               email: "kyt031522@gmail.com",
               name: {
                 full:team.name,
@@ -184,11 +184,7 @@ export async function createCheckoutSchedule({
 }): Promise<[CreateCheckoutScheduleResponse, typeof session.$inferSelect]>{
   const price = await getPriceById(priceId);
   const team = await getTeamById(Number(teamId));
-  const user = await getUser();
 
-  if(!user){
-    throw new Error("User not found");
-  }
 
   if(!price.productId){
     throw new Error("Product not found");
@@ -207,7 +203,7 @@ export async function createCheckoutSchedule({
         billingKey: billingKey,
         orderName: "월간 이용권 정기결제",
         customer: {
-          id: teamId,
+          id: customerId,
           name: {
             full: team.name,
           }
@@ -229,7 +225,7 @@ export async function createCheckoutSchedule({
 
     const session = await createCheckoutSession(
       team.id,
-      user.id.toString(),
+      customerId,
       price.productId,
       priceId,
       paymentId,
