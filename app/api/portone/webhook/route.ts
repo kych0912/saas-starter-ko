@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as PortOne from "@portone/server-sdk";
 import { WebhookUnbrandedRequiredHeaders } from "@portone/server-sdk/webhook";
-import { getSessionById, getPriceById, getProductById } from "@/lib/db/queries";
+import { getPriceById, getProductById } from "@/lib/db/queries";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { session, teams } from "@/lib/db/schema";
 import { createCheckoutSchedule } from "@/lib/payments/portone-server";
-
+import { v4 as uuidv4 } from 'uuid';
 const portone = PortOne.PortOneClient({
     secret: process.env.PORTONE_SECRET_KEY!,
 });
@@ -54,29 +54,26 @@ export async function POST(req: NextRequest) {
       const price = await getPriceById(_session[0].priceId);
       const product = await getProductById(_session[0].productId);
 
-      console.log(_session);
-      console.log(webhook);
-      console.log(paymentResponse);
-
       if (Number(price.unitAmount) * 100 === amount.total) {
         console.log(_session);
         console.log(webhook);
         console.log(paymentResponse);
         switch (status) {
           case "PAID": {
+            const uuid = uuidv4();
             //schedule 생성
-            const response = await createCheckoutSchedule({
+            const [data, session] = await createCheckoutSchedule({
               teamId: _session[0].teamId.toString(),
               priceId: _session[0].priceId,
               billingKey: _session[0].billingKey,
               period: price.trialPeriodDays || 30,
-              paymentId: _session[0].paymentId
+              paymentId: uuid
             });
-
+            
             //team 정보 업데이트
             await db.update(teams).set({
               subscriptionStatus: 'active',
-              subscriptionId: response.schedule.id,
+              subscriptionId: data.schedule.id,
               productId: _session[0].productId,
               planName: product.name,
               shouldTrial:false,
