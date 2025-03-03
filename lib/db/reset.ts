@@ -14,8 +14,8 @@ async function resetDatabase() {
   await db.delete(schema.users);
   await db.delete(schema.prices);
   await db.delete(schema.products);
-  await db.delete(schema.subscriptions);
-  
+  await db.delete(schema.activityLogs);
+
   console.log('✅ complete reset database');
   process.exit(0);
 }

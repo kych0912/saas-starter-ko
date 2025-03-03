@@ -19,7 +19,7 @@ export default async function PricingPage() {
         <PricingCard
           name={basePlan?.productName || 'Base'}
           price={Number(basePrice?.priceUnitAmount) || 800}
-          interval={basePrice?.priceInterval || 'month'}
+          interval={basePrice?.priceInterval || 30}
           trialDays={basePrice?.priceTrialPeriodDays || 7}
           features={[
             'Unlimited Usage',
@@ -31,7 +31,7 @@ export default async function PricingPage() {
         <PricingCard
           name={plusPlan?.productName || 'Plus'}
           price={Number(plusPrice?.priceUnitAmount) || 1200}
-          interval={plusPrice?.priceInterval || 'month'}
+          interval={plusPrice?.priceInterval || 30}
           trialDays={plusPrice?.priceTrialPeriodDays || 7}
           features={[
             'Everything in Base, and:',

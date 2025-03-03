@@ -9,6 +9,7 @@ import {
   boolean,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+import { number } from 'zod';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -86,23 +87,9 @@ export const prices = pgTable('prices', {
   currency: varchar('currency').notNull(),
   unitAmount: decimal('unit_amount').notNull(), // (10000 = 100.00 USD)
   trialPeriodDays: integer('trial_period_days'), // trial period
-  interval: varchar('interval'), // 'month' or 'year' (for subscription)
+  interval: integer('interval').notNull(), // 30, 365
   intervalCount: integer('interval_count'), // interval frequency
   active: boolean('active').default(true),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-export const subscriptions = pgTable('subscriptions', {
-  id: serial('id').primaryKey(),
-  teamId: integer('team_id').references(() => teams.id),
-  priceId: varchar('price_id').references(() => prices.id),
-  productId: varchar('product_id').references(() => products.id),
-  status: varchar('status', { length: 20 }).notNull().default('active'),
-  startDate: timestamp('start_date').defaultNow(),
-  endDate: timestamp('end_date'),
-  lastBillingDate: timestamp('last_billing_date'),
-  nextBillingDate: timestamp('next_billing_date'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

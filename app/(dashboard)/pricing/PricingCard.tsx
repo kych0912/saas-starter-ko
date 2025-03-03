@@ -12,7 +12,7 @@ export default function PricingCard({
   }: {
     name: string;
     price: number;
-    interval: string
+    interval: number;
     trialDays: number;
     features: string[];
     priceId?: string;
@@ -27,7 +27,7 @@ export default function PricingCard({
         <p className="text-4xl font-medium text-gray-900 mb-6">
           ${price / 100}{' '}
           <span className="text-xl font-normal text-gray-600">
-            per user / {interval}
+            per user / {interval} days
           </span>
         </p>
         <ul className="space-y-4 mb-8">

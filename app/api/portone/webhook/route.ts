@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
               customerId: _session[0].customerId,
               priceId: _session[0].priceId,
               billingKey: _session[0].billingKey,
-              period: price.trialPeriodDays || 30,
+              period: price.interval || 30,
               paymentId: uuid
             });
 
