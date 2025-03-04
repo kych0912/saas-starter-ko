@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { getPriceById, getProductById } from "@/lib/db/queries";
 import { CheckoutForm } from "./checkout-form";
-import { PaypalButton } from "./paypal-button";
 
 export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ priceId?: string, teamId?: string }> }) {
     
