@@ -187,9 +187,9 @@ export async function getTeamById(teamId: number) {
 
 type billingKey = typeof billingKeys.$inferSelect;
 
-export async function getBillingKeysByTeamId(teamId: number): Promise<billingKey[] | []> {
+export async function getBillingKeyByTeamId(teamId: number): Promise<billingKey> {
   const result = await db.select().from(billingKeys).where(eq(billingKeys.teamId, teamId));
-  return result;
+  return result[0];
 }
 
 export async function createCheckoutSession(
