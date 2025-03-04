@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as PortOne from "@portone/server-sdk";
 import { WebhookUnbrandedRequiredHeaders } from "@portone/server-sdk/webhook";
-import { getPriceById, getProductById, getBillingKeysByTeamId } from "@/lib/db/queries";
+import { getPriceById, getProductById, getBillingKeyByTeamId } from "@/lib/db/queries";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { session, teams } from "@/lib/db/schema";
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       
       const price = await getPriceById(_session[0].priceId);
       const product = await getProductById(_session[0].productId);
-      const billingKey = await getBillingKeysByTeamId(_session[0].teamId);
+      const billingKey = await getBillingKeyByTeamId(_session[0].teamId);
       
       if (Number(price.unitAmount) * 100 === amount.total) {
         switch (status) {
