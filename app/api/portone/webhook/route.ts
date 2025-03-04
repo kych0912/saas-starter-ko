@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as PortOne from "@portone/server-sdk";
 import { WebhookUnbrandedRequiredHeaders } from "@portone/server-sdk/webhook";
-import { getPriceById, getProductById } from "@/lib/db/queries";
+import { getPriceById, getProductById, getBillingKeysByTeamId } from "@/lib/db/queries";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { session, teams } from "@/lib/db/schema";
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       const paymentResponse = await portone.payment.getPayment({ paymentId: paymentId });
 
       if (paymentResponse === null || !("id" in paymentResponse)) {
-        // 웹훅 정보와 일치하는 결제건이 실제로는 존재하지 않는 경우
+        // 웹훅 정보와 일치하는 결제건이 실제로는 존재하지 않는 경우 
         return NextResponse.json({ message: "Payment not found" }, { status: 200 });
       }
 
@@ -53,25 +53,27 @@ export async function POST(req: NextRequest) {
       
       const price = await getPriceById(_session[0].priceId);
       const product = await getProductById(_session[0].productId);
-
+      const billingKey = await getBillingKeysByTeamId(_session[0].teamId);
+      
       if (Number(price.unitAmount) * 100 === amount.total) {
         switch (status) {
           case "PAID": {
             const uuid = uuidv4();
             //schedule 생성
-            await createCheckoutSchedule({
+            const [schedule,_] = await createCheckoutSchedule({
               teamId: _session[0].teamId.toString(),
               customerId: _session[0].customerId,
               priceId: _session[0].priceId,
-              billingKey: _session[0].billingKey,
+              billingKey: billingKey.key,
               period: price.interval || 30,
               paymentId: uuid
             });
 
+            const schduleId = schedule.schedule.id;
             //team 정보 업데이트
             await db.update(teams).set({
               subscriptionStatus: 'active',
-              subscriptionId: uuid,
+              subscriptionId: schduleId,
               productId: _session[0].productId,
               planName: product.name,
               shouldTrial: false,
