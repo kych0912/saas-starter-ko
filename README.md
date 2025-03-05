@@ -1,8 +1,16 @@
 # Next.js SaaS Starter
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+This Project based on a original [Next.js SaaS Starter](https://github.com/nextjs/saas-starter) template for building a SaaS application using Next.js with support for authentication, PortOne integration for payments, and a dashboard for logged-in users.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+**Demo: [https://saas-starter-ko.vercel.app/](https://saas-starter-ko.vercel.app/)**
+
+## New features and modifications (Planned)
+
+1. Payment method change (Stripe -> PortOne)
+2. Support PortOne Webhook-Based Subscription Payment
+3. Dark mode (Sooooon.....)
+4. KO/EN Multi-languages support (Sooooon.....)
+5. Google & Microsoft login (Sooooon.....)
 
 ## Features
 
@@ -21,7 +29,7 @@ This is a starter template for building a SaaS application using **Next.js** wit
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Database**: [Postgres](https://www.postgresql.org/)
 - **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
+- **Payments**: [PortOne](https://portone.io/)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 
 ## Getting Started
@@ -62,15 +70,9 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
 
-Optionally, you can listen for Stripe webhooks locally through their CLI to handle subscription change events:
-
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-```
-
 ## Testing Payments
 
-To test Stripe payments, use the following test card details:
+To test PortOne payments, use the following test card details:
 
 - Card Number: `4242 4242 4242 4242`
 - Expiration: Any future date
@@ -97,10 +99,12 @@ When you're ready to deploy your SaaS application to production, follow these st
 In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
 
 1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+2. `PORTONE_SECRET_KEY`: Use your PortOne secret key for the production environment.
+3. `PORTONE_CHANNEL_KEY`: Set this to your PG channel key you want to use
+4. `NEXT_PUBLIC_PORTONE_STORE_ID`: Set your store key. You can find by [PortOne DashBoard]('https://admin.portone.io/integration-v2/manage/channel')
+5. `PORTONE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
+6. `POSTGRES_URL`: Set this to your production database URL.
+7. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
 
 ## Other Templates
 
