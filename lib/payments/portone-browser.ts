@@ -1,7 +1,10 @@
 import * as PortOne from "@portone/browser-sdk/v2";
 
-export async function createBillingKey({priceId}:{priceId:string}) {
-
+export async function createBillingKey({
+    redirectUrl,
+}: {
+    redirectUrl: string;
+}) {
     const issueResponse = await PortOne.requestIssueBillingKey({
         storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
         channelKey: "channel-key-ab41dd63-057e-41e5-ac2d-4ecd842ce9da",
@@ -11,6 +14,7 @@ export async function createBillingKey({priceId}:{priceId:string}) {
         customer:{
             customerId: "customer-id-1234567890",
         },
+        redirectUrl: redirectUrl,
     });
 
     if (!issueResponse || issueResponse.code !== undefined) {

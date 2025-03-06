@@ -1,16 +1,12 @@
 import { redirect } from "next/navigation";
 import { getPriceById, getProductById } from "@/lib/db/queries";
 import { CheckoutForm } from "./checkout-form";
-
-export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ priceId?: string, teamId?: string }> }) {
+import { MobileCheckout } from "./mobile-checkout";
+export default async function CheckoutPage({ searchParams }: { searchParams: Promise<{ priceId?: string, teamId?: string, billingKey?: string }> }) {
     
-    const { priceId, teamId } = await searchParams;
+    const { priceId, teamId, billingKey } = await searchParams;
     
     if(!priceId || !teamId){
-        redirect('/pricing');
-    }
-
-    if(!priceId){
         redirect('/pricing');
     }
 
@@ -31,6 +27,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
             </div>
 
             <CheckoutForm priceId={priceId}/>
+            <MobileCheckout billingKey={billingKey} priceId={priceId}/>
         </>
     )
 }   
