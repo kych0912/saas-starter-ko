@@ -11,12 +11,11 @@ import {
   getTeamById
 } from '@/lib/db/queries';
 import { BillingKeyInfo } from '@portone/server-sdk/payment/billingKey';
-import { db } from '../db/drizzle';
-import { eq } from 'drizzle-orm';
 import { PayWithBillingKeyResponse } from '@portone/server-sdk/payment';
-import { v4 as uuidv4 } from 'uuid';
-
-export async function createPayMentsByBillingKey({
+import { processPayment } from './services/payments-service';
+import { validateCheckoutData } from './validators/validator';
+import { processTrialSubscription } from './services/trial-service';
+export async function createPayMentsByBillingKeyAndSession({
   team,   
   customerId,
   priceId,
@@ -167,7 +166,7 @@ interface CreateCheckoutScheduleResponse {
   }
 }
 
-export async function createCheckoutSchedule({
+export async function createCheckoutScheduleAndSession({
   teamId,
   customerId,
   priceId,
@@ -259,55 +258,29 @@ export async function createCheckoutSubscription({
   priceId: string;
   billingKey: string;
 }){
-  const price = await getPriceById(priceId);
+  let redirectUrl: string | null  = null;
+  
+  try{
+    const { price, product, user } = await validateCheckoutData(team, priceId); 
 
-  if(!price.productId){
-    redirect(`/pricing?error=product_not_found`);
+    const { redirectUrl:_redirectUrl } = team.shouldTrial 
+    ? await processTrialSubscription(team, user, price, product, billingKey)
+    : await processPayment(team, user, priceId, billingKey);
+    redirectUrl = _redirectUrl;
+  } catch (error:unknown) {
+    if (error instanceof Error) {
+      switch(error.message) {
+        case 'product_not_found':
+          redirectUrl = `/pricing?error=${error.message}&message=${encodeURIComponent(error.message)}`;
+        case 'user_not_found':
+          redirectUrl = `/sign-up?redirect=checkout&priceId=${priceId}`;
+        default:
+          redirectUrl = `/pricing?error=${encodeURIComponent(error.message)}`;
+      }
+    } 
+  } finally{
+    if(redirectUrl){
+      redirect(redirectUrl);
+    }
   }
-
-  const product = await getProductById(price.productId);
-  const shouldTrial = team.shouldTrial;
-  const user = await getUser();
-
-  //만약 trial을 진행했다면 결제 진행 후 session 생성
-  if(!user) {
-    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
-  }
-
-  if(!shouldTrial){
-    const paymentId = uuidv4();
-
-    //결제 진행
-    const [_, session] = await createPayMentsByBillingKey({
-      team,
-      customerId: user.id.toString(),
-      priceId,
-      billingKey,
-      paymentId
-    });
-
-    redirect(`/api/portone/checkout?sessionId=${session.id}`)
-  }
-
-  //진행하지 않았다면 schedule 생성 후 team 정보 업데이트
-  const period = price.trialPeriodDays || 14;
-  const paymentId = uuidv4();
-  const [_, session] = await createCheckoutSchedule({
-    teamId: team.id.toString(),
-    customerId: user.id.toString(),
-    priceId,
-    billingKey,
-    period,
-    paymentId
-  });
-
-  //team 정보 업데이트
-  await db.update(teams).set({
-    subscriptionStatus: 'trial',
-    productId: product.id,
-    planName: product.name,
-    shouldTrial: false
-  }).where(eq(teams.id, team.id));
-
-  redirect(`/api/portone/checkout?sessionId=${session.id}&isTrial=true`);
 }
