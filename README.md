@@ -35,7 +35,7 @@ This Project based on a original [Next.js SaaS Starter](https://github.com/nextj
 ## Getting Started
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
+git clone https://github.com/kych0912/saas-starter-ko
 cd saas-starter
 pnpm install
 ```
@@ -72,21 +72,21 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 ## Testing Payments
 
-To test PortOne payments, use the following test card details:
+For testing PortOne payments, you'll need to:
+Use your real card number for testing, but please test locally as this is required for proper testing functionality. The good news is that when testing locally, no actual charges will be made to your card.
 
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
+Card Number: You'll need to use your actual card number
+Expiration Date: Any future date is fine
 
 ## Going to Production
 
 When you're ready to deploy your SaaS application to production, follow these steps:
 
-### Set up a production Stripe webhook
+### Set up a production PortOne webhook
 
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
+1. Go to the PortOne Dashboard and create a new webhook for your production environment.
+2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/portone/webhook`).
+3. Select the events you want to listen for
 
 ### Deploy to Vercel
 
@@ -105,11 +105,3 @@ In your Vercel project settings (or during deployment), add all the necessary en
 5. `PORTONE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
 6. `POSTGRES_URL`: Set this to your production database URL.
 7. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
