@@ -4,6 +4,7 @@ import { CheckoutButton } from "./checkout-button";
 import { createBillingKey } from "@/lib/payments/portone-browser";
 import { createPayMentsByBillingKeyAction } from "@/lib/payments/actions";
 import { toast } from "sonner";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export function CheckoutForm({
   priceId,
@@ -11,22 +12,17 @@ export function CheckoutForm({
   priceId: string;
 }) {
   async function handleCheckout() {
-    try{
-      const redirectUrl = window.location.href;
-      const billingKey = await createBillingKey({
-        redirectUrl: redirectUrl,
-      });
-      const formData = new FormData();
-      formData.append("billingKey", billingKey);
-      formData.append("priceId", priceId);
+    const redirectUrl = window.location.href;
+    const billingKey = await createBillingKey({
+      redirectUrl: redirectUrl,
+    });
+    const formData = new FormData();
+    formData.append("billingKey", billingKey);
+    formData.append("priceId", priceId);
 
-      await createPayMentsByBillingKeyAction(formData);
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to checkout");
-    }
+    //발급 후 결제 진행
+    await createPayMentsByBillingKeyAction(formData);
   }
-
 
   return (
     <form action={handleCheckout}>

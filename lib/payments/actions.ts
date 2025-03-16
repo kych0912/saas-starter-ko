@@ -13,5 +13,4 @@ export const createPayMentsByBillingKeyAction = withTeam(async (formData, team) 
     const priceId = formData.get('priceId') as string;
     const billingKey = formData.get('billingKey') as string;
     await createCheckoutSubscription({ team: team, priceId, billingKey });
-    redirect(`/dashboard`);
 });
