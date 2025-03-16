@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Team, User } from '../../db/schema';
 import { CheckoutResult } from '../types';
-import { createPayMentsByBillingKeyAndSession } from '../portone-server';
+import { createPayMentsAndSessionByBillingKey } from '../portone-server';
 
 export async function processPayment(
   team: Team, 
@@ -12,7 +12,7 @@ export async function processPayment(
   try {
     const paymentId = uuidv4();
     
-    const [_, session] = await createPayMentsByBillingKeyAndSession({
+    const [_, session] = await createPayMentsAndSessionByBillingKey({
       team,
       customerId: user.id.toString(),
       priceId,

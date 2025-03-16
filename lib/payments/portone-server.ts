@@ -15,7 +15,7 @@ import { PayWithBillingKeyResponse } from '@portone/server-sdk/payment';
 import { processPayment } from './services/payments-service';
 import { validateCheckoutData } from './validators/validator';
 import { processTrialSubscription } from './services/trial-service';
-export async function createPayMentsByBillingKeyAndSession({
+export async function createPayMentsAndSessionByBillingKey({
   team,   
   customerId,
   priceId,
@@ -27,7 +27,7 @@ export async function createPayMentsByBillingKeyAndSession({
   priceId: string;
   billingKey: string;
   paymentId: string;
-}): Promise<[PayWithBillingKeyResponse, typeof session.$inferSelect]>{
+}): Promise<[PayWithBillingKeyResponse, typeof session.$inferSelect | null]>{
   const price = await getPriceById(priceId);  
 
   if (!team) {

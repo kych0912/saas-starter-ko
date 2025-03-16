@@ -5,7 +5,7 @@ import { getPriceById, getProductById, getBillingKeyByTeamId } from "@/lib/db/qu
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { session, teams } from "@/lib/db/schema";
-import { createCheckoutSchedule } from "@/lib/payments/portone-server";
+import { createCheckoutScheduleAndSession } from "@/lib/payments/portone-server";
 import { v4 as uuidv4 } from 'uuid';
 const portone = PortOne.PortOneClient({
     secret: process.env.PORTONE_SECRET_KEY!,
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
           case "PAID": {
             const uuid = uuidv4();
             //schedule 생성
-            const [schedule,_] = await createCheckoutSchedule({
+            const [schedule,_] = await createCheckoutScheduleAndSession({
               teamId: _session[0].teamId.toString(),
               customerId: _session[0].customerId,
               priceId: _session[0].priceId,
