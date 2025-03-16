@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUser, getTeamForUser, insertBillingKey, getProductById } from '@/lib/db/queries';
-import { createPayMentsByBillingKey } from '@/lib/payments/portone-server';
+import { getUser, getTeamForUser, getProductById } from '@/lib/db/queries';
 import { db } from '@/lib/db/drizzle';
 import { teams, session } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -45,7 +44,6 @@ export async function GET(request: NextRequest) {
   //team 정보 업데이트
   await db.update(teams).set({
     subscriptionStatus: isTrial === 'true' ? 'trial' : 'active',
-    subscriptionId: _session[0].id.toString(),
     productId: productId,
     planName: product.name,
     shouldTrial: false,
