@@ -73,7 +73,7 @@ export default async function ActivityPage() {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
+      <h1 className="text-lg lg:text-2xl font-medium text-foreground mb-6">
         Activity Log
       </h1>
       <Card>
@@ -95,11 +95,11 @@ export default async function ActivityPage() {
                       <Icon className="w-5 h-5 text-orange-600" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         {formattedAction}
                         {log.ipAddress && ` from IP ${log.ipAddress}`}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {getRelativeTime(new Date(log.timestamp))}
                       </p>
                     </div>
@@ -110,10 +110,10 @@ export default async function ActivityPage() {
           ) : (
             <div className="flex flex-col items-center justify-center text-center py-12">
               <AlertCircle className="h-12 w-12 text-orange-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 No activity yet
               </h3>
-              <p className="text-sm text-gray-500 max-w-sm">
+              <p className="text-sm text-muted-foreground max-w-sm">
                 When you perform actions like signing in or updating your
                 account, they'll appear here.
               </p>
