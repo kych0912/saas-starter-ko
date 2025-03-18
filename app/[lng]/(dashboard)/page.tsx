@@ -17,19 +17,6 @@ export default async function HomePage({
   return (
     <main>
       <section className="py-20">
-        <Trans i18nKey="languageSwitcher" t={t}>
-          Switch from <strong>{{lng}}</strong> to:{' '}
-        </Trans>
-        {languages.filter((l) => lng !== l).map((l, index) => {
-        return (
-          <span key={l}>
-            {index > 0 && (' or ')}
-            <Link href={`/${l}`}>
-              {l}
-            </Link>
-          </span>
-        )
-      })}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
