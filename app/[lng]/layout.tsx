@@ -5,7 +5,8 @@ import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
 import { Toaster } from "@/components/ui/sonner"
 import { cookies } from 'next/headers';
-import Script from 'next/script';
+import { languages } from '@/app/i18n/setting';
+import { dir } from 'i18next'
 
 export const metadata: Metadata = {
   title: 'Next.js SaaS Starter',
@@ -16,21 +17,29 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }));
+}
+
 const manrope = Manrope({ subsets: ['latin'] });
 
 export default async function RootLayout({
   children,
-}: {
+  params,
+}: {  
   children: React.ReactNode;
+  params: Promise<{ lng: string }>;
 }) {
   let userPromise = getUser();
   const cookieStore = await cookies();
   const theme = cookieStore.get('next-sass-starter-theme')?.value;
   const isDark = theme === 'dark';
-  
+  const { lng } = await params;
+
   return (
     <html
-      lang="en"
+      lang={lng}
+      dir={dir(lng)}
       className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className} ${isDark ? 'dark' : ''}`}
       style={{ colorScheme: isDark ? 'dark' : 'light' }}
     >

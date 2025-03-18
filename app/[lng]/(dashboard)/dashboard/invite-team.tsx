@@ -13,7 +13,7 @@ import { Loader2, PlusCircle } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { use, useActionState } from 'react';
-import { inviteTeamMember } from '@/app/(login)/actions';
+import { inviteTeamMember } from '@/app/[lng]/(login)/actions';
 import { useUser } from '@/lib/auth';
 
 type ActionState = {

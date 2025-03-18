@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/lib/auth';
-import { signOut } from '@/app/(login)/actions';
+import { signOut } from '@/app/[lng]/(login)/actions';
 import { useRouter } from 'next/navigation';
 import DarkModeToggle from '@/components/dark-mode-toggle';
 
