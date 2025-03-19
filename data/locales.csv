@@ -1,0 +1,14 @@
+﻿,en,ko
+signup.title,Create your account,계정 생성
+signup.email,email,이메일
+signup.password,password,패스워드
+signup.submit,Sign up,회원가입
+signup.border,Already have an account?,이미 계정이 있으신가요?
+signup.login,Sign in to existing account,계정 로그인하기
+,,
+signin.title,login,로그인
+signin.email,email,이메일
+signin.password,password,패스워드
+signin.submit,Sign in,로그인
+signin.border,New to our platform?,저희 서비스는 처음이신가요?
+signin.login,Create an account,새로운 계정 생성하기
