@@ -15,6 +15,9 @@ import { PayWithBillingKeyResponse } from '@portone/server-sdk/payment';
 import { processPayment } from './services/payments-service';
 import { validateCheckoutData } from './validators/validator';
 import { processTrialSubscription } from './services/trial-service';
+import { cookies } from 'next/headers';
+import { cookieName } from '@/app/i18n/setting';
+
 export async function createPayMentsAndSessionByBillingKey({
   team,   
   customerId,
@@ -152,12 +155,13 @@ export async function createPortOneCheckout({
   priceId: string;
 }) {
   const user = await getUser();
+  const lang = (await cookies()).get(cookieName)?.value || 'en';
 
   if (!team || !user) {
-    redirect(`/sign-up?redirect=checkout&priceId=${priceId}`);
+    redirect(`/${lang}/sign-up?redirect=checkout&priceId=${priceId}`);
   }
 
-  redirect(`/checkout?teamId=${team.id}&priceId=${priceId}`)
+  redirect(`/${lang}/checkout?teamId=${team.id}&priceId=${priceId}`)
 }
 
 interface CreateCheckoutScheduleResponse {

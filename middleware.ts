@@ -4,17 +4,22 @@ import { middleware as userMiddleware } from './middleware/user';
 import { middleware as lngMiddleware } from './middleware/lng';
 
 export async function middleware(request: NextRequest) {
-  const lngRes = await lngMiddleware(request);
-  if( lngRes ){
-    return lngRes;
+  // 기본 응답 객체 생성
+  let response = NextResponse.next();
+  
+  // lngMiddleware 실행 및 결과 처리
+  const lngRes = await lngMiddleware(request, response);
+  if (lngRes) {
+    response = lngRes;
   }
 
-  const userRes = await userMiddleware(request);
-  if( userRes ){
-    return userRes;
+  // userMiddleware 실행 및 결과 처리
+  const userRes = await userMiddleware(request, response);
+  if (userRes) {
+    response = userRes;
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

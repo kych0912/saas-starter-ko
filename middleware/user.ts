@@ -4,7 +4,8 @@ import { signToken, verifyToken } from '@/lib/auth/session';
 
 const protectedRoutes = '/dashboard';
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, response?: NextResponse) {
+  const res = response || NextResponse.next();
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get('session');
   const isProtectedRoute = pathname.startsWith(protectedRoutes);
@@ -13,8 +14,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 
-  let res = NextResponse.next();
-  
   if( sessionCookie){
     try {
       const parsed = await verifyToken(sessionCookie.value);
@@ -40,5 +39,5 @@ export async function middleware(request: NextRequest) {
     }
   }
   
-  return null;
+  return res;
 }

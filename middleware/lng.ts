@@ -4,7 +4,14 @@ import { NextRequest, NextResponse } from "next/server"
 
 acceptLanguage.languages(languages);
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, response?: NextResponse) {
+    const res = response || NextResponse.next();
+
+    if(request.nextUrl.pathname.startsWith('/_next') ||
+        request.nextUrl.pathname.startsWith('/api')
+    ){
+        return res;
+    }
 
     // 언어 설정
     let lng
@@ -18,16 +25,17 @@ export async function middleware(request: NextRequest) {
         !request.nextUrl.pathname.startsWith('/_next')
     ) {
         console.log('redirecting to', `/${lng}${request.nextUrl.pathname}`);
-        return NextResponse.redirect(new URL(`/${lng}${request.nextUrl.pathname}`, request.url))
+        res.cookies.set(cookieName, lng);
+        return NextResponse.redirect(new URL(`/${lng}${request.nextUrl.pathname}`, request.url));
     }
     
     if (request.headers.has('referer')) {
         const refererUrl = new URL(request.headers.get('referer') || '')
         const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`))
-        const response = NextResponse.next()
-        if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
-        return null
+        if (lngInReferer) {
+            res.cookies.set(cookieName, lngInReferer)
+        }
     }
 
-    return null;
+    return res;
 }
