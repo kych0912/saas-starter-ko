@@ -15,8 +15,9 @@ import { useUser } from '@/lib/auth';
 import { signOut } from '@/app/[lng]/(login)/actions';
 import { useRouter } from 'next/navigation';
 import DarkModeToggle from '@/components/dark-mode-toggle';
+import { useParams } from 'next/navigation';
 
-function Header() {
+function Header({lng}: {lng: string}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { userPromise } = useUser();
   const user = use(userPromise);
@@ -31,13 +32,13 @@ function Header() {
   return (
     <header className="bg-background border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+        <Link href={`/${lng}`} className="flex items-center">
           <CircleIcon className="h-6 w-6 text-orange-500" />
           <span className="ml-2 text-xl font-semibold text-foreground">ACME</span>
         </Link>
         <div className="flex items-center space-x-4">
           <Link
-            href="/pricing"
+            href={`/${lng}/pricing`}
             className="text-sm font-medium text-foreground hover:text-accent-foreground"
           >
             Pricing
@@ -57,7 +58,7 @@ function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="flex flex-col gap-1">
                 <DropdownMenuItem className="cursor-pointer">
-                  <Link href="/dashboard" className="flex w-full items-center">
+                  <Link href={`/${lng}/dashboard`} className="flex w-full items-center">
                     <Home className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                   </Link>
@@ -77,7 +78,7 @@ function Header() {
               asChild
               className="bg-foreground hover:bg-accent-foreground/90 text-background text-sm px-4 py-2 rounded-full"
             >
-              <Link href="/sign-up">Sign Up</Link>
+              <Link href={`/${lng}/sign-up`}>Sign Up</Link>
             </Button>
           )}
           <DarkModeToggle />
@@ -88,9 +89,11 @@ function Header() {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const params = useParams();
+  const lng = params.lng as string;
   return (
     <section className="flex flex-col min-h-screen">
-      <Header />
+      <Header lng={lng} />
       {children}
     </section>
   );

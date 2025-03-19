@@ -1,10 +1,15 @@
 import { Suspense } from 'react';
 import { Login } from '../login';
 
-export default function SignUpPage() {
+export default async function SignUpPage({
+  params,
+}: {
+  params: Promise<{lng: string}>
+}) {
+  const { lng } = await params;
   return (
     <Suspense>
-      <Login mode="signup" />
+      <Login lng={lng} mode="signup" />
     </Suspense>
   );
 }

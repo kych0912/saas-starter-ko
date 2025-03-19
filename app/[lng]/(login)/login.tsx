@@ -9,12 +9,14 @@ import { Label } from '@/components/ui/label';
 import { CircleIcon, Loader2 } from 'lucide-react';
 import { signIn, signUp } from './actions';
 import { ActionState } from '@/lib/auth/middleware';
+import { useTranslation } from '@/app/i18n/useTranslation/client';
 
-export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
+export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
   const priceId = searchParams.get('priceId');
   const inviteId = searchParams.get('inviteId');
+  const { t } = useTranslation(lng, mode,{});
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     mode === 'signin' ? signIn : signUp,
     { error: '' },
@@ -28,8 +30,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           {mode === 'signin'
-            ? 'Sign in to your account'
-            : 'Create your account'}
+            ? t('title')
+            : t('title')}
         </h2>
       </div>
 
@@ -43,7 +45,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email
+              {t('email')}
             </Label>
             <div className="mt-1">
               <Input
@@ -65,7 +67,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              {t('password')}
             </Label>
             <div className="mt-1">
               <Input
@@ -101,9 +103,9 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   Loading...
                 </>
               ) : mode === 'signin' ? (
-                'Sign in'
+                t('submit')
               ) : (
-                'Sign up'
+                t('submit')
               )}
             </Button>
           </div>
@@ -117,22 +119,22 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-gray-50 text-gray-500">
                 {mode === 'signin'
-                  ? 'New to our platform?'
-                  : 'Already have an account?'}
+                  ? t('border')
+                  : t('border')}
               </span>
             </div>
           </div>
 
           <div className="mt-6">
             <Link
-              href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
+              href={`${mode === 'signin' ? `/${lng}/sign-up` : `/${lng}/sign-in`}${
                 redirect ? `?redirect=${redirect}` : ''
               }${priceId ? `&priceId=${priceId}` : ''}`}
               className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
             >
               {mode === 'signin'
-                ? 'Create an account'
-                : 'Sign in to existing account'}
+                ? t('login')
+                : t('login')}
             </Link>
           </div>
         </div>
