@@ -6,7 +6,7 @@ signup.submit,Sign up,회원가입
 signup.border,Already have an account?,이미 계정이 있으신가요?
 signup.login,Sign in to existing account,계정 로그인하기
 ,,
-signin.title,login,로그인
+signin.title,Sign in to your account,로그인
 signin.email,email,이메일
 signin.password,password,패스워드
 signin.submit,Sign in,로그인
