@@ -49,6 +49,43 @@ function createLocalesInLocal(header, namespace, locale){
     fs.writeFileSync(path.join(localesPath, `${namespace}.json`), JSON.stringify(locale, null, 2));
 }
 
+function parseCSVLine(line){
+
+    if(!line.includes('"')){
+        return line.split(',');
+    }
+
+    const length = line.length;
+    //true 일 경우 "" 안에 있는 문자열
+    let inQuotes = false;
+    let buffer = '';
+    const result = [];
+
+    for(let i = 0; i < length; i++){
+        let current = line[i];
+
+        if(current === '"'){
+            inQuotes = !inQuotes;
+            continue;
+        }
+
+        if(inQuotes){
+            buffer += current;
+        }else{
+            if(current === ','){
+                result.push(buffer);
+                buffer = '';
+                continue;
+            }
+
+            buffer += current;
+        }
+    }
+
+    if(buffer !== '') result.push(buffer);
+    return result;
+}
+
 function convertCsvToJson(){
     const csvPath = path.join(process.cwd(), 'data', 'locales.csv');
     const csvData = fs.readFileSync(csvPath, { encoding: 'utf8' });
@@ -56,7 +93,7 @@ function convertCsvToJson(){
     const normalizedData = csvData.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
     const lines = normalizedData.split('\n');
     const lng = lines[0].split(',').slice(1);
-    const languages  = lines.slice(1).map(line => line.split(','));
+    const languages  = lines.slice(1).map(line => parseCSVLine(line));
     
     return {
         lng,
