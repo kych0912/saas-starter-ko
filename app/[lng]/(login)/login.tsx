@@ -117,7 +117,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-background text-muted-foreground">
+              <span className="px-2 bg-gray-50 dark:bg-gray-950">
                 {mode === 'signin'
                   ? t('border')
                   : t('border')}
