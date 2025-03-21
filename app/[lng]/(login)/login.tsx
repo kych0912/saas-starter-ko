@@ -23,12 +23,12 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
   );
 
   return (
-    <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <CircleIcon className="h-12 w-12 text-orange-500" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
           {mode === 'signin'
             ? t('title')
             : t('title')}
@@ -43,7 +43,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
           <div>
             <Label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               {t('email')}
             </Label>
@@ -56,7 +56,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
                 defaultValue={state.email}
                 required
                 maxLength={50}
-                className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-muted-foreground text-foreground focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your email"
               />
             </div>
@@ -65,7 +65,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
           <div>
             <Label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               {t('password')}
             </Label>
@@ -81,14 +81,14 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
                 required
                 minLength={8}
                 maxLength={100}
-                className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-muted-foreground text-foreground focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your password"
               />
             </div>
           </div>
 
           {state?.error && (
-            <div className="text-red-500 text-sm">{state.error}</div>
+            <div className="text-red-500 text-sm">{t(`${state.error}`)}</div>
           )}
 
           <div>
@@ -117,7 +117,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-50 text-gray-500">
+              <span className="px-2 bg-background text-muted-foreground">
                 {mode === 'signin'
                   ? t('border')
                   : t('border')}
