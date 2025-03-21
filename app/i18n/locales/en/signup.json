@@ -4,5 +4,6 @@
   "password": "password",
   "submit": "Sign up",
   "border": "Already have an account?",
-  "login": "Sign in to existing account"
+  "login": "Sign in to existing account",
+  "invalid_email_or_password": "Invalid email or password. Please try again"
 }

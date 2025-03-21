@@ -4,5 +4,6 @@
   "password": "password",
   "submit": "Sign in",
   "border": "New to our platform?",
-  "login": "Create an account"
+  "login": "Create an account",
+  "invalid_email_or_password": "Invalid email or password. Please try again"
 }
