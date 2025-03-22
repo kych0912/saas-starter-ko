@@ -1,0 +1,6 @@
+{
+  "user_not_in_team": "User is not part of a team",
+  "already_member": "User is already a member of this team",
+  "invitation_exists": "An invitation has already been sent to this email",
+  "success": "Invitation sent successfully"
+}

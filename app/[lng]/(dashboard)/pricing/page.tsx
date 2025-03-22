@@ -4,7 +4,8 @@ import PricingCard from './PricingCard';
 // Prices are fresh for one hour max
 export const revalidate = 3600;
 
-export default async function PricingPage() {
+export default async function PricingPage({params}: {params: Promise<{lng: string}>}) {
+  const {lng} = await params;
   const products = await getProducts();
 
   const basePlan = products.find((product) => product.productName === 'Base');
@@ -22,11 +23,12 @@ export default async function PricingPage() {
           interval={basePrice?.priceInterval || 30}
           trialDays={basePrice?.priceTrialPeriodDays || 7}
           features={[
-            'Unlimited Usage',
-            'Unlimited Workspace Members',
-            'Email Support',
+            'unlimited_usage',
+            'unlimited_members',
+            'email_support',
           ]}
           priceId={basePrice?.priceId}
+          lng={lng}
         />
         <PricingCard
           name={plusPlan?.productName || 'Plus'}
@@ -34,11 +36,12 @@ export default async function PricingPage() {
           interval={plusPrice?.priceInterval || 30}
           trialDays={plusPrice?.priceTrialPeriodDays || 7}
           features={[
-            'Everything in Base, and:',
-            'Early Access to New Features',
-            '24/7 Support + Slack Access',
+            'base_plus',
+            'new_feature_plus',
+            'CS_plus',
           ]}
           priceId={plusPrice?.priceId}
+          lng={lng}
         />
       </div>
     </main>

@@ -1,0 +1,20 @@
+{
+  "password_incorrect": "Current password is incorrect.",
+  "new_password_must_be_different": "New password must be different from the current password.",
+  "password_updated": "Password updated successfully.",
+  "title": "Security Settings",
+  "card_title_password": "Password",
+  "card_title_delete": "Delete Account",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "new_password_confirm": "Confirm New Password",
+  "password_submit": "Update Password",
+  "delete_account_warning": "Account deletion is non-reversable. Please proceed with caution.",
+  "delete_account_confirm": "Confirm Password",
+  "delete_account_submit": "Delete Account",
+  "delete_account_password_error": "Incorrect password. Account deletion failed.",
+  "updating": "Updating…",
+  "update_password": "Update Password",
+  "deleting": "Deleting…",
+  "delete_account": "Delete Account"
+}

@@ -1,0 +1,14 @@
+{
+  "Base": "기본",
+  "Plus": "플러스",
+  "trial": "{{trialDays}}일의 무료 체험판",
+  "price": "유저 당 / {{interval}}일",
+  "unlimited_usage": "무제한 사용량",
+  "unlimited_members": "무제한 멤버",
+  "email_support": "이메일 지원",
+  "base_plus": "기본 플랜의 모든것과",
+  "new_feature_plus": "새 기능 얼리 액세스",
+  "CS_plus": "24/7 고객센터 + Slack 액세스",
+  "button": "지금 시작하기",
+  "loading": "로딩중…"
+}

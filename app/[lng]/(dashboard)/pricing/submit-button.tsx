@@ -3,9 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import { useTranslation } from '@/app/i18n/useTranslation/client';
 
-export function SubmitButton() {
+export function SubmitButton({lng}: {lng: string}) {
   const { pending } = useFormStatus();
+  const {t} = useTranslation(lng, 'pricing',{});
 
   return (
     <Button
@@ -16,11 +18,11 @@ export function SubmitButton() {
       {pending ? (
         <>
           <Loader2 className="animate-spin mr-2 h-4 w-4" />
-          Loading...
+          {t('loading')}
         </>
       ) : (
         <>
-          Get Started
+          {t('button')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </>
       )}

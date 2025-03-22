@@ -13,7 +13,9 @@ export default async function HomePage({
 }) {
   const { lng } = await params;
 
-  const { t } = await useTranslation(lng, 'common');
+  const { t } = await useTranslation(lng, 'main1');
+  const { t: t2 } = await useTranslation(lng, 'main2');
+  const { t: t3 } = await useTranslation(lng, 'main3');
   return (
     <main>
       <section className="py-20">
@@ -21,13 +23,11 @@ export default async function HomePage({
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-foreground tracking-tight sm:text-5xl md:text-6xl">
-                Build Your SaaS
-                <span className="block text-orange-500">Faster Than Ever</span>
+                {t('title')}
+                <span className="block text-orange-500">{t('subtitle')}</span>
               </h1>
               <p className="mt-3 text-base text-muted-foreground sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Launch your SaaS product in record time with our powerful,
-                ready-to-use template. Packed with modern technologies and
-                essential integrations.
+                {t('description')}
               </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
@@ -35,7 +35,7 @@ export default async function HomePage({
                   target="_blank"
                 >
                   <Button className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-lg px-8 py-4 inline-flex items-center justify-center">
-                    Deploy your own
+                    {t('button')}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
@@ -62,11 +62,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  Next.js and React
+                  {t2('first_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  Leverage the power of modern web technologies for optimal
-                  performance and developer experience.
+                  {t2('first_description')}
                 </p>
               </div>
             </div>
@@ -77,11 +76,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  Postgres and Drizzle ORM
+                  {t2('second_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  Robust database solution with an intuitive ORM for efficient
-                  data management and scalability.
+                  {t2('second_description')}
                 </p>
               </div>
             </div>
@@ -92,11 +90,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  Stripe Integration
+                  {t2('third_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  Seamless payment processing and subscription management with
-                  industry-leading Stripe integration.
+                  {t2('third_description')}
                 </p>
               </div>
             </div>
@@ -109,12 +106,10 @@ export default async function HomePage({
           <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
-                Ready to launch your SaaS?
+                {t3('title')}
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-                Our template provides everything you need to get your SaaS up
-                and running quickly. Don't waste time on boilerplate - focus on
-                what makes your product unique.
+                {t3('description')}
               </p>
             </div>
             <div className="mt-8 lg:mt-0 flex justify-center lg:justify-end">
@@ -123,7 +118,7 @@ export default async function HomePage({
                 target="_blank"
               >
                 <Button className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-xl px-12 py-6 inline-flex items-center justify-center">
-                  View the code
+                  {t3('button')}
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </a>

@@ -1,0 +1,6 @@
+{
+  "user_not_in_team": "사용자가 팀에 속해있지 않습니다",
+  "already_member": "이미 팀에 속한 멤버입니다",
+  "invitation_exists": "이 이메일로 이미 초대장이 발송되었습니다",
+  "success": "초대장이 성공적으로 발송되었습니다"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "팀 설정",
+  "subscription": "팀 구독",
+  "current_plan": "현재 플랜",
+  "free": "무료",
+  "monthly": "월간 결제",
+  "trial": "체험 기간",
+  "no_subscription": "활성화된 구독 없음",
+  "manage": "구독 관리",
+  "members": "팀 멤버",
+  "removing": "삭제 중...",
+  "remove": "삭제"
+}

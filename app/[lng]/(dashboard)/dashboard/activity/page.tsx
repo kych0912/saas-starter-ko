@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { ActivityType } from '@/lib/db/schema';
 import { getActivityLogs } from '@/lib/db/queries';
+import { useTranslation } from '@/app/i18n/useTranslation';
 
 const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.SIGN_UP]: UserPlus,
@@ -27,58 +28,64 @@ const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.ACCEPT_INVITATION]: CheckCircle,
 };
 
-function getRelativeTime(date: Date) {
+function getRelativeTime(date: Date, t: any) {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-  if (diffInSeconds < 60) return 'just now';
+  if (diffInSeconds < 60) return t('just_now');
   if (diffInSeconds < 3600)
-    return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    return t('minutes_ago', { count: Math.floor(diffInSeconds / 60) });
   if (diffInSeconds < 86400)
-    return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return t('hours_ago', { count: Math.floor(diffInSeconds / 3600) });
   if (diffInSeconds < 604800)
-    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    return t('days_ago', { count: Math.floor(diffInSeconds / 86400) });
   return date.toLocaleDateString();
 }
 
 function formatAction(action: ActivityType): string {
   switch (action) {
     case ActivityType.SIGN_UP:
-      return 'You signed up';
+      return 'sign_up';
     case ActivityType.SIGN_IN:
-      return 'You signed in';
+      return 'sign_in';
     case ActivityType.SIGN_OUT:
-      return 'You signed out';
+      return 'sign_out';
     case ActivityType.UPDATE_PASSWORD:
-      return 'You changed your password';
+      return 'update_password';
     case ActivityType.DELETE_ACCOUNT:
-      return 'You deleted your account';
+      return 'delete_account';
     case ActivityType.UPDATE_ACCOUNT:
-      return 'You updated your account';
+      return 'update_account';
     case ActivityType.CREATE_TEAM:
-      return 'You created a new team';
+      return 'create_team';
     case ActivityType.REMOVE_TEAM_MEMBER:
-      return 'You removed a team member';
+      return 'remove_team_member';
     case ActivityType.INVITE_TEAM_MEMBER:
-      return 'You invited a team member';
+      return 'invite_team_member';
     case ActivityType.ACCEPT_INVITATION:
-      return 'You accepted an invitation';
+      return 'accept_invitation';
     default:
-      return 'Unknown action occurred';
+      return 'unknown';
   }
 }
 
-export default async function ActivityPage() {
+export default async function ActivityPage({
+  params,
+}: {
+  params: Promise<{ lng: string }>
+}) {
+  const { lng } = await params;
+  const { t } = await useTranslation(lng, 'activity')
   const logs = await getActivityLogs();
 
   return (
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-medium text-foreground mb-6">
-        Activity Log
+        {t('title')}
       </h1>
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
+          <CardTitle>{t('card_title')}</CardTitle>
         </CardHeader>
         <CardContent>
           {logs.length > 0 ? (
@@ -96,11 +103,11 @@ export default async function ActivityPage() {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-foreground">
-                        {formattedAction}
-                        {log.ipAddress && ` from IP ${log.ipAddress}`}
+                        {t(formattedAction)}
+                        {log.ipAddress && ` ${t('from_ip')} ${log.ipAddress}`}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {getRelativeTime(new Date(log.timestamp))}
+                        {getRelativeTime(new Date(log.timestamp), t)}
                       </p>
                     </div>
                   </li>
@@ -111,11 +118,10 @@ export default async function ActivityPage() {
             <div className="flex flex-col items-center justify-center text-center py-12">
               <AlertCircle className="h-12 w-12 text-orange-500 mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">
-                No activity yet
+                {t('no_activity')}
               </h3>
               <p className="text-sm text-muted-foreground max-w-sm">
-                When you perform actions like signing in or updating your
-                account, they'll appear here.
+                {t('when_you_perform_actions')}
               </p>
             </div>
           )}

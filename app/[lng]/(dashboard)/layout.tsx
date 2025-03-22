@@ -16,12 +16,14 @@ import { signOut } from '@/app/[lng]/(login)/actions';
 import { useRouter } from 'next/navigation';
 import DarkModeToggle from '@/components/dark-mode-toggle';
 import { useParams } from 'next/navigation';
+import { useTranslation } from '@/app/i18n/useTranslation/client';
 
 function Header({lng}: {lng: string}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { userPromise } = useUser();
   const user = use(userPromise);
   const router = useRouter();
+  const { t } = useTranslation(lng, 'header', {})
 
   async function handleSignOut() {
     await signOut();
@@ -41,7 +43,7 @@ function Header({lng}: {lng: string}) {
             href={`/${lng}/pricing`}
             className="text-sm font-medium text-foreground hover:text-accent-foreground"
           >
-            Pricing
+            {t('pricing')}
           </Link>
           {user ? (
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -60,14 +62,14 @@ function Header({lng}: {lng: string}) {
                 <DropdownMenuItem className="cursor-pointer">
                   <Link href={`/${lng}/dashboard`} className="flex w-full items-center">
                     <Home className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>{t('dashboard')}</span>
                   </Link>
                 </DropdownMenuItem>
                 <form action={handleSignOut} className="w-full">
                   <button type="submit" className="flex w-full">
                     <DropdownMenuItem className="w-full flex-1 cursor-pointer">
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign out</span>
+                      <span>{t('signout')}</span>
                     </DropdownMenuItem>
                   </button>
                 </form>
@@ -78,7 +80,7 @@ function Header({lng}: {lng: string}) {
               asChild
               className="bg-foreground hover:bg-accent-foreground/90 text-background text-sm px-4 py-2 rounded-full"
             >
-              <Link href={`/${lng}/sign-up`}>Sign Up</Link>
+              <Link href={`/${lng}/sign-up`}>{t('signup')}</Link>
             </Button>
           )}
           <DarkModeToggle />

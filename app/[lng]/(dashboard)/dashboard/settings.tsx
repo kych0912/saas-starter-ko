@@ -8,13 +8,15 @@ import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember } from '@/app/[lng]/(login)/actions';
 import { InviteTeamMember } from './invite-team';
 import Link from 'next/link';
+import { useTranslation } from '@/app/i18n/useTranslation/client';
 
 type ActionState = {
   error?: string;
   success?: string;
 };
 
-export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
+export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng: string }) {
+  const { t } = useTranslation(lng, 'setting', {})
   const [removeState, removeAction, isRemovePending] = useActionState<
     ActionState,
     FormData
@@ -26,29 +28,29 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium mb-6">Team Settings</h1>
+      <h1 className="text-lg lg:text-2xl font-medium mb-6">{t('title')}</h1>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Team Subscription</CardTitle>
+          <CardTitle>{t('subscription')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
                 <p className="font-medium">
-                  Current Plan: {teamData.planName || 'Free'}
+                  {t('current_plan')}: {teamData.planName || t('free')}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {teamData.subscriptionStatus === 'active'
-                    ? 'Billed monthly'
+                    ? t('monthly')
                     : teamData.subscriptionStatus === 'trialing'
-                      ? 'Trial period'
-                      : 'No active subscription'}
+                      ? t('trial')
+                      : t('no_subscription')}
                 </p>
               </div>
               <Link href="/billing" passHref>
                 <Button type="submit" variant="outline">
-                  Manage Subscription
+                  {t('manage')}
                 </Button>
               </Link>
             </div>
@@ -57,7 +59,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
       </Card>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Team Members</CardTitle>
+          <CardTitle>{t('members')}</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
@@ -94,7 +96,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                       size="sm"
                       disabled={isRemovePending}
                     >
-                      {isRemovePending ? 'Removing...' : 'Remove'}
+                      {isRemovePending ? t('removing') : t('remove')}
                     </Button>
                   </form>
                 ) : null}
@@ -106,7 +108,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
           )}
         </CardContent>
       </Card>
-      <InviteTeamMember />
+      <InviteTeamMember lng={lng} />
     </section>
   );
 }

@@ -1,0 +1,10 @@
+{
+  "title": "Invite Team Member",
+  "email": "Email",
+  "role": "Role",
+  "member": "Member",
+  "owner": "Owner",
+  "invite": "Invite Member",
+  "inviting": "Inviting…",
+  "error": "You must be a team owner to invite new members."
+}

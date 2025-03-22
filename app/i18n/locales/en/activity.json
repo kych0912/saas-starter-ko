@@ -1,0 +1,21 @@
+{
+  "title": "Activity Log",
+  "card_title": "Recent Activity",
+  "sign_up": "You signed up",
+  "sign_in": "You signed in",
+  "sign_out": "You signed out",
+  "update_password": "You changed your password",
+  "delete_account": "You deleted your account",
+  "update_account": "You updated your account",
+  "create_team": "You created a new team",
+  "remove_team_member": "You removed a team member",
+  "invite_team_member": "You invited a team member",
+  "accept_invitation": "You accepted an invitation",
+  "unknown": "Unknown action occurred",
+  "no_activity": "No activity yet",
+  "when_you_perform_actions": "When you perform actions like signing in or updating your                account, they'll appear here.",
+  "just_now": "just now",
+  "minutes_ago": "minutes ago",
+  "hours_ago": "hours ago",
+  "days_ago": "days ago"
+}

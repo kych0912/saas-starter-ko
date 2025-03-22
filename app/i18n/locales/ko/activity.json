@@ -1,0 +1,21 @@
+{
+  "title": "활동 로그",
+  "card_title": "최근 활동",
+  "sign_up": "회원가입 완료",
+  "sign_in": "로그인 완료",
+  "sign_out": "로그아웃 완료",
+  "update_password": "비밀번호 변경 완료",
+  "delete_account": "계정 삭제 완료",
+  "update_account": "계정 정보 업데이트 완료",
+  "create_team": "새 팀 생성 완료",
+  "remove_team_member": "팀 멤버 제거 완료",
+  "invite_team_member": "팀 멤버 초대 완료",
+  "accept_invitation": "초대 수락 완료",
+  "unknown": "알 수 없는 작업이 발생했습니다",
+  "no_activity": "아직 활동이 없습니다.",
+  "when_you_perform_actions": "로그인 또는 업데이트 시, 이곳에 표시됩니다.",
+  "just_now": "방금",
+  "minutes_ago": "{{count}}분 전",
+  "hours_ago": "{{count}}시간 전",
+  "days_ago": "{{count}}일 전"
+}

@@ -250,12 +250,12 @@ export const updatePassword = validatedActionWithUser(
     );
 
     if (!isPasswordValid) {
-      return { error: 'Current password is incorrect.' };
+      return { error: 'password_incorrect' };
     }
 
     if (currentPassword === newPassword) {
       return {
-        error: 'New password must be different from the current password.',
+        error: 'new_password_must_be_different',
       };
     }
 
@@ -270,7 +270,7 @@ export const updatePassword = validatedActionWithUser(
       logActivity(userWithTeam?.teamId, user.id, ActivityType.UPDATE_PASSWORD),
     ]);
 
-    return { success: 'Password updated successfully.' };
+    return { success: 'password_updated' };
   },
 );
 
@@ -285,7 +285,7 @@ export const deleteAccount = validatedActionWithUser(
 
     const isPasswordValid = await comparePasswords(password, user.passwordHash);
     if (!isPasswordValid) {
-      return { error: 'Incorrect password. Account deletion failed.' };
+      return { error: 'delete_account_password_error' };
     }
 
     const userWithTeam = await getUserWithTeam(user.id);
@@ -337,7 +337,7 @@ export const updateAccount = validatedActionWithUser(
       logActivity(userWithTeam?.teamId, user.id, ActivityType.UPDATE_ACCOUNT),
     ]);
 
-    return { success: 'Account updated successfully.' };
+    return { success: 'account_updated' };
   },
 );
 
@@ -386,7 +386,7 @@ export const inviteTeamMember = validatedActionWithUser(
     const userWithTeam = await getUserWithTeam(user.id);
 
     if (!userWithTeam?.teamId) {
-      return { error: 'User is not part of a team' };
+      return { error: 'user_not_in_team' };
     }
 
     const existingMember = await db
@@ -402,7 +402,7 @@ export const inviteTeamMember = validatedActionWithUser(
       .limit(1);
 
     if (existingMember.length > 0) {
-      return { error: 'User is already a member of this team' };
+      return { error: 'already_member' };
     }
 
     // Check if there's an existing invitation
@@ -419,7 +419,7 @@ export const inviteTeamMember = validatedActionWithUser(
       .limit(1);
 
     if (existingInvitation.length > 0) {
-      return { error: 'An invitation has already been sent to this email' };
+      return { error: 'invitation_exists' };
     }
 
     // Create a new invitation
@@ -440,6 +440,6 @@ export const inviteTeamMember = validatedActionWithUser(
     // TODO: Send invitation email and include ?inviteId={id} to sign-up URL
     // await sendInvitationEmail(email, userWithTeam.team.name, role)
 
-    return { success: 'Invitation sent successfully' };
+    return { success: 'success' };
   },
 );

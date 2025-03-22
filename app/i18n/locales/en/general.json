@@ -1,0 +1,10 @@
+{
+  "title": "General Settings",
+  "card_title": "Account Information",
+  "name": "name",
+  "email": "email",
+  "submit": "Save Changes",
+  "saving": "saving…",
+  "save_changes": "Save Changes",
+  "account_updated": "Account updated successfully."
+}

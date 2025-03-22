@@ -1,0 +1,13 @@
+{
+  "title": "Team Settings",
+  "subscription": "Team Subscription",
+  "current_plan": "Current Plan",
+  "free": "Free",
+  "monthly": "Billed monthly",
+  "trial": "Trial period",
+  "no_subscription": "No active subscription",
+  "manage": "Manage Subscription",
+  "members": "Team Members",
+  "removing": "Removing…",
+  "remove": "Remove"
+}

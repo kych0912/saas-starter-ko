@@ -1,0 +1,10 @@
+{
+  "title": "기본 설정",
+  "card_title": "계정 정보",
+  "name": "이름",
+  "email": "이메일",
+  "submit": "변경사항 저장",
+  "saving": "저장중…",
+  "save_changes": "저장 완료",
+  "account_updated": "성공적으로 저장되었습니다."
+}

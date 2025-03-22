@@ -1,0 +1,20 @@
+{
+  "password_incorrect": "유효하지 않은 계정 정보입니다. 다시 시도해주세요",
+  "new_password_must_be_different": "기존 비밀번호와 다르게 설정해주세요",
+  "password_updated": "성공적으로 업데이트 되었습니다.",
+  "title": "보안 설정",
+  "card_title_password": "비밀번호",
+  "card_title_delete": "계정 삭제",
+  "current_password": "현재 비밀번호",
+  "new_password": "새 비밀번호",
+  "new_password_confirm": "비밀번호 확인",
+  "password_submit": "비밀번호 업데이트",
+  "delete_account_warning": "계정 삭제는 되돌릴 수 없습니다. 주의를 요합니다.",
+  "delete_account_confirm": "비밀번호 확인",
+  "delete_account_submit": "계정 삭제",
+  "delete_account_password_error": "비밀번호가 틀립니다. 계정 삭제에 실패했습니다.",
+  "updating": "변경중…",
+  "update_password": "비밀번호 변경 완료",
+  "deleting": "삭제중…",
+  "delete_account": "계정 삭제 완료"
+}
