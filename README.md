@@ -8,8 +8,8 @@ This Project based on a original [Next.js SaaS Starter](https://github.com/nextj
 
 1. Payment method change (Stripe -> PortOne)
 2. Support PortOne Webhook-Based Subscription Payment
-3. Dark mode (Sooooon.....)
-4. KO/EN Multi-languages support (Sooooon.....)
+3. Dark mode
+4. KO/EN Multi-languages support
 5. Google & Microsoft login (Sooooon.....)
 
 ## Features
