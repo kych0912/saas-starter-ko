@@ -25,7 +25,7 @@ import {
   validatedAction,
   validatedActionWithUser,
 } from '@/lib/auth/middleware';
-
+import { createCustomer } from '@/lib/payments/steppay/steppay';
 async function logActivity(
   teamId: number | null | undefined,
   userId: number,
@@ -125,7 +125,20 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   const passwordHash = await hashPassword(password);
 
+  const customer = await createCustomer({
+    email: email,
+  });
+
+  if(customer.isError){
+    return {
+      error: 'Failed to create customer',
+      email,
+      password,
+    };
+  }
+  
   const newUser: NewUser = {
+    id: customer.id,
     email,
     passwordHash,
     role: 'owner', // Default role, will be overridden if there's an invitation
