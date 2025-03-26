@@ -1,5 +1,5 @@
 import { db } from './drizzle';
-import { users, teams, teamMembers, products, prices } from './schema';
+import { users, teams, teamMembers } from './schema';
 import { hashPassword } from '@/lib/auth/session';
 
 async function seed() {
@@ -35,43 +35,6 @@ async function seed() {
     userId: user.id,
     role: 'owner',
   });
-
-  //test product seed
-  await db.insert(products).values([{
-    id: 'prod_12212058',
-    name: 'Base',
-    description: 'Base subscription plan',
-    active: true,
-  },{
-    id: 'prod_12212059',
-    name: 'Plus',
-    description: 'Plus subscription plan',
-    active: true, 
-  }]);
-
-  //test price seed
-  await db.insert(prices).values([{
-    id: 'price_12212058',
-    productId: 'prod_12212058',
-    currency: 'usd',
-    unitAmount: '800',
-    trialPeriodDays: 14,
-    interval: 30,
-    active: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },{
-    id: 'price_12212059',
-    productId: 'prod_12212059',
-    currency: 'usd',
-    unitAmount: '1200',
-    trialPeriodDays: 14,
-    interval: 30,
-    active: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }]);
-  
 }
 
 seed()

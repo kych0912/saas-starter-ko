@@ -2,9 +2,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, CreditCard, Database } from 'lucide-react';
 import { Terminal } from './terminal';
 import { useTranslation } from '@/app/i18n/useTranslation';
-import { Trans } from 'react-i18next/TransWithoutContext'
-import { languages } from '@/app/i18n/setting';
-import Link from 'next/link';
 
 export default async function HomePage({
   params,

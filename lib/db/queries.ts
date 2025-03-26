@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, billingKeys, prices, products, session, teamMembers, teams, users } from './schema';
+import { activityLogs, teamMembers, teams, users } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -34,16 +34,6 @@ export async function getUser() {
   }
 
   return user[0];
-}
-
-export async function getTeamByCustomerId(customerId: string) {
-  const result = await db
-    .select()
-    .from(teams)
-    .where(eq(teams.customerId, customerId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : null;
 }
 
 export async function updateTeamSubscription(
@@ -127,94 +117,3 @@ export async function getTeamForUser(userId: number) {
 
   return result?.teamMembers[0]?.team || null;
 }
-
-export async function getProducts(){
-  const result = await db.select({
-    productId: products.id,
-    productName: products.name,
-    productDescription: products.description,
-    productActive: products.active,
-    priceId: prices.id,
-    priceUnitAmount: prices.unitAmount,
-    priceInterval: prices.interval,
-    priceTrialPeriodDays: prices.trialPeriodDays,
-  })
-  .from(products)
-  .innerJoin(prices, eq(products.id, prices.productId))
-  .orderBy(prices.unitAmount);
-  
-  return result;
-}
-
-export async function insertBillingKey(teamId: number, key: string) {
-  console.log('insertBillingKey', teamId, key);
-  
-  const teamBillingKeys = await db
-  .select()
-  .from(billingKeys)
-  .where(eq(billingKeys.teamId, teamId));
-
-  console.log(teamBillingKeys);
-
-  if (teamBillingKeys.length > 0) {
-    await db.update(billingKeys).set({
-      key,
-      updatedAt: new Date(),
-    }).where(eq(billingKeys.teamId, teamId));
-    return;
-  }
-
-  await db.insert(billingKeys).values({
-    teamId,
-    key,
-  });
-}
-
-export async function getPriceById(priceId: string) {
-  const result = await db.select().from(prices).where(eq(prices.id, priceId));
-  return result[0];
-}
-
-export async function getProductById(productId: string) {
-  const result = await db.select().from(products).where(eq(products.id, productId));
-  return result[0];
-}
-
-export async function getTeamById(teamId: number) {
-  const result = await db.select().from(teams).where(eq(teams.id, teamId));
-  return result[0];
-}
-
-type billingKey = typeof billingKeys.$inferSelect;
-
-export async function getBillingKeyByTeamId(teamId: number): Promise<billingKey> {
-  const result = await db.select().from(billingKeys).where(eq(billingKeys.teamId, teamId));
-  return result[0];
-}
-
-export async function createCheckoutSession(
-  teamId: number, 
-  customerId: string, 
-  productId: string, 
-  priceId: string,
-  paymentId: string,
-  billingKey: string
-): Promise<typeof session.$inferSelect> {
-
-  const _session = await db.insert(session).values({
-    teamId,
-    customerId,
-    productId,
-    priceId,
-    paymentId,
-    billingKey
-  }).returning();
-
-  return _session[0];
-}
-
-export async function getSessionById(sessionId: number) {
-  const result = await db.select().from(session).where(eq(session.id, sessionId));
-  return result[0];
-}
-
