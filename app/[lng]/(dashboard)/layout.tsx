@@ -14,7 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/lib/auth';
 import { signOut } from '@/app/[lng]/(login)/actions';
 import { useRouter } from 'next/navigation';
-import DarkModeToggle from '@/components/dark-mode-toggle';
+import DarkModeToggle from '@/components/ui/dark-mode-toggle';
+import LanguageSwitchToggle from "@/components/ui/language-switch-toggle"
 import { useParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/useTranslation/client';
 
@@ -84,6 +85,7 @@ function Header({lng}: {lng: string}) {
             </Button>
           )}
           <DarkModeToggle />
+          <LanguageSwitchToggle/>
         </div>
       </div>
     </header>
