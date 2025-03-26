@@ -37,7 +37,8 @@ export default async function PricingPage({params}: {params: Promise<{lng: strin
             'unlimited_members',
             'email_support',
           ]}
-          priceId={basePlan?.id.toString()}
+          priceCode={basePlan?.code}
+          productCode={productCode}
           lng={lng}
         />
         <PricingCard
@@ -51,7 +52,8 @@ export default async function PricingPage({params}: {params: Promise<{lng: strin
             'new_feature_plus',
             'CS_plus',
           ]}
-          priceId={plusPlan?.id.toString()}
+          priceCode={plusPlan?.code}
+          productCode={productCode}
           lng={lng}
         />
       </div>

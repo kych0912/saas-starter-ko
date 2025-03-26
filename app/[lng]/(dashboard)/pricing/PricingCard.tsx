@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { SubmitButton } from './submit-button';
-import { createPortOneCheckoutAction } from '@/lib/payments/actions';
+import { createCheckoutAction } from '@/lib/payments/actions';
 import { useTranslation } from '@/app/i18n/useTranslation';
 import { DemoPeriodUnit, IntervalUnit } from '@/lib/payments/types/Product';
 
@@ -9,7 +9,8 @@ export default async function PricingCard({
     price,
     interval,
     features,
-    priceId,
+    priceCode,
+    productCode,
     lng,
     demoData,
     unit
@@ -18,7 +19,8 @@ export default async function PricingCard({
     price: Record<string,number>;
     interval: number;
     features: string[];
-    priceId?: string;
+    priceCode?: string;
+    productCode?: string;
     lng: string;
     demoData: {
       enabledDemo: boolean;
@@ -84,8 +86,9 @@ export default async function PricingCard({
             </li>
           ))}
         </ul>
-        <form action={createPortOneCheckoutAction}>
-          <input type="hidden" name="priceId" value={priceId} />
+        <form action={createCheckoutAction}>
+          <input type="hidden" name="productCode" value={productCode} />
+          <input type="hidden" name="priceCode" value={priceCode} />
           <SubmitButton lng={lng}/>
         </form>
       </div>
