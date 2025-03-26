@@ -147,3 +147,23 @@ export async function getOrder(orderCode:string):Promise<OrderV1DTO>{
     const data = await response.json() as OrderV1DTO;
     return data;
 }
+
+export async function createCustomPortalSession(team:Team):Promise<string>{ 
+
+    const customerId = team.stepPayCustomerId;
+
+    if(!customerId){
+        redirect('/pricing');
+    }
+
+    const response = await fetch(`https://api.steppay.kr/api/v1/session/${customerId}`,{
+        method:"GET",
+        headers:{
+            "Secret-Token": process.env.STEPPAY_SECRET_KEY!,
+            "Content-Type": "application/json",
+            "Accept": "*/*",
+        },
+    })
+    const data = await response.text();
+    return data;
+}

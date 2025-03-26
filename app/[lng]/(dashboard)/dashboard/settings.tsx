@@ -7,8 +7,9 @@ import { useActionState } from 'react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember } from '@/app/[lng]/(login)/actions';
 import { InviteTeamMember } from './invite-team';
-import Link from 'next/link';
 import { useTranslation } from '@/app/i18n/useTranslation/client';
+import { createCustomPortalSessionAction } from '@/lib/payments/actions';
+
 
 type ActionState = {
   error?: string;
@@ -48,11 +49,11 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
                       : t('no_subscription')}
                 </p>
               </div>
-              <Link href="/billing" passHref>
+              <form action={createCustomPortalSessionAction}>
                 <Button type="submit" variant="outline">
                   {t('manage')}
                 </Button>
-              </Link>
+              </form>
             </div>
           </div>
         </CardContent>
