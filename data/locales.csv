@@ -108,10 +108,10 @@ security.delete_account,Delete Account,계정 삭제 완료
 pricing.Base,Base,기본
 pricing.Plus,Plus,플러스
 pricing.trial,with {{trialDays}} {{unit}} free trial,{{trialDays}}일의 무료 체험판
-pricing.unit_day,days,일
-pricing.unit_week,weeks,주
-pricing.unit_month,months,달
-pricing.unit_year,years,년
+pricing.unit_day,day,일
+pricing.unit_week,week,주
+pricing.unit_month,month,달
+pricing.unit_year,year,년
 ,,
 pricing.price,per user / {{interval}} {{unit}},유저 당 / {{interval}} {{unit}}
 pricing.unlimited_usage,Unlimited Usage,무제한 사용량
