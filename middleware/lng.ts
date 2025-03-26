@@ -24,9 +24,9 @@ export async function middleware(request: NextRequest, response?: NextResponse) 
         !languages.some(loc => request.nextUrl.pathname.startsWith(`/${loc}`)) &&
         !request.nextUrl.pathname.startsWith('/_next')
     ) {
-        console.log('redirecting to', `/${lng}${request.nextUrl.pathname}`);
+        console.log('redirecting to', `/${lng}${request.nextUrl.pathname}${request.nextUrl.search}`);
         res.cookies.set(cookieName, lng);
-        return NextResponse.redirect(new URL(`/${lng}${request.nextUrl.pathname}`, request.url));
+        return NextResponse.redirect(new URL(`/${lng}${request.nextUrl.pathname}${request.nextUrl.search}`, request.url));
     }
     
     if (request.headers.has('referer')) {
