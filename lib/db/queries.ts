@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import { activityLogs, Team, teamMembers, teams, users } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -36,22 +36,32 @@ export async function getUser() {
   return user[0];
 }
 
-export async function updateTeamSubscription(
-  teamId: number,
-  subscriptionData: {
-    stripeSubscriptionId: string | null;
-    stripeProductId: string | null;
-    planName: string | null;
-    subscriptionStatus: string;
-  }
-) {
-  await db
-    .update(teams)
-    .set({
-      ...subscriptionData,
-      updatedAt: new Date(),
-    })
-    .where(eq(teams.id, teamId));
+
+
+export async function updateTeamSubscription({
+  teamid,
+  subscriptionStatus,
+  stepPaySubscriptionId,
+  planName,
+  stepPayProductCode,
+  stepPayPriceCode,
+}:{
+  teamid:number,
+  subscriptionStatus:string | null,
+  stepPaySubscriptionId:string | null,
+  planName:string | null,
+  stepPayProductCode:string | null,
+  stepPayPriceCode:string | null,
+  updatedAt: Date,
+}) {
+  await db.update(teams).set({
+    subscriptionStatus,
+    stepPaySubscriptionId,
+    planName,
+    stepPayProductCode,
+    stepPayPriceCode,
+    updatedAt: new Date(),
+  }).where(eq(teams.id, teamid));
 }
 
 export async function getUserWithTeam(userId: number) {
