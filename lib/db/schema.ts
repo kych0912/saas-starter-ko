@@ -27,12 +27,12 @@ export const teams = pgTable('teams', {
   name: varchar('name', { length: 100 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-  customerId: text('customer_id').unique(),
-  subscriptionId: text('subscription_id').unique(),
-  productId: text('product_id'),
+  stepPayCustomerId: text('steppay_customer_id').unique(),
+  stepPaySubscriptionId: text('steppay_subscription_id').unique(),
+  stepPayProductCode: text('steppay_product_code'),
+  stepPayPriceCode: text('steppay_price_code'),
   planName: varchar('plan_name', { length: 50 }),
   subscriptionStatus: varchar('subscription_status', { length: 20 }), // active, inactive, canceled, unpaid, trial
-  shouldTrial: boolean('should_trial').default(true),
 });
 
 export const teamMembers = pgTable('team_members', {
@@ -70,66 +70,7 @@ export const invitations = pgTable('invitations', {
     .references(() => users.id),
   invitedAt: timestamp('invited_at').notNull().defaultNow(),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
-});
-
-export const products = pgTable('products', {
-  id: varchar('id').primaryKey(), // Product ID
-  name: text('name').notNull(),
-  description: text('description'),
-  active: boolean('active').default(true),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-export const prices = pgTable('prices', {
-  id: varchar('id').primaryKey(), // Price ID
-  productId: varchar('product_id').references(() => products.id),
-  currency: varchar('currency').notNull(),
-  unitAmount: decimal('unit_amount').notNull(), // (10000 = 100.00 USD)
-  trialPeriodDays: integer('trial_period_days'), // trial period
-  interval: integer('interval').notNull(), // 30, 365
-  intervalCount: integer('interval_count'), // interval frequency
-  active: boolean('active').default(true),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-//checkout session information
-export const session = pgTable('session', {
-  id: serial('id').primaryKey(),
-  paymentId: varchar('payment_id').notNull(),
-  billingKey: varchar('billing_key', { length: 255 }).notNull(),
-  teamId: integer('team_id').notNull().references(() => teams.id),
-  customerId: varchar('customer_id').notNull(),
-  productId: varchar('product_id').notNull().references(() => products.id),
-  priceId: varchar('price_id').notNull().references(() => prices.id),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-//팀 마다 빌링키
-export const billingKeys = pgTable('billing_keys', {
-  id: serial('id').primaryKey(),
-  teamId: integer('team_id').references(() => teams.id),
-  key: varchar('key', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-export const billingKeysRelations = relations(billingKeys, ({ one }) => ({
-  team: one(teams, {
-    fields: [billingKeys.teamId],
-    references: [teams.id],
-  }),
-}));
-
-//1:1 relations between products and prices
-export const pricesRelations = relations(prices, ({ one }) => ({
-  product: one(products, {
-    fields: [prices.productId],
-    references: [products.id],
-  }),
-}));
+}); 
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
@@ -185,9 +126,7 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
-export type Session = typeof session.$inferSelect;
-export type Price = typeof prices.$inferSelect;
-export type Product = typeof products.$inferSelect;
+
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;

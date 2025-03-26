@@ -41,7 +41,7 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
                   {t('current_plan')}: {teamData.planName || t('free')}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {teamData.subscriptionStatus === 'active'
+                  {teamData.subscriptionStatus === 'ACTIVE'
                     ? t('monthly')
                     : teamData.subscriptionStatus === 'trialing'
                       ? t('trial')

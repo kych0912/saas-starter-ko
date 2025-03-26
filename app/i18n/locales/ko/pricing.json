@@ -6,7 +6,7 @@
   "unit_week": "주",
   "unit_month": "달",
   "unit_year": "년",
-  "price": "유저 당 / {{interval}}{{unit}}",
+  "price": "유저 당 / {{interval}} {{unit}}",
   "unlimited_usage": "무제한 사용량",
   "unlimited_members": "무제한 멤버",
   "email_support": "이메일 지원",

@@ -124,21 +124,8 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   }
 
   const passwordHash = await hashPassword(password);
-
-  const customer = await createCustomer({
-    email: email,
-  });
-
-  if(customer.isError){
-    return {
-      error: 'Failed to create customer',
-      email,
-      password,
-    };
-  }
   
   const newUser: NewUser = {
-    id: customer.id,
     email,
     passwordHash,
     role: 'owner', // Default role, will be overridden if there's an invitation

@@ -4,8 +4,6 @@ import { initReactI18next } from 'react-i18next/initReactI18next'
 import { getOptions,LocaleTypes } from '../setting'
 
 const initI18next = async (lng: LocaleTypes, ns: string) => {
-    console.log(lng);   
-    console.log(ns);
   const i18nInstance = createInstance()
   await i18nInstance
     .use(initReactI18next)

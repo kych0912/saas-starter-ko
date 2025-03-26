@@ -1,15 +1,12 @@
 'use server';
 
-import { createPortOneCheckout, createCheckoutSubscription } from './portone-server';
 import { withTeam } from '@/lib/auth/middleware';
+import { createCheckout, redirectToCheckout } from './steppay/steppay';
 
-export const createPortOneCheckoutAction = withTeam(async (formData, team) => {
-    const priceId = formData.get('priceId') as string;
-    await createPortOneCheckout({ team: team, priceId });
+export const createCheckoutAction = withTeam(async (formData, team) => {
+    const productCode = formData.get('productCode') as string;
+    const priceCode = formData.get('priceCode') as string;
+    const order = await createCheckout({ team: team, productCode, priceCode });
+    await redirectToCheckout(order.orderCode);
 });
 
-export const createPayMentsByBillingKeyAction = withTeam(async (formData, team) => {
-    const priceId = formData.get('priceId') as string;
-    const billingKey = formData.get('billingKey') as string;
-    await createCheckoutSubscription({ team: team, priceId, billingKey });
-});
