@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUser, getTeamForUser } from '@/lib/db/queries';
-import { db } from '@/lib/db/drizzle';
-import { teams } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { getUser, getTeamForUser, updateTeamSubscription } from '@/lib/db/queries';
 import { getOrder } from '@/lib/payments/steppay/steppay';
-import { OrderType, SubscriptionStatus } from '@/lib/payments/types/Order';
+import { SubscriptionStatus } from '@/lib/payments/types/Order';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -48,19 +45,24 @@ export async function GET(request: NextRequest) {
     const item = subscription.items[0];
 
     const subscriptionStatus = subscription.status;
-    const subscriptionId = subscription.id;
+    const subscriptionId = subscription.id.toString();
     const planName = item.plan.name;
     const productCode = item.productCode;
     const priceCode = item.priceCode;
 
-    await db.update(teams).set({
-      subscriptionStatus,
-      stepPaySubscriptionId: subscriptionId.toString(),
-      planName,
-      stepPayProductCode: productCode,
+    if(!productCode || !priceCode){
+      return NextResponse.redirect(new URL('/pricing?error=invalid_product_or_price_code', request.url));
+    }
+
+    await updateTeamSubscription({
+      teamid: team.id, 
+      subscriptionStatus, 
+      stepPaySubscriptionId: subscriptionId, 
+      planName, 
+      stepPayProductCode: productCode, 
       stepPayPriceCode: priceCode,
       updatedAt: new Date(),
-    }).where(eq(teams.id, team.id));
+    });
       
     return NextResponse.redirect(new URL(`/dashboard`, request.url));
   } catch (error) {
