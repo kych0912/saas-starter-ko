@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
     const secret = process.env.STEPPAY_SECRET_KEY;
 
     if(!signature || !payload || !secret){
+        console.error('Invalid request');
         return NextResponse.json({message: 'Invalid request'}, {status: 400});
     }
 
@@ -20,6 +21,7 @@ export async function POST(request: NextRequest) {
         SteppayWebhookUtil.verifySignature(signature, data, secret);
         Event = body.event;
     }catch(error){
+        console.error('invalid signature');
         return NextResponse.json({message: 'Invalid signature'}, {status: 400});
     }
 
