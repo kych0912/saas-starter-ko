@@ -6,7 +6,7 @@ import { SubscriptionItem } from "@/lib/payments/types/Webhook";
 export async function POST(request: NextRequest) {
     const signature = request.headers.get('Steppay-Signature');
     const payload = await request.text();
-    const secret = process.env.STEPPAY_SECRET_KEY;
+    const secret = process.env.STEPPAY_WEBHOOK_SECRET;
 
     if(!signature || !payload || !secret){
         console.error('Invalid request');
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     let Event: string;
 
     try{
-        SteppayWebhookUtil.verifySignature(signature, data, secret);
+        SteppayWebhookUtil.verifySignature(signature, payload, secret);
         Event = body.event;
     }catch(error){
         console.error('invalid signature');
