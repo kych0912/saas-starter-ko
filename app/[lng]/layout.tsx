@@ -8,6 +8,7 @@ import { cookies } from 'next/headers';
 import { languages } from '@/app/i18n/setting';
 import { dir } from 'i18next'
 import { ClientCookiesProvider } from '@/lib/auth/provider';
+import { Provider as SessionProvider } from '@/lib/auth/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'Next.js SaaS Starter',
@@ -46,10 +47,12 @@ export default async function RootLayout({
     >
       <body className="min-h-[100dvh] bg-gray-50 dark:bg-gray-950">
         <UserProvider userPromise={userPromise}>
-          <ClientCookiesProvider>
-            {children}
-            <Toaster position='bottom-center'/>
-          </ClientCookiesProvider>
+          <SessionProvider>
+            <ClientCookiesProvider>
+              {children}
+              <Toaster position='bottom-center'/>
+            </ClientCookiesProvider>
+          </SessionProvider>
         </UserProvider>
       </body>
     </html>
