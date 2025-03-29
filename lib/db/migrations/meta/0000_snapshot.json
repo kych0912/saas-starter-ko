@@ -1,5 +1,5 @@
 {
-  "id": "0d389d44-5c60-4077-ab95-92d82466bcf1",
+  "id": "1380993c-8245-49f5-b61d-c8ab4fd70288",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -67,65 +67,6 @@
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.billing_keys": {
-      "name": "billing_keys",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "team_id": {
-          "name": "team_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "key": {
-          "name": "key",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "billing_keys_team_id_teams_id_fk": {
-          "name": "billing_keys_team_id_teams_id_fk",
-          "tableFrom": "billing_keys",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -210,257 +151,6 @@
           "tableTo": "users",
           "columnsFrom": [
             "invited_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.prices": {
-      "name": "prices",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "currency": {
-          "name": "currency",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "unit_amount": {
-          "name": "unit_amount",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "trial_period_days": {
-          "name": "trial_period_days",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "interval": {
-          "name": "interval",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "interval_count": {
-          "name": "interval_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "prices_product_id_products_id_fk": {
-          "name": "prices_product_id_products_id_fk",
-          "tableFrom": "prices",
-          "tableTo": "products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.products": {
-      "name": "products",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.session": {
-      "name": "session",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "payment_id": {
-          "name": "payment_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "billing_key": {
-          "name": "billing_key",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "team_id": {
-          "name": "team_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "customer_id": {
-          "name": "customer_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "price_id": {
-          "name": "price_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "session_team_id_teams_id_fk": {
-          "name": "session_team_id_teams_id_fk",
-          "tableFrom": "session",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "session_product_id_products_id_fk": {
-          "name": "session_product_id_products_id_fk",
-          "tableFrom": "session",
-          "tableTo": "products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "session_price_id_prices_id_fk": {
-          "name": "session_price_id_prices_id_fk",
-          "tableFrom": "session",
-          "tableTo": "prices",
-          "columnsFrom": [
-            "price_id"
           ],
           "columnsTo": [
             "id"
@@ -576,20 +266,26 @@
           "notNull": true,
           "default": "now()"
         },
-        "customer_id": {
-          "name": "customer_id",
+        "steppay_customer_id": {
+          "name": "steppay_customer_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "subscription_id": {
-          "name": "subscription_id",
+        "steppay_subscription_id": {
+          "name": "steppay_subscription_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "product_id": {
-          "name": "product_id",
+        "steppay_product_code": {
+          "name": "steppay_product_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "steppay_price_code": {
+          "name": "steppay_price_code",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -605,31 +301,24 @@
           "type": "varchar(20)",
           "primaryKey": false,
           "notNull": false
-        },
-        "should_trial": {
-          "name": "should_trial",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "teams_customer_id_unique": {
-          "name": "teams_customer_id_unique",
+        "teams_steppay_customer_id_unique": {
+          "name": "teams_steppay_customer_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "customer_id"
+            "steppay_customer_id"
           ]
         },
-        "teams_subscription_id_unique": {
-          "name": "teams_subscription_id_unique",
+        "teams_steppay_subscription_id_unique": {
+          "name": "teams_steppay_subscription_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "subscription_id"
+            "steppay_subscription_id"
           ]
         }
       },
