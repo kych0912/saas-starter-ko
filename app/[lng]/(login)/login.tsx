@@ -10,11 +10,13 @@ import { CircleIcon, Loader2 } from 'lucide-react';
 import { signIn, signUp } from './actions';
 import { ActionState } from '@/lib/auth/middleware';
 import { useTranslation } from '@/app/i18n/useTranslation/client';
+import { signIn as signInNextAuth } from 'next-auth/react';
 
 export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
-  const priceId = searchParams.get('priceId');
+  const priceCode = searchParams.get('priceCode');
+  const productCode = searchParams.get('productCode');
   const inviteId = searchParams.get('inviteId');
   const { t } = useTranslation(lng, mode,{});
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -38,8 +40,36 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <form className="space-y-6" action={formAction}>
           <input type="hidden" name="redirect" value={redirect || ''} />
-          <input type="hidden" name="priceId" value={priceId || ''} />
+          <input type="hidden" name="priceCode" value={priceCode || ''} />
+          <input type="hidden" name="productCode" value={productCode || ''} />
           <input type="hidden" name="inviteId" value={inviteId || ''} />
+
+          {
+            mode === 'signup' && (
+              <div>
+                <Label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-muted-foreground"
+                >
+                  {t('user')}
+                </Label>
+                <div className="mt-1">
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    autoComplete="username"
+                    defaultValue={state.username}
+                    required
+                    maxLength={100}
+                    className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-muted-foreground text-foreground focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                    placeholder="Enter your user name"
+                  />
+                </div>
+              </div>
+            )
+          }
+
           <div>
             <Label
               htmlFor="email"
@@ -94,6 +124,8 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
           <div>
             <Button
               type="submit"
+              name="provider"
+              value="credentials"
               className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
               disabled={pending}
             >
@@ -110,6 +142,44 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
             </Button>
           </div>
         </form>
+
+        <div className="mt-6 flex gap-2">
+          <Button 
+              type="submit"
+              name="provider"
+              value="google"
+              variant="outline"
+              className="justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex w-full flex-row items-center gap-2"
+              onClick={() => signInNextAuth('google',{
+                redirectTo:'/dashboard'
+              },{
+                inviteId,
+                productCode,
+                priceCode,
+              })}
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53"></path><path fill="none" d="M1 1h22v22H1z"></path></svg>
+            Google
+          </Button>
+
+          <Button 
+              type="submit"
+              name="provider"
+              value="facebook"
+              variant="outline"
+              className="justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex w-full flex-row items-center gap-2"
+              onClick={() => signInNextAuth('facebook',{
+                redirectTo:'/dashboard'
+              },{
+                inviteId,
+                productCode,
+                priceCode,
+              })}
+            >
+            <svg width="17" height="20" viewBox="0 0 17 20" fill="#0080ff" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_196_3851)"><path d="M5.7982 11.7172H8.20975V21.6452C8.20975 21.8412 8.36858 22 8.56459 22H12.6535C12.8495 22 13.0083 21.8412 13.0083 21.6452V11.764H15.7806C15.9608 11.764 16.1125 11.6287 16.1331 11.4497L16.5541 7.79467C16.5657 7.69411 16.5338 7.59341 16.4666 7.51797C16.3992 7.44246 16.3028 7.39924 16.2017 7.39924H13.0084V5.10812C13.0084 4.41746 13.3803 4.06723 14.1138 4.06723C14.2184 4.06723 16.2017 4.06723 16.2017 4.06723C16.3977 4.06723 16.5566 3.90834 16.5566 3.71239V0.357465C16.5566 0.161452 16.3977 0.00262581 16.2017 0.00262581H13.3243C13.304 0.00163226 13.259 0 13.1925 0C12.6933 0 10.9579 0.0980064 9.58709 1.3591C8.06824 2.7566 8.27937 4.42988 8.32983 4.71999V7.39917H5.7982C5.60219 7.39917 5.44336 7.55799 5.44336 7.75401V11.3623C5.44336 11.5583 5.60219 11.7172 5.7982 11.7172Z" fill="#0080ff"></path></g><defs><clipPath id="clip0_196_3851"><rect width="22" height="22" fill="white"></rect></clipPath></defs></svg>
+            Facebook
+          </Button>
+        </div>
 
         <div className="mt-6">
           <div className="relative">
@@ -129,7 +199,7 @@ export function Login({lng, mode = 'signin' }: { lng: string, mode?: 'signin' | 
             <Link
               href={`${mode === 'signin' ? `/${lng}/sign-up` : `/${lng}/sign-in`}${
                 redirect ? `?redirect=${redirect}` : ''
-              }${priceId ? `&priceId=${priceId}` : ''}`}
+              }${priceCode ? `&priceCode=${priceCode}` : ''}`}
               className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
             >
               {mode === 'signin'

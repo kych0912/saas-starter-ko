@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { use, useState } from 'react';
+import { useState, use } from 'react';
 import { Button } from '@/components/ui/button';
 import { CircleIcon, Home, LogOut } from 'lucide-react';
 import {
@@ -11,25 +11,21 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '@/lib/auth';
-import { signOut } from '@/app/[lng]/(login)/actions';
-import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import DarkModeToggle from '@/components/ui/dark-mode-toggle';
 import LanguageSwitchToggle from "@/components/ui/language-switch-toggle"
 import { useParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/useTranslation/client';
+import { useUser } from '@/lib/auth';
 
 function Header({lng}: {lng: string}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation(lng, 'header', {})
   const { userPromise } = useUser();
   const user = use(userPromise);
-  const router = useRouter();
-  const { t } = useTranslation(lng, 'header', {})
 
   async function handleSignOut() {
-    await signOut();
-    router.refresh();
-    router.push('/');
+    await signOut({callbackUrl: '/'});
   }
 
   return (
@@ -46,13 +42,15 @@ function Header({lng}: {lng: string}) {
           >
             {t('pricing')}
           </Link>
-          {user ? (
-            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <DropdownMenuTrigger>
+
+          {
+          user ? (
+              <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <DropdownMenuTrigger>
                 <Avatar className="cursor-pointer size-9">
                   <AvatarImage alt={user.name || ''} />
                   <AvatarFallback>
-                    {user.email
+                    {user.email!
                       .split(' ')
                       .map((n) => n[0])
                       .join('')}

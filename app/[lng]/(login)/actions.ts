@@ -16,7 +16,7 @@ import {
   ActivityType,
   invitations,
 } from '@/lib/db/schema';
-import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
+import { comparePasswords, hashPassword } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
@@ -25,8 +25,14 @@ import {
   validatedAction,
   validatedActionWithUser,
 } from '@/lib/auth/middleware';
-import { createCustomer } from '@/lib/payments/steppay/steppay';
-async function logActivity(
+import { 
+  authenticateUser, 
+  signInUserInterface,
+  signUpUserInterface
+} from '@/lib/auth/user-auth';
+
+
+export async function logActivity(
   teamId: number | null | undefined,
   userId: number,
   type: ActivityType,
@@ -52,48 +58,21 @@ const signInSchema = z.object({
 export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const { email, password } = data;
 
-  const userWithTeam = await db
-    .select({
-      user: users,
-      team: teams,
-    })
-    .from(users)
-    .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    .leftJoin(teams, eq(teamMembers.teamId, teams.id))
-    .where(eq(users.email, email))
-    .limit(1);
+  const userResult = await signInUserInterface(email, password);
 
-  if (userWithTeam.length === 0) {
-    return {
-      error: 'invalid_email_or_password',
-      email,
-      password,
-    };
+  if (!userResult.ok) {
+    return userResult.error;
   }
 
-  const { user: foundUser, team: foundTeam } = userWithTeam[0];
+  const user = userResult.value;
 
-  const isPasswordValid = await comparePasswords(
-    password,
-    foundUser.passwordHash,
-  );
-
-  if (!isPasswordValid) {
-    return {
-      error: 'invalid_email_or_password',
-      email,
-      password,
-    };
-  }
-
-  await Promise.all([
-    setSession(foundUser),
-    logActivity(foundTeam?.id, foundUser.id, ActivityType.SIGN_IN),
-  ]);
+  //유저 인증
+  await authenticateUser(user, password);
 
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
-    const priceId = formData.get('priceId') as string;
+    const priceCode = formData.get('priceCode') as string;
+    const productCode = formData.get('productCode') as string;
     // return createCheckoutSession({ team: foundTeam, priceId });
   }
 
@@ -101,120 +80,36 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 });
 
 const signUpSchema = z.object({
+  username: z.string(),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string(),
   inviteId: z.string().optional(),
 });
 
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
-  const { email, password, inviteId } = data;
+  const { username, email, password, inviteId } = data;
 
-  const existingUser = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-
-  if (existingUser.length > 0) {
-    return {
-      error: 'Failed to create user. Please try again.',
-      email,
-      password,
-    };
-  }
-
-  const passwordHash = await hashPassword(password);
-  
-  const newUser: NewUser = {
+  const userResult = await signUpUserInterface({
+    username,
     email,
-    passwordHash,
-    role: 'owner', // Default role, will be overridden if there's an invitation
-  };
+    password,
+    inviteId,
+  });
 
-  const [createdUser] = await db.insert(users).values(newUser).returning();
-
-  if (!createdUser) {
-    return {
-      error: 'Failed to create user. Please try again.',
-      email,
-      password,
-    };
+  if(!userResult.ok){
+    return userResult.error;
   }
 
-  let teamId: number;
-  let userRole: string;
-  let createdTeam: typeof teams.$inferSelect | null = null;
+  const user = userResult.value;
 
-  if (inviteId) {
-    // Check if there's a valid invitation
-    const [invitation] = await db
-      .select()
-      .from(invitations)
-      .where(
-        and(
-          eq(invitations.id, parseInt(inviteId)),
-          eq(invitations.email, email),
-          eq(invitations.status, 'pending'),
-        ),
-      )
-      .limit(1);
+  //유저 인증
+  await authenticateUser(user, password);
 
-    if (invitation) {
-      teamId = invitation.teamId;
-      userRole = invitation.role;
-
-      await db
-        .update(invitations)
-        .set({ status: 'accepted' })
-        .where(eq(invitations.id, invitation.id));
-
-      await logActivity(teamId, createdUser.id, ActivityType.ACCEPT_INVITATION);
-
-      [createdTeam] = await db
-        .select()
-        .from(teams)
-        .where(eq(teams.id, teamId))
-        .limit(1);
-    } else {
-      return { error: 'Invalid or expired invitation.', email, password };
-    }
-  } else {
-    // Create a new team if there's no invitation
-    const newTeam: NewTeam = {
-      name: `${email}'s Team`,
-    };
-
-    [createdTeam] = await db.insert(teams).values(newTeam).returning();
-
-    if (!createdTeam) {
-      return {
-        error: 'Failed to create team. Please try again.',
-        email,
-        password,
-      };
-    }
-
-    teamId = createdTeam.id;
-    userRole = 'owner';
-
-    await logActivity(teamId, createdUser.id, ActivityType.CREATE_TEAM);
-  }
-
-  const newTeamMember: NewTeamMember = {
-    userId: createdUser.id,
-    teamId: teamId,
-    role: userRole,
-  };
-
-  await Promise.all([
-    db.insert(teamMembers).values(newTeamMember),
-    logActivity(teamId, createdUser.id, ActivityType.SIGN_UP),
-    setSession(createdUser),
-  ]);
 
   const redirectTo = formData.get('redirect') as string | null;
   if (redirectTo === 'checkout') {
-    const priceId = formData.get('priceId') as string;
+    const priceCode = formData.get('priceCode') as string;
+    const productCode = formData.get('productCode') as string;
     // return createCheckoutSession({ team: createdTeam, priceId });
   }
 
@@ -246,7 +141,7 @@ export const updatePassword = validatedActionWithUser(
 
     const isPasswordValid = await comparePasswords(
       currentPassword,
-      user.passwordHash,
+      user.passwordHash!,
     );
 
     if (!isPasswordValid) {
@@ -283,7 +178,7 @@ export const deleteAccount = validatedActionWithUser(
   async (data, _, user) => {
     const { password } = data;
 
-    const isPasswordValid = await comparePasswords(password, user.passwordHash);
+    const isPasswordValid = await comparePasswords(password, user.passwordHash!);
     if (!isPasswordValid) {
       return { error: 'delete_account_password_error' };
     }
