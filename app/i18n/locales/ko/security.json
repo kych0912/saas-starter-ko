@@ -16,5 +16,6 @@
   "updating": "변경중…",
   "update_password": "비밀번호 변경 완료",
   "deleting": "삭제중…",
-  "delete_account": "계정 삭제 완료"
+  "delete_account": "계정 삭제 완료",
+  "oauth_password": "아직 비밀번호가 설정되지 않았습니다."
 }

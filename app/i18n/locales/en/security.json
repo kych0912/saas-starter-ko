@@ -16,5 +16,6 @@
   "updating": "Updating…",
   "update_password": "Update Password",
   "deleting": "Deleting…",
-  "delete_account": "Delete Account"
+  "delete_account": "Delete Account",
+  "oauth_password": "No password set yet."
 }

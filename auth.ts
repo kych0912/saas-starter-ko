@@ -65,7 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { inviteId, productCode, priceCode } = account;
         const provider = account.provider;
         const email = user.email;
-        const password = `oauth-${provider}`;
+        const password = `oauth`;
         const username = user.name;
 
 

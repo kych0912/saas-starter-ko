@@ -368,3 +368,8 @@ export async function signUpUserInterface({
         value:user
     }
 }
+
+export async function isOauthPassword(password: string): Promise<boolean> {
+    const oauthPassword = 'oauth';
+    return comparePasswords(oauthPassword, password);
+}
