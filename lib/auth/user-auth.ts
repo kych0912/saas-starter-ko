@@ -61,7 +61,7 @@ export async function findUserTeam(
         return {
             ok: false,
             error: {
-                error: 'user_not_found',
+                error: 'invalid_email_or_password',
                 message: { email }
             }
         };
