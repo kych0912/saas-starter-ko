@@ -12,10 +12,10 @@ import {
 import { Loader2, PlusCircle } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { use, useActionState } from 'react';
+import { useActionState, use } from 'react';
 import { inviteTeamMember } from '@/app/[lng]/(login)/actions';
-import { useUser } from '@/lib/auth';
 import { useTranslation } from '@/app/i18n/useTranslation/client';
+import { useUser } from '@/lib/auth';
 
 type ActionState = {
   error?: string;
@@ -23,10 +23,10 @@ type ActionState = {
 };
 
 export function InviteTeamMember({lng}: {lng: string}) {
-  const { userPromise } = useUser();
   const { t } = useTranslation(lng, 'team', {})
-  const { t: tInviteResponse } = useTranslation(lng, 'invite_response', {})
+  const { userPromise } = useUser();
   const user = use(userPromise);
+  const { t: tInviteResponse } = useTranslation(lng, 'invite_response', {})
   const isOwner = user?.role === 'owner';
   const [inviteState, inviteAction, isInvitePending] = useActionState<
     ActionState,
