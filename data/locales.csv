@@ -129,3 +129,6 @@ header.pricing,pricing,요금제
 header.signup,signup,회원가입
 header.signout,sign-out,로그아웃
 header.dashboard,dashboard,대시보드
+header.settings,settings,세팅
+header.darkMode,DarkMode,다크 모드
+header.language,Language,언어

@@ -2,5 +2,8 @@
   "pricing": "요금제",
   "signup": "회원가입",
   "signout": "로그아웃",
-  "dashboard": "대시보드"
+  "dashboard": "대시보드",
+  "settings": "세팅",
+  "darkMode": "다크 모드",
+  "language": "언어"
 }

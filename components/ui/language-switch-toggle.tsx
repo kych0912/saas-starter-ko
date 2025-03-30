@@ -16,7 +16,6 @@ export default function LanguageSwitchToggle() {
 
     return (
         <div className='flex items-center gap-2'>
-            <Globe />
             <Link 
                 href={lng === 'en' ? englishPath : koreanPath}
                 className='text-sm font-medium text-foreground hover:underline'

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, use } from 'react';
 import { Button } from '@/components/ui/button';
-import { CircleIcon, Home, LogOut } from 'lucide-react';
+import { CircleIcon, Home, LogOut, Settings, X } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,7 @@ import { useUser } from '@/lib/auth';
 
 function Header({lng}: {lng: string}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { t } = useTranslation(lng, 'header', {})
   const { userPromise } = useUser();
   const user = use(userPromise);
@@ -82,10 +83,43 @@ function Header({lng}: {lng: string}) {
               <Link href={`/${lng}/sign-up`}>{t('signup')}</Link>
             </Button>
           )}
-          <DarkModeToggle />
-          <LanguageSwitchToggle/>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSettingsOpen(true)}
+          >
+            <Settings className="h-6 w-6" />
+          </Button>
         </div>
       </div>
+      
+      {isSettingsOpen && (
+        <div onClick={() => setIsSettingsOpen(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div onClick={(e)=>e.stopPropagation()} className="bg-background p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">{t('settings')}</h2>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSettingsOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{t('darkMode')}</span>
+                <DarkModeToggle />
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{t('language')}</span>
+                <LanguageSwitchToggle />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
