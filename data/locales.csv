@@ -25,8 +25,8 @@ main2.first_title,Next.js and React,Next.js와 React 기반
 main2.first_description,Leverage the power of modern web technologies for optimal performance and developer experience.,최고의 성능과 개발 경험을 위한 현대적 웹 기술의 강점을 활용하세요.
 main2.second_title,Postgres and Drizzle ORM,Postgres와 Drizzle ORM 내장
 main2.second_description,Robust database solution with an intuitive ORM for efficient data management and scalability.,효율적인 데이터 관리와 확장성을 위한 직관적인 ORM을 갖춘 안정적인 데이터베이스 솔루션입니다.
-main2.third_title,Stripe Integration,Stripe 결제 통합
-main2.third_description,Seamless payment processing and subscription management with industry-leading Stripe integration.,업계 최고의 Stripe 통합으로 매끄러운 결제 처리와 구독 관리 시스템을 구현하세요.
+main2.third_title,StepPay Integration,StepPay 결제 통합
+main2.third_description,Implement a seamless payment processing and subscription management system with Stepppay integration.,Stepppay 통합으로 매끄러운 결제 처리와 구독 관리 시스템을 구현하세요.
 ,,
 main3.title,Ready to launch your SaaS?,SaaS 출시 준비 완료하셨나요?
 main3.description,Our template provides everything you need to get your SaaS up and running quickly. Don't waste time on boilerplate - focus on what makes your product unique.,"이 템플릿은 SaaS를 빠르게 시작하고 운영하는 데 필요한 모든 것을 제공합니다. 기본 코드 작성에 시간을 낭비하지 말고, 제품의 고유한 가치 창출에 집중하세요."
