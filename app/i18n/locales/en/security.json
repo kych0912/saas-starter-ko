@@ -17,5 +17,7 @@
   "update_password": "Update Password",
   "deleting": "Deleting…",
   "delete_account": "Delete Account",
-  "oauth_password": "No password set yet."
+  "oauth_password": "No password set yet.",
+  "customer_not_found": "Customer not found",
+  "customer_has_subscription": "The plan that the customer is subscribing to exists. Please cancel the subscription and proceed."
 }

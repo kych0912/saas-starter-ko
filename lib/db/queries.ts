@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 export async function getUser() {
   const session = await auth();
 
-  if (!session || !session.user) {
+  if (!session || !session.user.id) {
     return null;
   }
 
@@ -55,9 +55,11 @@ export async function getUserWithTeam(userId: number) {
     .select({
       user: users,
       teamId: teamMembers.teamId,
+      stepPayCustomerId: teams.stepPayCustomerId,
     })
     .from(users)
     .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
+    .leftJoin(teams, eq(teamMembers.teamId, teams.id))
     .where(eq(users.id, userId))
     .limit(1);
 

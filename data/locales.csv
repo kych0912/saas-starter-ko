@@ -217,6 +217,8 @@ security.update_password,Update Password,비밀번호 변경 완료
 security.deleting,Deleting…,삭제중…
 security.delete_account,Delete Account,계정 삭제 완료
 security.oauth_password,No password set yet.,아직 비밀번호가 설정되지 않았습니다.
+security.customer_not_found,Customer not found,고객을 찾지 못했습니다.
+security.customer_has_subscription,The plan that the customer is subscribing to exists. Please cancel the subscription and proceed.,고객이 구독중인 플랜이 존재합니다. 구독을 취소 후 진행해주세요.
 ,,
 pricing.Base,Base,기본
 pricing.Plus,Plus,플러스

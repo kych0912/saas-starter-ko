@@ -369,6 +369,41 @@ export async function signUpUserInterface({
     }
 }
 
+export async function deleteCustomer(customerId: string){
+  const response = await fetch(`https://api.steppay.kr/api/v1/customers/${customerId}`,{
+    method:'DELETE',
+    headers:{
+      'Accept':'*/*',
+      'Content-Type':'application/json',
+      'Secret-Token':`${process.env.STEPPAY_SECRET_KEY}`
+    }
+  })
+
+  if(!response.ok){
+    switch(response.status){
+      case 404:
+        return{
+          ok:false,
+          error:{
+            error:'customer_not_found',
+            message:"Customer not found"
+          }
+        }
+      case 400:
+        return{
+          ok:false,
+          error:{
+            error:'customer_has_subscription',
+            message:"Customer has subscription"
+          }
+        }
+    }
+  }
+
+  const data = await response.json();
+  return data;
+}
+
 export async function isOauthPassword(password: string): Promise<boolean> {
     const oauthPassword = 'oauth';
     return comparePasswords(oauthPassword, password);

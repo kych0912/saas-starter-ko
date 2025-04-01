@@ -51,7 +51,7 @@ export function DeleteAccountCard({isOauthPromise}: {isOauthPromise: Promise<boo
                 type="password"
                 placeholder={isOauth ? t('oauth_password') : ''}
                 required
-                minLength={8}
+                minLength={isOauth ? 0 : 8}
                 maxLength={100}
                 disabled={isOauth}
               />

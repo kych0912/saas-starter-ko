@@ -6,21 +6,16 @@ import { db } from '@/lib/db/drizzle';
 import {
   User,
   users,
-  teams,
   teamMembers,
   activityLogs,
-  type NewUser,
-  type NewTeam,
-  type NewTeamMember,
   type NewActivityLog,
   ActivityType,
   invitations,
 } from '@/lib/db/schema';
 import { comparePasswords, hashPassword } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 
-import { getUser, getUserWithTeam } from '@/lib/db/queries';
+import { getUserWithTeam } from '@/lib/db/queries';
 import {
   validatedAction,
   validatedActionWithUser,
@@ -28,8 +23,10 @@ import {
 import { 
   authenticateUser, 
   signInUserInterface,
-  signUpUserInterface
+  signUpUserInterface,
+  deleteCustomer
 } from '@/lib/auth/user-auth';
+import { signOut } from '@/auth';
 
 
 export async function logActivity(
@@ -116,13 +113,6 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   redirect('/dashboard');
 });
 
-export async function signOut() {
-  const user = (await getUser()) as User;
-  const userWithTeam = await getUserWithTeam(user.id);
-  await logActivity(userWithTeam?.teamId, user.id, ActivityType.SIGN_OUT);
-  (await cookies()).delete('session');
-}
-
 const updatePasswordSchema = z
   .object({
     currentPassword: z.string().min(8).max(100),
@@ -170,13 +160,17 @@ export const updatePassword = validatedActionWithUser(
 );
 
 const deleteAccountSchema = z.object({
-  password: z.string().min(8).max(100),
+  password: z.string().optional(),
 });
 
 export const deleteAccount = validatedActionWithUser(
   deleteAccountSchema,
   async (data, _, user) => {
-    const { password } = data;
+    let { password } = data;
+
+    if(!password){
+      password = 'oauth';
+    }
 
     const isPasswordValid = await comparePasswords(password, user.passwordHash!);
     if (!isPasswordValid) {
@@ -190,6 +184,13 @@ export const deleteAccount = validatedActionWithUser(
       user.id,
       ActivityType.DELETE_ACCOUNT,
     );
+
+    if(userWithTeam?.stepPayCustomerId){
+      const response = await deleteCustomer(userWithTeam.stepPayCustomerId);
+      if(!response.ok){
+        return { error: response.error.error };
+      }
+    }
 
     // Soft delete
     await db
@@ -210,8 +211,7 @@ export const deleteAccount = validatedActionWithUser(
           ),
         );
     }
-
-    (await cookies()).delete('session');
+    await signOut();
     redirect('/sign-in');
   },
 );
