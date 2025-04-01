@@ -137,20 +137,20 @@ async function getGoogleClientSecret(): Promise<string> {
   return await question('Enter your Google Client Secret: ');
 }
 
-async function getFacebookClientId(): Promise<string> {
-  console.log('Step 7: Getting Facebook Client ID');
+async function getNaverClientId(): Promise<string> {
+  console.log('Step 7: Getting Naver Client ID');
   console.log(
-    'You can find your Facebook Client ID at: https://developers.facebook.com/apps/'
+    'You can find your Naver Client ID at: hhttps://developers.naver.com/'
   );
-  return await question('Enter your Facebook Client ID: ');
+  return await question('Enter your Naver Client ID: ');
 }
 
-async function getFacebookClientSecret(): Promise<string> {
-  console.log('Step 8: Getting Facebook Client Secret');
+async function getNaverClientSecret(): Promise<string> {
+  console.log('Step 8: Getting Naver Client Secret');
   console.log(
-    'You can find your Facebook Client Secret at: https://developers.facebook.com/apps/'
+    'You can find your Naver Client Secret at: hhttps://developers.naver.com/'
   );
-  return await question('Enter your Facebook Client Secret: ');
+  return await question('Enter your Naver Client Secret: ');
 }
 
 async function main() {
@@ -161,8 +161,8 @@ async function main() {
   const AUTH_SECRET = generateAuthSecret();
   const GOOGLE_ID = await getGoogleClientId();
   const GOOGLE_SECRET = await getGoogleClientSecret();
-  const FACEBOOK_ID = await getFacebookClientId();
-  const FACEBOOK_SECRET = await getFacebookClientSecret();
+  const NAVER_ID = await getNaverClientId();
+  const NAVER_SECRET = await getNaverClientSecret();
 
   await writeEnvFile({
     POSTGRES_URL,
@@ -173,8 +173,8 @@ async function main() {
     NEXTAUTH_SECRET: AUTH_SECRET,
     GOOGLE_ID,
     GOOGLE_SECRET,
-    FACEBOOK_ID,
-    FACEBOOK_SECRET,
+    NAVER_ID,
+    NAVER_SECRET,
   });
 
   console.log('🎉 Setup completed successfully!');

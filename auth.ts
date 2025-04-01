@@ -2,7 +2,7 @@ import NextAuth, { Account } from "next-auth"
 import { db } from "@/lib/db/drizzle"
 import { users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
-import FacebookProvider from "next-auth/providers/facebook"
+import NaverProvider from "next-auth/providers/naver"
 import GoogleProvider from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { User } from "next-auth"
@@ -13,18 +13,15 @@ import {
   signUpUserInterface
 } from "@/lib/auth/user-auth"
 
-
-
-
 export const { handlers, signIn, signOut, auth } = NextAuth({ 
     providers: [
-      FacebookProvider({
-        clientId: process.env.FACEBOOK_ID!,
-        clientSecret: process.env.FACEBOOK_SECRET!,
-      }),
       GoogleProvider({
         clientId: process.env.GOOGLE_ID!,
         clientSecret: process.env.GOOGLE_SECRET!,
+      }),
+      NaverProvider({
+        clientId: process.env.NAVER_ID!,
+        clientSecret: process.env.NAVER_SECRET!,
       }),
       Credentials({
         credentials: {
@@ -72,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if(provider === 'credentials'){
             return true;
         }
-  
+        console.log(user);
         if(!email || !username) return false;
   
         //유저 팀 찾기
