@@ -90,45 +90,29 @@ volumes:
   }
 }
 
-async function getPortOneSecretKey(): Promise<string> {
-  console.log('Step 2: Getting PortOne Secret Key');
+async function getStepPaySecretKey(): Promise<string> {
+  console.log('Step 2: Getting StepPay Secret Key');
   console.log(
-    'You can find your PortOne Secret Key at: https://admin.portone.io/integration-v2/manage/api-keys?version=v2'
+    'You can find your StepPay Secret Key at: https://portal.steppay.kr/setting/key'
   );
-  return await question('Enter your PortOne Secret Key: ');
+  return await question('Enter your StepPay Secret Key: ');
 }
 
-async function getPortOneChannelKey(): Promise<string> {
-  console.log('Step 3: Getting PortOne Channel Key');
+async function getStepPayWebhookSecret(): Promise<string> {
+  console.log('Step 3: Getting StepPay Webhook Secret');
   console.log(
-    'You can find your PortOne Channel Key at: https://admin.portone.io/integration-v2/manage/channel'
+    'You can find your StepPay Webhook Secret at: https://portal.steppay.kr/setting/webhook'
   );
-  return await question('Enter your PortOne Channel Key: ');
-}
-
-async function getPortOneStoreId(): Promise<string> {
-  console.log('Step 4: Getting PortOne Store ID');
-  console.log(
-    'You can find your PortOne Store ID at: https://admin.portone.io/integration-v2/manage/channel'
-  );
-  return await question('Enter your PortOne Store ID: ');
-}
-
-async function getPortOneWebhookSecret(): Promise<string> {
-  console.log('Step 5: Getting PortOne Webhook Secret');
-  console.log(
-    'You can find your PortOne Webhook Secret at: https://admin.portone.io/integration-v2/manage/webhook'
-  );
-  return await question('Enter your PortOne Webhook Secret: ');
+  return await question('Enter your StepPay Webhook Secret: ');
 }
 
 function generateAuthSecret(): string {
-  console.log('Step 6: Generating AUTH_SECRET...');
+  console.log('Step 4: Generating AUTH_SECRET...');
   return crypto.randomBytes(32).toString('hex');
 }
 
 async function writeEnvFile(envVars: Record<string, string>) {
-  console.log('Step 7: Writing environment variables to .env');
+  console.log('Step 9: Writing environment variables to .env');
   const envContent = Object.entries(envVars)
     .map(([key, value]) => `${key}=${value}`)
     .join('\n');
@@ -137,23 +121,60 @@ async function writeEnvFile(envVars: Record<string, string>) {
   console.log('.env file created with the necessary variables.');
 }
 
+async function getGoogleClientId(): Promise<string> {
+  console.log('Step 5: Getting Google Client ID');
+  console.log(
+    'You can find your Google Client ID at: https://console.cloud.google.com/apis/credentials'
+  );
+  return await question('Enter your Google Client ID: ');
+}
+
+async function getGoogleClientSecret(): Promise<string> {
+  console.log('Step 6: Getting Google Client Secret');
+  console.log(
+    'You can find your Google Client Secret at: https://console.cloud.google.com/apis/credentials'
+  );
+  return await question('Enter your Google Client Secret: ');
+}
+
+async function getFacebookClientId(): Promise<string> {
+  console.log('Step 7: Getting Facebook Client ID');
+  console.log(
+    'You can find your Facebook Client ID at: https://developers.facebook.com/apps/'
+  );
+  return await question('Enter your Facebook Client ID: ');
+}
+
+async function getFacebookClientSecret(): Promise<string> {
+  console.log('Step 8: Getting Facebook Client Secret');
+  console.log(
+    'You can find your Facebook Client Secret at: https://developers.facebook.com/apps/'
+  );
+  return await question('Enter your Facebook Client Secret: ');
+}
+
 async function main() {
   const POSTGRES_URL = await getPostgresURL();
-  const PORTONE_SECRET_KEY = await getPortOneSecretKey();
-  const PORTONE_CHANNEL_KEY = await getPortOneChannelKey();
-  const NEXT_PUBLIC_PORTONE_STORE_ID = await getPortOneStoreId();
-  const PORTONE_WEBHOOK_SECRET = await getPortOneWebhookSecret();
+  const STEPPY_SECRET_KEY = await getStepPaySecretKey();
+  const STEPPY_WEBHOOK_SECRET = await getStepPayWebhookSecret();
   const BASE_URL = 'http://localhost:3000';
   const AUTH_SECRET = generateAuthSecret();
+  const GOOGLE_ID = await getGoogleClientId();
+  const GOOGLE_SECRET = await getGoogleClientSecret();
+  const FACEBOOK_ID = await getFacebookClientId();
+  const FACEBOOK_SECRET = await getFacebookClientSecret();
 
   await writeEnvFile({
     POSTGRES_URL,
-    PORTONE_SECRET_KEY,
-    PORTONE_CHANNEL_KEY,
-    NEXT_PUBLIC_PORTONE_STORE_ID,
-    PORTONE_WEBHOOK_SECRET,
+    STEPPY_SECRET_KEY,
+    STEPPY_WEBHOOK_SECRET,
     BASE_URL,
     AUTH_SECRET,
+    NEXTAUTH_SECRET: AUTH_SECRET,
+    GOOGLE_ID,
+    GOOGLE_SECRET,
+    FACEBOOK_ID,
+    FACEBOOK_SECRET,
   });
 
   console.log('🎉 Setup completed successfully!');
