@@ -2,7 +2,7 @@
 
 이 프로젝트는 인증 지원, 결제를 위한 StepPay 통합, 로그인한 사용자를 위한 대시보드를 포함한 Next.js를 사용하여 SaaS 애플리케이션을 구축하기 위한 원본 [Next.js SaaS Starter](https://github.com/nextjs/saas-starter) 템플릿을 기반으로 합니다.
 
-**데모: [https://saas-starter-ko.vercel.app/](https://saas-starter-ko.vercel.app/)**
+**데모: [https://saas-starter-ko.vercel.app/ko](https://saas-starter-ko.vercel.app/ko)**
 
 ## 새로운 기능 및 수정사항
 
