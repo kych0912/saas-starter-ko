@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "app/api/steppay/webhook/Utils.js", "app/i18n/CsvToLocales.js", "tailwind.config.js"  ],
   "exclude": [
     "node_modules"
   ]
