@@ -16,21 +16,132 @@ signin.border,New to our platform?,저희 서비스는 처음이신가요?
 signin.login,Create an account,새로운 계정 생성하기
 signin.invalid_email_or_password,Invalid email or password. Please try again,유효하지 않은 계정 정보입니다. 다시 시도해주세요
 ,,
-main1.title,Build your SaaS,SaaS 비즈니스 구축
-main1.subtitle,Faster Than Ever,이전보다 훨씬 빠르게
-main1.description,"Launch your SaaS product in record time with our powerful, ready-to-use template. Packed with modern technologies and essential integrations.",강력하고 즉시 사용 가능한 템플릿으로 SaaS 제품을 최단 시간에 출시하세요. 최신 기술과 필수 통합 기능이 모두 탑재되어 있습니다.
-main1.button,Deploy your own,지금 시작하기
+hero.title,Build your SaaS,SaaS 비즈니스 구축
+hero.subtitle,Faster Than Ever,이전보다 훨씬 빠르게
+hero.description,"Launch your SaaS product in record time with our powerful, ready-to-use template. Packed with modern technologies and essential integrations.",강력하고 즉시 사용 가능한 템플릿으로 SaaS 제품을 최단 시간에 출시하세요. 최신 기술과 필수 통합 기능이 모두 탑재되어 있습니다.
+hero.button,Deploy your own,지금 시작하기
 ,,
-main2.first_title,Next.js and React,Next.js와 React 기반
-main2.first_description,Leverage the power of modern web technologies for optimal performance and developer experience.,최고의 성능과 개발 경험을 위한 현대적 웹 기술의 강점을 활용하세요.
-main2.second_title,Postgres and Drizzle ORM,Postgres와 Drizzle ORM 내장
-main2.second_description,Robust database solution with an intuitive ORM for efficient data management and scalability.,효율적인 데이터 관리와 확장성을 위한 직관적인 ORM을 갖춘 안정적인 데이터베이스 솔루션입니다.
-main2.third_title,StepPay Integration,StepPay 결제 통합
-main2.third_description,Implement a seamless payment processing and subscription management system with Stepppay integration.,Stepppay 통합으로 매끄러운 결제 처리와 구독 관리 시스템을 구현하세요.
+benefit.first_title,Next.js and React,Next.js와 React 기반
+benefit.first_description,Leverage the power of modern web technologies for optimal performance and developer experience.,최고의 성능과 개발 경험을 위한 현대적 웹 기술의 강점을 활용하세요.
+benefit.second_title,Postgres and Drizzle ORM,Postgres와 Drizzle ORM 내장
+benefit.second_description,Robust database solution with an intuitive ORM for efficient data management and scalability.,효율적인 데이터 관리와 확장성을 위한 직관적인 ORM을 갖춘 안정적인 데이터베이스 솔루션입니다.
+benefit.third_title,StepPay Integration,StepPay 결제 통합
+benefit.third_description,Implement a seamless payment processing and subscription management system with Stepppay integration.,Stepppay 통합으로 매끄러운 결제 처리와 구독 관리 시스템을 구현하세요.
 ,,
-main3.title,Ready to launch your SaaS?,SaaS 출시 준비 완료하셨나요?
-main3.description,Our template provides everything you need to get your SaaS up and running quickly. Don't waste time on boilerplate - focus on what makes your product unique.,"이 템플릿은 SaaS를 빠르게 시작하고 운영하는 데 필요한 모든 것을 제공합니다. 기본 코드 작성에 시간을 낭비하지 말고, 제품의 고유한 가치 창출에 집중하세요."
-main3.button,View the code,코드 살펴보기
+CTA.title,Ready to launch your SaaS?,SaaS 출시 준비 완료하셨나요?
+CTA.description,Our template provides everything you need to get your SaaS up and running quickly. Don't waste time on boilerplate - focus on what makes your product unique.,"이 템플릿은 SaaS를 빠르게 시작하고 운영하는 데 필요한 모든 것을 제공합니다. 기본 코드 작성에 시간을 낭비하지 말고, 제품의 고유한 가치 창출에 집중하세요."
+CTA.button,View the code,코드 살펴보기
+,,
+features.title,Save over 100 hours with Next.js Full-Stack saas-starter-ko,Next.js Full-Stack saas-starter-ko로 100시간 이상 시간 절약
+features.description_first,Our Next.js full-stack saas-starter-ko gets you from idea to launch faster.,Next.js full-stack saas-starter-ko로 아이디어에서 출시까지 더 빠르게.
+features.description_second,"With saas-starter-ko's pre-built features, the hard work is done. ",saas-starter-ko의 사전 구현된 기능들로 어려운 작업은 끝났습니다.
+features.description_third,Focus on what matters.,중요한 것에만 집중하세요.
+,,
+features.authentication_title,Authentication,인증 시스템
+features.authentication_description,Full authentication system powered by Auth.js with JWT tokens stored securely in cookies.,Auth.js를 사용한 완전한 인증 시스템으로 JWT 토큰을 쿠키에 안전하게 저장합니다.
+features.authentication_timeSaved,8-10,8-10
+features.email_login_title,Email & Password Login,이메일 및 비밀번호 로그인
+features.email_login_description,Simple and secure login flow with email and password validation.,이메일과 비밀번호 검증을 포함한 간단하고 안전한 로그인 프로세스입니다.
+features.email_login_timeSaved,4-6,4-6
+features.oauth_title,Social OAuth Integration,소셜 OAuth 통합
+features.oauth_description,Ready-to-use OAuth social logins with Google and Facebook authentication.,Google과 Facebook 인증을 지원하는 바로 사용 가능한 OAuth 소셜 로그인입니다.
+features.oauth_timeSaved,5-7,5-7
+features.protected_routes_title,Protected Routes,보호된 라우트
+features.protected_routes_description,Global middleware to protect logged-in routes and validate user sessions.,로그인된 라우트를 보호하고 사용자 세션을 검증하는 글로벌 미들웨어입니다.
+features.protected_routes_timeSaved,3-5,3-5
+features.ui_components_title,Shadcn UI Components,Shadcn UI 컴포넌트
+features.ui_components_description,Beautiful UI components built with Radix UI primitives and styled with Tailwind CSS.,Radix UI 기본 요소로 구축되고 Tailwind CSS로 스타일링된 아름다운 UI 컴포넌트입니다.
+features.ui_components_timeSaved,6-8,6-8
+features.responsive_title,Mobile Responsive Design,모바일 반응형 디자인
+features.responsive_description,"Fully responsive layouts that look great on mobile, tablet, and desktop devices.","모바일, 태블릿 및 데스크톱 기기에서 멋지게 보이는 완전 반응형 레이아웃"
+features.responsive_timeSaved,4-6,4-6
+features.dark_mode_title,Dark Mode,다크 모드
+features.dark_mode_description,Complete theme system with light and dark modes that users can toggle based on preference.,사용자가 선호도에 따라 선택할 수 있는 라이트 및 다크 모드를 포함한 완전한 테마 시스템입니다.
+features.dark_mode_timeSaved,3-5,3-5
+features.user_management_title,User Management,사용자 관리
+features.user_management_description,Dashboard CRUD operations for managing users with intuitive admin interfaces.,직관적인 관리자 인터페이스를 갖춘 사용자 관리를 위한 대시보드 CRUD 기능입니다.
+features.user_management_timeSaved,5-7,5-7
+features.team_management_title,Team Management,팀 관리
+features.team_management_description,Multi-user teams with invitation system and member management tools.,초대 시스템과 멤버 관리 도구를 갖춘 다중 사용자 팀 기능입니다.
+features.team_management_timeSaved,6-8,6-8
+features.rbac_title,Role-Based Access Control,역할 기반 접근 제어
+features.rbac_description,Basic RBAC with Owner and Member roles to control permissions and access levels.,권한과 접근 수준을 제어하는 소유자(Owner)와 멤버(Member) 역할의 기본 RBAC 시스템입니다.
+features.rbac_timeSaved,4-6,4-6
+features.activity_logging_title,Activity Logging,활동 로깅
+features.activity_logging_description,Comprehensive activity tracking system for auditing user events and actions.,사용자 이벤트와 작업을 감사하기 위한 포괄적인 활동 추적 시스템입니다.
+features.activity_logging_timeSaved,3-5,3-5
+features.steppay_title,StepPay Integration,StepPay 통합
+features.steppay_description,Seamless payment processing with StepPay checkout for subscription handling.,구독 처리를 위한 StepPay 결제 시스템의 원활한 통합입니다.
+features.steppay_timeSaved,6-8,6-8
+features.webhook_title,Webhook Support,웹훅 지원
+features.webhook_description,Webhook infrastructure for subscription events and payment notifications.,구독 이벤트와 결제 알림을 위한 웹훅 인프라입니다.
+features.webhook_timeSaved,3-5,3-5
+features.customer_portal_title,Customer Portal,고객 포털
+features.customer_portal_description,User-facing portal where customers can manage their subscriptions and billing details.,고객이 구독과 결제 정보를 관리할 수 있는 사용자 대면 포털입니다.
+features.customer_portal_timeSaved,5-7,5-7
+features.i18n_title,Multi-Language Support,다국어 지원
+features.i18n_description,i18next and react-i18next integration for translating your application into any language.,애플리케이션을 어떤 언어로든 번역할 수 있는 i18next 및 react-i18next 통합입니다.
+features.i18n_timeSaved,4-6,4-6
+features.translation_tools_title,Translation Tools,번역 도구
+features.translation_tools_description,Parsing scripts to convert Excel translation files to JSON format for i18next.,Excel 번역 파일을 i18next용 JSON 형식으로 변환하는 파싱 스크립트입니다.
+features.translation_tools_timeSaved,3-5,3-5
+features.database_title,Database Setup,데이터베이스 설정
+features.database_description,Quick database configuration with Drizzle ORM for type-safe database operations.,타입 안전한 데이터베이스 작업을 위한 Drizzle ORM을 사용한 빠른 데이터베이스 구성입니다.
+features.database_timeSaved,3-5,3-5
+features.migration_title,Migration System,마이그레이션 시스템
+features.migration_description,Database schema management and migration tools for evolving your data model.,데이터 모델을 발전시키기 위한 데이터베이스 스키마 관리 및 마이그레이션 도구입니다.
+features.migration_timeSaved,3-4,3-4
+features.serverless_title,Serverless Architecture,서버리스 아키텍처
+features.serverless_description,"Compatible with serverless deployments for modern, scalable hosting options.",최신 확장 가능한 호스팅 옵션을 위한 서버리스 배포와 호환됩니다.
+features.serverless_timeSaved,3-5,3-5
+features.opensource_title,Open Source Codebase,오픈 소스 코드베이스
+features.opensource_description,Full access to all code with MIT license for complete customization freedom.,완전한 커스터마이징 자유를 위한 MIT 라이선스의 모든 코드에 대한 전체 접근 권한입니다.
+features.time_savings_title,Development Time Savings,개발 시간 절약
+features.time_savings_description,Save approximately 3 weeks of development time to focus on your unique business logic.,고유한 비즈니스 로직에 집중할 수 있도록 약 3주의 개발 시간을 절약합니다.
+features.time_savings_timeSaved,100+,100+
+common.hours,hours save,시간 절약
+,,
+pricing_main.title,Pricing,가격 정책
+pricing_main.description,SaaS-starter-ko is free and open source. You can use it as a starting point for your own project.,SaaS-starter-ko는 무료 오픈 소스입니다. 당신의 프로젝트 시작점으로 활용하세요.
+pricing_main.community_title,Community,커뮤니티
+pricing_main.community_description,For individuals and small teams,개인 및 소규모 팀을 위한
+pricing_main.community_price,$0 ,₩0
+pricing_main.community_period,/forever,/영원히
+pricing_main.community_features_core,All core features,모든 핵심 기능
+pricing_main.community_features_license,MIT License,MIT 라이선스
+pricing_main.community_features_support,GitHub issues support,GitHub 이슈 지원
+pricing_main.community_button,Star on GitHub,GitHub에 스타 주기
+,,
+pricing_main.supporter_title,Supporter,후원자
+pricing_main.supporter_description,Support the development,개발 지원하기
+pricing_main.supporter_price,Buy me,커피 한잔
+pricing_main.supporter_period,a coffee,사주기
+pricing_main.supporter_badge,Recommended,추천
+pricing_main.supporter_features_all,All Community features,모든 커뮤니티 기능
+pricing_main.supporter_features_karma,Good karma,선행…
+pricing_main.supporter_features_contribute,Contribute to future features,추후 기능에 기여
+pricing_main.supporter_button,Buy me a coffee,커피 사주기
+,,
+pricing_main.contributor_title,Contributor,기여자
+pricing_main.contributor_description,Get involved in the project,프로젝트에 참여하기
+pricing_main.contributor_price,Share,코드
+pricing_main.contributor_period,your code,공유하기
+pricing_main.contributor_features_all,All Community features,모든 커뮤니티 기능
+pricing_main.contributor_features_credits,Your name in Contributor,Contributor에 이름 등재
+pricing_main.contributor_features_future,Help shape the future,미래 방향성에 기여
+pricing_main.contributor_button,Fork & Contribute,Fork 및 기여하기
+pricing_main.value_time,By using this starter kit, you're saving approximately
+pricing_main.value_hours,of development time.,의 개발 시간을 절약할 수 있습니다.
+pricing_main.value_cost,That's about,이는 약
+pricing_main.value_money,in developer costs!,의 개발 비용에 해당합니다!
+,,
+saved.title,Development Time Saved,절약되는 개발 시간
+saved.hours,hours,시간 이상
+saved.subtitle_1,Save over 3 weeks of development time with saas-starter-ko,saas-starter-ko를 사용하여 3주 이상의 개발 시간을 절약
+saved.subtitle_2,Focus more on core business logic and creating customer value.,핵심 비즈니스 로직과 고객 가치 창출에 더 집중하세요.
+saved.features,Main feature,핵심 기능
+saved.time,Development time,개발 시간
+saved.open_source,Open Source,오픈소스
 ,,
 setting.title,Team Settings,팀 설정
 setting.subscription,Team Subscription,팀 구독

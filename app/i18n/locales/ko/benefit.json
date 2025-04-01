@@ -1,0 +1,8 @@
+{
+  "first_title": "Next.js와 React 기반",
+  "first_description": "최고의 성능과 개발 경험을 위한 현대적 웹 기술의 강점을 활용하세요.",
+  "second_title": "Postgres와 Drizzle ORM 내장",
+  "second_description": "효율적인 데이터 관리와 확장성을 위한 직관적인 ORM을 갖춘 안정적인 데이터베이스 솔루션입니다.",
+  "third_title": "StepPay 결제 통합",
+  "third_description": "Stepppay 통합으로 매끄러운 결제 처리와 구독 관리 시스템을 구현하세요."
+}
