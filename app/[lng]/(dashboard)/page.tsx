@@ -1,8 +1,109 @@
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CreditCard, Database } from 'lucide-react';
+import { ArrowRight, CreditCard, Database, Check, Clock } from 'lucide-react';
 import { Terminal } from './terminal';
 import { useTranslation } from '@/app/i18n/useTranslation';
+import { features as featureData, pricing as pricingData } from '@/data/constants';
 
+async function FeatureCard({ title, description, timeSaved, lng }: { title: string, description: string, timeSaved?: string, lng: string }) {
+  const { t } = await useTranslation(lng, 'features');
+  const { t:common } = await useTranslation(lng, 'common');
+  return (
+    <div className="shadow-primary/5 p-2 shadow-sm">
+      <h4 className="flex flex-col space-y-2 text-lg font-medium text-foreground tracking-tight">
+        {t(title)}
+      </h4>
+      <div className="py-2.5">
+        <div className="text-base text-muted-foreground flex flex-col space-y-2">
+          {t(description)}
+          {timeSaved && (
+            <div className="mt-2 flex items-center text-sm text-orange-500 font-medium">
+              <Clock className="h-4 w-4 mr-1" />
+              {t(timeSaved) + ' ' + common('hours')}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface PricingCardProps {
+  titleKey: string;
+  descriptionKey: string;
+  priceKey: string;
+  priceUnitKey: string;
+  featuresKey: string[];
+  buttonKey: string;
+  hyperlinkKey: string;
+  isRecommended?: boolean;
+  lng: string;
+}
+
+async function PricingCard({ 
+  titleKey, 
+  descriptionKey, 
+  priceKey, 
+  priceUnitKey, 
+  featuresKey, 
+  buttonKey,
+  hyperlinkKey,
+  isRecommended,
+  lng 
+}: PricingCardProps) {
+  const { t } = await useTranslation(lng, 'pricing_main');
+  return (
+    <div className="relative flex flex-col rounded-xl border bg-card text-card-foreground shadow transition-all hover:shadow-lg">
+      {isRecommended && (
+        <div className="absolute -top-3 left-0 right-0 mx-auto w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+          {t('supporter_badge')}
+        </div>
+      )}
+      <div className="p-6 pt-8">
+        <h3 className="font-heading text-xl font-semibold leading-none tracking-tight">
+          {t(titleKey)}
+        </h3>
+        <div className="mt-4 flex flex-col gap-2 text-sm text-muted-foreground">
+          {t(descriptionKey)}
+        </div>
+        
+        <div className="mt-6 flex items-baseline gap-1">
+          <span className="font-heading text-4xl font-bold">{t(priceKey)}</span>
+          <span className="text-muted-foreground">{t(priceUnitKey)}</span>
+        </div>
+
+        <ul className="mt-8 flex flex-col gap-3 text-sm">
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-orange-500 mr-2 mt-0.5 flex-shrink-0" /> 
+            <span>{t(featuresKey[0])}</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-orange-500 mr-2 mt-0.5 flex-shrink-0" /> 
+            <span>{t(featuresKey[1])}</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-orange-500 mr-2 mt-0.5 flex-shrink-0" /> 
+            <span>{t(featuresKey[2])}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="mt-auto p-6 pt-0">
+        <a 
+          href={isRecommended ? undefined : hyperlinkKey} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`inline-flex w-full items-center justify-center rounded-md px-4 py-2 text-sm font-medium shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+            isRecommended 
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none" 
+              : "bg-orange-500 hover:bg-orange-600 text-white"
+          }`}
+        >   
+          {t(buttonKey)}
+        </a>
+      </div>
+    </div>
+  );
+}
 export default async function HomePage({
   params,
 }: {
@@ -10,9 +111,13 @@ export default async function HomePage({
 }) {
   const { lng } = await params;
 
-  const { t } = await useTranslation(lng, 'main1');
-  const { t: t2 } = await useTranslation(lng, 'main2');
-  const { t: t3 } = await useTranslation(lng, 'main3');
+  const { t: Hero } = await useTranslation(lng, 'hero');
+  const { t: benefit } = await useTranslation(lng, 'benefit');
+  const { t: CTA } = await useTranslation(lng, 'CTA');
+  const { t: features } = await useTranslation(lng, 'features');
+  const { t: pricing } = await useTranslation(lng, 'pricing_main');
+  const { t: saved } = await useTranslation(lng, 'saved');
+
   return (
     <main>
       <section className="py-20">
@@ -20,11 +125,11 @@ export default async function HomePage({
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-foreground tracking-tight sm:text-5xl md:text-6xl">
-                {t('title')}
-                <span className="block text-orange-500">{t('subtitle')}</span>
+                {Hero('title')}
+                <span className="block text-orange-500">{Hero('subtitle')}</span>
               </h1>
               <p className="mt-3 text-base text-muted-foreground sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                {t('description')}
+                {Hero('description')}
               </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
@@ -32,7 +137,7 @@ export default async function HomePage({
                   target="_blank"
                 >
                   <Button className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-lg px-8 py-4 inline-flex items-center justify-center">
-                    {t('button')}
+                    {Hero('button')}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
@@ -59,10 +164,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  {t2('first_title')}
+                  {benefit('first_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  {t2('first_description')}
+                  {benefit('first_description')}
                 </p>
               </div>
             </div>
@@ -73,10 +178,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  {t2('second_title')}
+                  {benefit('second_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  {t2('second_description')}
+                  {benefit('second_description')}
                 </p>
               </div>
             </div>
@@ -87,10 +192,10 @@ export default async function HomePage({
               </div>
               <div className="mt-5">
                 <h2 className="text-lg font-medium text-foreground">
-                  {t2('third_title')}
+                  {benefit('third_title')}
                 </h2>
                 <p className="mt-2 text-base text-muted-foreground">
-                  {t2('third_description')}
+                  {benefit('third_description')}
                 </p>
               </div>
             </div>
@@ -98,15 +203,120 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-16 bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
+          <div className="flex max-w-3xl flex-col items-center space-y-6 text-center">
+            <div className="flex flex-col items-center space-y-6 text-center">
+              <div className="flex flex-col">
+                <h2 className="font-heading scroll-m-20 pb-2 text-2xl font-semibold transition-colors first:mt-0 lg:text-3xl tracking-tighter">
+                  {features('title')}
+                </h2>
+                <h3 className="scroll-m-20 lg:text-2xl text-muted-foreground text-xl font-normal tracking-tight">
+                  <span className="flex flex-col space-y-1">
+                    <span>{features('description_first')}</span>
+                    <span>{features('description_second')}</span>
+                    <span>{features('description_third')}</span>
+                  </span>
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+            {
+              featureData.map((feature) => (
+                <FeatureCard 
+                  key={feature.titleKey} 
+                  title={feature.titleKey} 
+                  description={feature.descriptionKey} 
+                  timeSaved={feature.timeSavedKey} 
+                  lng={lng}
+                />
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      {/* 총 절약 시간 섹션 */}
+      <section className="py-16 bg-background w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
+              {saved('title')}
+            </h2>
+            <div className="flex justify-center items-center mb-6">
+              <span className="text-4xl md:text-6xl sm:text-5xl font-bold text-orange-500">100+</span>
+              <div className="text-3xl md:text-6xl sm:text-5xl font-bold text-foreground ml-4">
+                {saved('hours')}
+              </div>
+            </div>
+            <div className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              {saved('subtitle_1')}
+            </div>
+            <div className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              {saved('subtitle_2')}
+            </div>
+            <div className="mt-8">
+              <div className="inline-flex items-center justify-center px-6 py-3 border border-orange-300 dark:border-orange-700 rounded-lg bg-white dark:bg-black shadow-sm">
+                <div className="grid grid-cols-3 gap-4 sm:gap-8 text-center">
+                  <div>
+                    <div className="text-3xl font-bold text-orange-500">20+</div>
+                    <div className="text-sm text-muted-foreground">{saved('features')}</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-orange-500">100+</div>
+                    <div className="text-sm text-muted-foreground">{saved('time')}</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-orange-500">₩0</div>
+                    <div className="text-sm text-muted-foreground">{saved('open_source')}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-background w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+          <div className="flex max-w-3xl flex-col items-center space-y-6 text-center">
+            <div className="flex flex-col items-center space-y-6 text-center">
+              <div className="flex flex-col">
+                <h2 className="font-heading scroll-m-20 pb-2 text-2xl font-semibold transition-colors first:mt-0 lg:text-3xl tracking-tighter">
+                  {pricing('title')}
+                </h2>
+                <h3 className="scroll-m-20 lg:text-2xl text-muted-foreground text-xl font-normal tracking-tight">
+                  <span className="flex flex-col space-y-1">
+                    <span>{pricing('description')}</span>
+                  </span>
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          {/* Pricing Cards */}
+          <div className="mt-16 grid lg:grid-cols-3 gap-8 w-full">
+            {
+              pricingData.map((plan, index) => (
+                <PricingCard key={index} {...plan} lng={lng} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-background w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
-                {t3('title')}
+                {CTA('title')}
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-                {t3('description')}
+                {CTA('description')}
               </p>
             </div>
             <div className="mt-8 lg:mt-0 flex justify-center lg:justify-end">
@@ -115,7 +325,7 @@ export default async function HomePage({
                 target="_blank"
               >
                 <Button className="bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full text-xl px-12 py-6 inline-flex items-center justify-center">
-                  {t3('button')}
+                  {CTA('button')}
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </a>
