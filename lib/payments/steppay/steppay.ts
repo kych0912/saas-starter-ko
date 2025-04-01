@@ -32,7 +32,7 @@ export async function createCustomer({
     const data = await response.json();
     
     if(!response.ok){
-        throw new Error('Failed to create customer');
+        redirect('/pricing?error=failed_to_create_customer');
     }
 
     return data;
