@@ -11,7 +11,7 @@ This Project based on a original [Next.js SaaS Starter](https://github.com/nextj
 3. Dark mode
 4. KO/EN Multi-languages support
 5. Parsing scripts to convert Excel translation files to JSON format for i18next.
-6. Google & Facebook login
+6. Google & NAVER login
 
 ## Features
 
@@ -106,5 +106,5 @@ In your Vercel project settings (or during deployment), add all the necessary en
 3. `STEPPAY_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step
 4. `POSTGRES_URL, NEXTAUTH_SECRET`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-6. `GOOGLE_ID, FACEBOOK_ID`: Set these to your Google and Facebook OAuth client IDs.
-7. `GOOGLE_SECRET, FACEBOOK_SECRET`: Set these to your Google and Facebook OAuth client secrets.
+6. `GOOGLE_ID, NAVER_ID`: Set these to your Google and NAVER OAuth client IDs.
+7. `GOOGLE_SECRET, NAVER_SECRET`: Set these to your Google and NAVER OAuth client secrets.

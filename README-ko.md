@@ -106,5 +106,5 @@ Vercel 프로젝트 설정(또는 배포 중)에서 필요한 모든 환경 변�
 3. `STEPPAY_WEBHOOK_SECRET`: 1단계에서 생성한 프로덕션 웹훅의 웹훅 비밀을 사용합니다.
 4. `POSTGRES_URL, NEXTAUTH_SECRET`: 프로덕션 데이터베이스 URL로 설정합니다.
 5. `AUTH_SECRET`: 무작위 문자열로 설정합니다. `openssl rand -base64 32`로 생성할 수 있습니다.
-6. `GOOGLE_ID, FACEBOOK_ID`: Google 및 Facebook OAuth 클라이언트 ID로 설정합니다.
-7. `GOOGLE_SECRET, FACEBOOK_SECRET`: Google 및 Facebook OAuth 클라이언트 비밀로 설정합니다.
+6. `GOOGLE_ID, NAVER_ID`: Google 및 NAVER OAuth 클라이언트 ID로 설정합니다.
+7. `GOOGLE_SECRET, NAVER_SECRET`: Google 및 NAVER OAuth 클라이언트 비밀로 설정합니다.
