@@ -71,6 +71,116 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
 
+## Excel to i18n JSON Translation Guide
+
+This guide explains how to use the translation script in the Next.js SaaS Starter project to convert Excel files to i18n JSON format.
+
+### Excel File Format
+
+The translation Excel file should be structured in the following format:
+
+```
+namespace.key English Korean
+```
+
+Example:
+
+```
+signup.title Create your account 계정 생성
+signup.email email 이메일
+```
+
+### Converting Excel to JSON
+
+Follow these steps to convert your Excel translation file to i18n JSON format:
+
+1. Prepare your Excel file in the format described above with keys, English translations, and Korean translations.
+
+2. Save the Excel file in the designated directory in your project.
+   (Typically in the `/data` folder)
+
+3. Run the following command in your terminal:
+
+```bash
+pnpm prebuild
+```
+
+4. This command will automatically parse the Excel file and convert it to JSON format compatible with i18n.
+
+### Generated JSON Structure
+
+After conversion, the script will generate JSON files for each language and namespace in your project's locale directories. Here are examples of the generated files:
+
+#### `/i18n/locales/en/activity.json`
+
+```json
+{
+  "title": "Activity Log",
+  "card_title": "Recent Activity",
+  "sign_up": "You signed up",
+  "sign_in": "You signed in",
+  "sign_out": "You signed out",
+  "update_password": "You changed your password",
+  "delete_account": "You deleted your account",
+  "update_account": "You updated your account",
+  "create_team": "You created a new team",
+  "remove_team_member": "You removed a team member",
+  "invite_team_member": "You invited a team member",
+  "accept_invitation": "You accepted an invitation",
+  "unknown": "Unknown action occurred",
+  "no_activity": "No activity yet",
+  "when_you_perform_actions": "When you perform actions like signing in or updating your account, they'll appear here.",
+  "just_now": "just now",
+  "minutes_ago": "minutes ago",
+  "hours_ago": "hours ago",
+  "days_ago": "days ago"
+}
+```
+
+#### `/i18n/locales/ko/activity.json`
+
+```json
+{
+  "title": "활동 로그",
+  "card_title": "최근 활동",
+  "sign_up": "회원가입 완료",
+  "sign_in": "로그인 완료",
+  "sign_out": "로그아웃 완료",
+  "update_password": "비밀번호 변경 완료",
+  "delete_account": "계정 삭제 완료",
+  "update_account": "계정 정보 업데이트 완료",
+  "create_team": "새 팀 생성 완료",
+  "remove_team_member": "팀 멤버 제거 완료",
+  "invite_team_member": "팀 멤버 초대 완료",
+  "accept_invitation": "초대 수락 완료",
+  "unknown": "알 수 없는 작업이 발생했습니다",
+  "no_activity": "아직 활동이 없습니다.",
+  "when_you_perform_actions": "로그인 또는 업데이트 시, 이곳에 표시됩니다.",
+  "just_now": "방금",
+  "minutes_ago": "{{count}}분 전",
+  "hours_ago": "{{count}}시간 전",
+  "days_ago": "{{count}}일 전"
+}
+```
+
+These JSON files are created with nested object structures for each language (English and Korean) that can be used by the i18n system.
+
+In your application, you can reference these translations using keys like this:
+
+```typescript
+// Import the translation hook with language, namespace, and options in client component
+const { t } = useTranslation(lng, 'setting', {})
+
+//In server component, import useTranslation in /useTranslation
+const { t } = useTranslation(lng,'setting')
+
+<div>
+    {t('title')}
+    {t('card_title')}
+</div>
+
+```
+
 ## Testing Payments
 
 For testing StepPay payments, you'll need to:

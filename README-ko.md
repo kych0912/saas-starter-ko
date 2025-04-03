@@ -71,6 +71,115 @@ pnpm dev
 
 [http://localhost:3000](http://localhost:3000)을 브라우저에서 열어 앱이 작동하는 것을 확인하세요.
 
+# Excel에서 i18n JSON 변환 가이드
+
+이 가이드는 Next.js SaaS Starter 프로젝트에서 번역 스크립트를 사용하여 Excel 파일을 i18n JSON 형식으로 변환하는 방법을 설명합니다.
+
+### Excel 파일 형식
+
+번역용 Excel 파일은 다음과 같은 형식으로 구성되어야 합니다:
+
+```
+namespace.key English Korean
+```
+
+예시:
+
+```
+signup.title Create your account 계정 생성
+signup.email email 이메일
+```
+
+### Excel을 JSON으로 변환하기
+
+Excel 번역 파일을 i18n JSON 형식으로 변환하려면 다음 단계를 따르세요:
+
+1. 위에서 설명한 형식으로 키, 영어 번역, 한국어 번역이 포함된 Excel 파일을 준비합니다.
+
+2. Excel 파일을 프로젝트의 지정된 디렉토리에 저장합니다.
+   (일반적으로 `/data` 폴더에 위치)
+
+3. 터미널에서 다음 명령어를 실행합니다:
+
+```bash
+pnpm prebuild
+```
+
+4. 이 명령어는 Excel 파일을 자동으로 파싱하여 i18n과 호환되는 JSON 형식으로 변환합니다.
+
+### 생성된 JSON 구조
+
+변환 후, 스크립트는 프로젝트의 로케일 디렉토리에 각 언어와 네임스페이스에 대한 JSON 파일을 생성합니다. 다음은 생성된 파일의 예시입니다:
+
+#### `/i18n/locales/en/activity.json`
+
+```json
+{
+  "title": "Activity Log",
+  "card_title": "Recent Activity",
+  "sign_up": "You signed up",
+  "sign_in": "You signed in",
+  "sign_out": "You signed out",
+  "update_password": "You changed your password",
+  "delete_account": "You deleted your account",
+  "update_account": "You updated your account",
+  "create_team": "You created a new team",
+  "remove_team_member": "You removed a team member",
+  "invite_team_member": "You invited a team member",
+  "accept_invitation": "You accepted an invitation",
+  "unknown": "Unknown action occurred",
+  "no_activity": "No activity yet",
+  "when_you_perform_actions": "When you perform actions like signing in or updating your account, they'll appear here.",
+  "just_now": "just now",
+  "minutes_ago": "minutes ago",
+  "hours_ago": "hours ago",
+  "days_ago": "days ago"
+}
+```
+
+#### `/i18n/locales/ko/activity.json`
+
+```json
+{
+  "title": "활동 로그",
+  "card_title": "최근 활동",
+  "sign_up": "회원가입 완료",
+  "sign_in": "로그인 완료",
+  "sign_out": "로그아웃 완료",
+  "update_password": "비밀번호 변경 완료",
+  "delete_account": "계정 삭제 완료",
+  "update_account": "계정 정보 업데이트 완료",
+  "create_team": "새 팀 생성 완료",
+  "remove_team_member": "팀 멤버 제거 완료",
+  "invite_team_member": "팀 멤버 초대 완료",
+  "accept_invitation": "초대 수락 완료",
+  "unknown": "알 수 없는 작업이 발생했습니다",
+  "no_activity": "아직 활동이 없습니다.",
+  "when_you_perform_actions": "로그인 또는 업데이트 시, 이곳에 표시됩니다.",
+  "just_now": "방금",
+  "minutes_ago": "{{count}}분 전",
+  "hours_ago": "{{count}}시간 전",
+  "days_ago": "{{count}}일 전"
+}
+```
+
+이러한 JSON 파일은 i18n 시스템에서 사용할 수 있는 각 언어(영어 및 한국어)에 대한 객체 구조로 생성됩니다.
+
+애플리케이션에서는 다음과 같이 키를 사용하여 이러한 번역을 사용용할 수 있습니다:
+
+```typescript
+// 클라이언트 컴포넌트에서 언어, 네임스페이스 및 옵션과 함께 번역 훅 임포트
+const { t } = useTranslation(lng, 'setting', {})
+
+// 서버 컴포넌트에서는 /useTranslation에서 useTranslation 임포트
+const { t } = useTranslation(lng, 'setting')
+
+<div>
+    {t('title')}
+    {t('card_title')}
+</div>
+```
+
 ## 결제 테스트하기
 
 StepPay 결제를 테스트하려면 다음이 필요합니다:
