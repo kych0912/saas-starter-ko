@@ -140,7 +140,7 @@ async function getGoogleClientSecret(): Promise<string> {
 async function getNaverClientId(): Promise<string> {
   console.log('Step 7: Getting Naver Client ID');
   console.log(
-    'You can find your Naver Client ID at: hhttps://developers.naver.com/'
+    'You can find your Naver Client ID at: https://developers.naver.com/'
   );
   return await question('Enter your Naver Client ID: ');
 }
@@ -148,7 +148,7 @@ async function getNaverClientId(): Promise<string> {
 async function getNaverClientSecret(): Promise<string> {
   console.log('Step 8: Getting Naver Client Secret');
   console.log(
-    'You can find your Naver Client Secret at: hhttps://developers.naver.com/'
+    'You can find your Naver Client Secret at: https://developers.naver.com/'
   );
   return await question('Enter your Naver Client Secret: ');
 }
