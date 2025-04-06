@@ -194,9 +194,9 @@ activity.unknown,Unknown action occurred,알 수 없는 작업이 발생했습�
 activity.no_activity,No activity yet,아직 활동이 없습니다.
 activity.when_you_perform_actions,"When you perform actions like signing in or updating your                account, they'll appear here.","로그인 또는 업데이트 시, 이곳에 표시됩니다."
 activity.just_now,just now,방금
-activity.minutes_ago,minutes ago,{{count}}분 전
-activity.hours_ago,hours ago,{{count}}시간 전
-activity.days_ago,days ago,{{count}}일 전
+activity.minutes_ago,{{count}} minutes ago,{{count}}분 전
+activity.hours_ago,{{count}} hours ago,{{count}}시간 전
+activity.days_ago,{{count}} days ago,{{count}}일 전
 ,,
 security.password_incorrect,Current password is incorrect.,유효하지 않은 계정 정보입니다. 다시 시도해주세요
 security.new_password_must_be_different,New password must be different from the current password.,기존 비밀번호와 다르게 설정해주세요

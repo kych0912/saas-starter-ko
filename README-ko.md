@@ -131,9 +131,9 @@ pnpm prebuild
   "no_activity": "No activity yet",
   "when_you_perform_actions": "When you perform actions like signing in or updating your account, they'll appear here.",
   "just_now": "just now",
-  "minutes_ago": "minutes ago",
-  "hours_ago": "hours ago",
-  "days_ago": "days ago"
+  "minutes_ago": "{{count}} minutes ago",
+  "hours_ago": "{{count}} hours ago",
+  "days_ago": "{{count}} days ago"
 }
 ```
 
