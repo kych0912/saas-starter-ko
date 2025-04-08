@@ -3,7 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useActionState } from 'react';
+import { useState, useActionState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember } from '@/app/[lng]/(login)/actions';
 import { InviteTeamMember } from './invite-team';
@@ -22,6 +23,7 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
     ActionState,
     FormData
   >(removeTeamMember, { error: '', success: '' });
+  const [loadState, setLoadState] = useState(false);
 
   const getUserDisplayName = (user: Pick<User, 'id' | 'name' | 'email'>) => {
     return user.name || user.email || 'Unknown User';
@@ -50,8 +52,23 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
                 </p>
               </div>
               <form action={createCustomPortalSessionAction}>
-                <Button type="submit" variant="outline">
-                  {t('manage')}
+                <Button
+                  type="submit"
+                  variant="outline"
+                  onSubmit={() => {
+                    setLoadState(true);
+                  }}
+                >
+                  {loadState ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      {t('manage')}
+                    </>
+                  )}
                 </Button>
               </form>
             </div>
