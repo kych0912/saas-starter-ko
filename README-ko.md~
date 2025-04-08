@@ -37,7 +37,7 @@
 
 ```bash
 git clone https://github.com/kych0912/saas-starter-ko
-cd saas-starter-ko
+cd saas-starter
 pnpm install
 ```
 
