@@ -37,7 +37,7 @@ This Project based on a original [Next.js SaaS Starter](https://github.com/nextj
 
 ```bash
 git clone https://github.com/kych0912/saas-starter-ko
-cd saas-starter
+cd saas-starter-ko
 pnpm install
 ```
 
