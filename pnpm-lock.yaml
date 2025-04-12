@@ -7,6 +7,15 @@ settings:
 importers:
 
   .:
+    devDependencies:
+      pnpm:
+        specifier: 9.14.2
+        version: 9.14.2
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+
+  apps:
     dependencies:
       '@radix-ui/react-avatar':
         specifier: ^1.1.2
@@ -137,9 +146,6 @@ importers:
       tailwindcss-react-aria-components:
         specifier: 1.2.0
         version: 1.2.0(tailwindcss@4.0.3)
-      typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -1483,6 +1489,11 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
+  pnpm@9.14.2:
+    resolution: {integrity: sha512-biuvd9Brk2IpQVLIUcTyeO3jerHro6Vf2jF6SheyCfTbuXP7JQp3q8Rjo0H8sfF/F8+iQJHE6zGc2g2bhCeDhw==}
+    engines: {node: '>=18.12'}
+    hasBin: true
+
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
@@ -2705,6 +2716,8 @@ snapshots:
   oauth4webapi@3.3.2: {}
 
   picocolors@1.1.1: {}
+
+  pnpm@9.14.2: {}
 
   postcss-value-parser@4.2.0: {}
 
