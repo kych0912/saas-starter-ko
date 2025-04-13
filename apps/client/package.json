@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "app",
+  "name": "client",
   "scripts": {
     "dev": "next dev --turbopack",
     "prebuild": "node scripts/CsvToLocales.js",

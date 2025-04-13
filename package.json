@@ -4,15 +4,15 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm --filter app dev",
-    "build": "pnpm --filter app build",
-    "start": "pnpm --filter app start",
-    "db:setup": "pnpm --filter app db:setup",
-    "db:seed": "pnpm --filter app db:seed",
-    "db:generate": "pnpm --filter app db:generate",
-    "db:migrate": "pnpm --filter app db:migrate",
-    "db:studio": "pnpm --filter app db:studio",
-    "db:reset": "pnpm --filter app db:reset"
+    "dev": "pnpm --filter client dev",
+    "build": "pnpm --filter client build",
+    "start": "pnpm --filter client start",
+    "db:setup": "pnpm --filter client db:setup",
+    "db:seed": "pnpm --filter client db:seed",
+    "db:generate": "pnpm --filter client db:generate",
+    "db:migrate": "pnpm --filter client db:migrate",
+    "db:studio": "pnpm --filter client db:studio",
+    "db:reset": "pnpm --filter client db:reset"
   },
   "engines": {
     "node": ">=22.11.0",
@@ -22,6 +22,10 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@9.14.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "devDependencies": {
     "pnpm": "9.14.2",
     "typescript": "^5.7.3"

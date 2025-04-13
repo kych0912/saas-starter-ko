@@ -204,7 +204,9 @@ SaaS 애플리케이션을 프로덕션에 배포할 준비가 되면 다음 단
 
 1. 코드를 GitHub 저장소에 푸시합니다.
 2. 저장소를 [Vercel](https://vercel.com/)에 연결하고 배포합니다.
-3. Vercel 배포 프로세스를 따르면 프로젝트 설정을 안내받을 수 있습니다.
+3. 해당 프로젝트로 이동해서 Settings 탭에서 Build and Deployment 섹션으로 이동해주세요
+4. Root Directory 설정에서 apps/client를 입력해주세요.
+5. Vercel 배포 프로세스를 따르면 프로젝트 설정을 안내받을 수 있습니다.
 
 ### 환경 변수 추가하기
 

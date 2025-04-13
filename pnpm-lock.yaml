@@ -15,7 +15,7 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
 
-  apps:
+  apps/client:
     dependencies:
       '@radix-ui/react-avatar':
         specifier: ^1.1.2

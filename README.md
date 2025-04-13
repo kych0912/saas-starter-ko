@@ -204,8 +204,10 @@ When you're ready to deploy your SaaS application to production, follow these st
 ### Deploy to Vercel
 
 1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
+2. Connect the repository to Vercel and deploy it.
+3. Go to your project, then navigate to the Settings tab and find the Build and Deployment section.
+4. In the Root Directory setting, enter apps/client.
+5. Follow the Vercel deployment process for guided project setup.
 
 ### Add environment variables
 
