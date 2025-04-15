@@ -1,3 +1,8 @@
+# 📌 BREAKING
+The current Monolith repository will be migrated to a monorepo structure within the next two weeks. Please check the following issue and branch for details
+* [ISSUE](https://github.com/kych0912/saas-starter-ko/issues/10)
+* [BRANCH](https://github.com/kych0912/saas-starter-ko/tree/migrate/monorepo)
+
 # Next.js SaaS Starter
 
 This Project based on a original [Next.js SaaS Starter](https://github.com/nextjs/saas-starter) template for building a SaaS application using Next.js with support for authentication, StepPay integration for payments, and a dashboard for logged-in users.
