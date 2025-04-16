@@ -155,8 +155,8 @@ async function getNaverClientSecret(): Promise<string> {
 
 async function main() {
   const POSTGRES_URL = await getPostgresURL();
-  const STEPPY_SECRET_KEY = await getStepPaySecretKey();
-  const STEPPY_WEBHOOK_SECRET = await getStepPayWebhookSecret();
+  const STEPPAY_SECRET_KEY = await getStepPaySecretKey();
+  const STEPPAY_WEBHOOK_SECRET = await getStepPayWebhookSecret();
   const BASE_URL = 'http://localhost:3000';
   const AUTH_SECRET = generateAuthSecret();
   const GOOGLE_ID = await getGoogleClientId();
@@ -166,8 +166,8 @@ async function main() {
 
   await writeEnvFile({
     POSTGRES_URL,
-    STEPPY_SECRET_KEY,
-    STEPPY_WEBHOOK_SECRET,
+    STEPPAY_SECRET_KEY,
+    STEPPAY_WEBHOOK_SECRET,
     BASE_URL,
     AUTH_SECRET,
     NEXTAUTH_SECRET: AUTH_SECRET,
