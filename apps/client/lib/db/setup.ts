@@ -20,6 +20,92 @@ function question(query: string): Promise<string> {
   );
 }
 
+async function createStepPayProduct(stepPaySecretKey: string){
+  try{
+    const response = await fetch('https://api.steppay.kr/api/v1/products',{
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Secret-Token': `${stepPaySecretKey}`,
+        },
+        body: JSON.stringify(
+          {
+            type: "SOFTWARE",
+            status: "SALE",
+            name: "saas",
+            enabledDemo: true,
+            demoPeriod: 7,
+            demoPeriodUnit: "DAY",
+            useWidget: {
+              useDemo: true,
+              useEventBadge: false,
+              useOnetimePurchasable: false,
+              useNotice: false
+            },
+          }
+        )
+    })
+
+    if(!response.ok){
+      console.error(response);
+      process.exit(1);
+    }
+
+    const data = await response.json();
+    return data;
+  }catch(error){
+    console.error(error);
+    process.exit(1);
+  }
+}
+
+async function createStepPaySubscribePlan(
+  stepPaySecretKey: string,
+  productId: string,
+  price: number,
+  name: string,
+  description:string
+){
+  try{
+    const response = await fetch(`https://api.steppay.kr/api/v1/products/${productId}/prices`,{
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+        'Secret-Token': `${stepPaySecretKey}`,
+      },
+      body: JSON.stringify({
+        price: price,
+        unit: "멤버십",
+        currencyPrice:{
+          "KRW":price
+        },
+        plan: {
+          name: name,
+          description: description,
+        },
+        type:"FLAT",
+        recurring:{
+          "intervalCount":1,
+          "interval":"MONTH"
+        }
+      }),
+    });
+
+    if(!response.ok){
+      console.error(response);
+      process.exit(1);
+    }
+
+    const data = await response.json();
+    return data;
+  }catch(error){
+    console.error(error);
+    process.exit(1);
+  }
+}
+
 async function getPostgresURL(): Promise<string> {
   console.log('Step 1: Setting up Postgres');
   const dbChoice = await question(
@@ -95,7 +181,22 @@ async function getStepPaySecretKey(): Promise<string> {
   console.log(
     'You can find your StepPay Secret Key at: https://portal.steppay.kr/setting/key'
   );
-  return await question('Enter your StepPay Secret Key: ');
+  const stepPaySecretKey = await question('Enter your StepPay Secret Key: ');
+
+  console.log("Create StepPay Product");
+  const stepPayProduct = await createStepPayProduct(stepPaySecretKey);
+  console.log("StepPay Product Created");
+
+  console.log("Create StepPay Subscribe Plan");
+
+  const promises = [];
+  promises.push(createStepPaySubscribePlan(stepPaySecretKey,stepPayProduct.id,8900,"base","unlimited_usage\nunlimited_members\nemail_support"));
+  promises.push(createStepPaySubscribePlan(stepPaySecretKey,stepPayProduct.id,12900,"plus","base_plus\nnew_feature_plus\nCS_plus"));
+  await Promise.all(promises);
+
+  console.log("StepPay Subscribe Plan Created");
+
+  return stepPaySecretKey;
 }
 
 async function getStepPayWebhookSecret(): Promise<string> {
