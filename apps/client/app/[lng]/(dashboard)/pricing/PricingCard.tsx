@@ -45,7 +45,7 @@ export default async function PricingCard({
       }
     }
 
-    function demicalFormatPrice(price:number){
+    function decimalFormatPrice(price:number){
       return price.toLocaleString('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
@@ -61,7 +61,7 @@ export default async function PricingCard({
           </p>
         )}
         <p className="text-4xl font-medium text-foreground mb-6">
-          {getCurrency(Object.keys(currencyPrice)[0])}{demicalFormatPrice(currencyPrice[Object.keys(currencyPrice)[0]])}{' '}
+          {getCurrency(Object.keys(currencyPrice)[0])}{decimalFormatPrice(currencyPrice[Object.keys(currencyPrice)[0]])}{' '}
           <span className="text-xl font-normal text-muted-foreground">
             {t('price',{interval:recurring?.intervalCount || 1,unit:getUnit(recurring?.interval || IntervalUnit.MONTH)})}
           </span>
