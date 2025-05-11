@@ -1,8 +1,3 @@
-# 📌 BREAKING
-현재 Monolith 방식의 레포지토리는 모노레포 형식으로 2주 내에 마이그레이션 할 예정입니다. 다음 이슈와 브랜치를 확인해주세요
-* [ISSUE](https://github.com/kych0912/saas-starter-ko/issues/9)
-* [BRANCH](https://github.com/kych0912/saas-starter-ko/tree/migrate/monorepo)
-
 # Next.js SaaS Starter
 
 이 프로젝트는 인증 지원, 결제를 위한 StepPay 통합, 로그인한 사용자를 위한 대시보드를 포함한 Next.js를 사용하여 SaaS 애플리케이션을 구축하기 위한 원본 [Next.js SaaS Starter](https://github.com/nextjs/saas-starter) 템플릿을 기반으로 합니다.
