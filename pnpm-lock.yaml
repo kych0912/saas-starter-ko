@@ -41,6 +41,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.1.1
         version: 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@saas/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       '@tailwindcss/postcss':
         specifier: 4.0.3
         version: 4.0.3
@@ -156,6 +159,8 @@ importers:
   packages/MFA: {}
 
   packages/email-notification: {}
+
+  packages/tsconfig: {}
 
 packages:
 
