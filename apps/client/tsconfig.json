@@ -4,13 +4,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "app",
-    ".next/types/**/*.ts"
-  ]
+  "include": ["app", ".next/types/**/*.ts", "types/next-auth.d.ts"]
 }
