@@ -1,47 +1,48 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
+  Button,
+  Input,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { Loader2, PlusCircle } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { useActionState, use } from 'react';
-import { inviteTeamMember } from '@/app/[lng]/(login)/actions';
-import { useTranslation } from '@/app/i18n/useTranslation/client';
-import { useUser } from '@/lib/auth';
+  CardFooter,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+} from "@saas/ui";
+import { Loader2, PlusCircle } from "lucide-react";
+import { useActionState, use } from "react";
+import { inviteTeamMember } from "@/app/[lng]/(login)/actions";
+import { useTranslation } from "@/app/i18n/useTranslation/client";
+import { useUser } from "@/lib/auth";
 
 type ActionState = {
   error?: string;
   success?: string;
 };
 
-export function InviteTeamMember({lng}: {lng: string}) {
-  const { t } = useTranslation(lng, 'team', {})
+export function InviteTeamMember({ lng }: { lng: string }) {
+  const { t } = useTranslation(lng, "team", {});
   const { userPromise } = useUser();
   const user = use(userPromise);
-  const { t: tInviteResponse } = useTranslation(lng, 'invite_response', {})
-  const isOwner = user?.role === 'owner';
+  const { t: tInviteResponse } = useTranslation(lng, "invite_response", {});
+  const isOwner = user?.role === "owner";
   const [inviteState, inviteAction, isInvitePending] = useActionState<
     ActionState,
     FormData
-  >(inviteTeamMember, { error: '', success: '' });
+  >(inviteTeamMember, { error: "", success: "" });
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <form action={inviteAction} className="space-y-4">
           <div>
-            <Label htmlFor="email">{t('email')}</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               name="email"
@@ -52,7 +53,7 @@ export function InviteTeamMember({lng}: {lng: string}) {
             />
           </div>
           <div>
-            <Label>{t('role')}</Label>
+            <Label>{t("role")}</Label>
             <RadioGroup
               defaultValue="member"
               name="role"
@@ -61,11 +62,11 @@ export function InviteTeamMember({lng}: {lng: string}) {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="member" id="member" />
-                <Label htmlFor="member">{t('member')}</Label>
+                <Label htmlFor="member">{t("member")}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="owner" id="owner" />
-                <Label htmlFor="owner">{t('owner')}</Label>
+                <Label htmlFor="owner">{t("owner")}</Label>
               </div>
             </RadioGroup>
           </div>
@@ -73,7 +74,9 @@ export function InviteTeamMember({lng}: {lng: string}) {
             <p className="text-red-500">{tInviteResponse(inviteState.error)}</p>
           )}
           {inviteState?.success && (
-            <p className="text-green-500">{tInviteResponse(inviteState.success)}</p>
+            <p className="text-green-500">
+              {tInviteResponse(inviteState.success)}
+            </p>
           )}
           <Button
             type="submit"
@@ -83,12 +86,12 @@ export function InviteTeamMember({lng}: {lng: string}) {
             {isInvitePending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('inviting')}
+                {t("inviting")}
               </>
             ) : (
               <>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                {t('invite')}
+                {t("invite")}
               </>
             )}
           </Button>
@@ -96,9 +99,7 @@ export function InviteTeamMember({lng}: {lng: string}) {
       </CardContent>
       {!isOwner && (
         <CardFooter>
-          <p className="text-sm text-muted-foreground">
-            {t('error')}
-          </p>
+          <p className="text-sm text-muted-foreground">{t("error")}</p>
         </CardFooter>
       )}
     </Card>

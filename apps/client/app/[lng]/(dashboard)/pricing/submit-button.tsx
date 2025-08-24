@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Loader2 } from 'lucide-react';
-import { useFormStatus } from 'react-dom';
-import { useTranslation } from '@/app/i18n/useTranslation/client';
+import { Button } from "@saas/ui";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { useTranslation } from "@/app/i18n/useTranslation/client";
 
-export function SubmitButton({lng}: {lng: string}) {
+export function SubmitButton({ lng }: { lng: string }) {
   const { pending } = useFormStatus();
-  const {t} = useTranslation(lng, 'pricing',{});
+  const { t } = useTranslation(lng, "pricing", {});
 
   return (
     <Button
@@ -18,11 +18,11 @@ export function SubmitButton({lng}: {lng: string}) {
       {pending ? (
         <>
           <Loader2 className="animate-spin mr-2 h-4 w-4" />
-          {t('loading')}
+          {t("loading")}
         </>
       ) : (
         <>
-          {t('button')}
+          {t("button")}
           <ArrowRight className="ml-2 h-4 w-4" />
         </>
       )}
