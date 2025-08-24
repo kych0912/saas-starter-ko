@@ -1,0 +1,23 @@
+{
+  "extends": "@saas/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react-jsx",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@saas/ui/*": ["src/*"],
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
