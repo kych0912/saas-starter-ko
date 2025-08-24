@@ -1,7 +1,7 @@
-import { desc, and, eq, isNull } from 'drizzle-orm';
-import { db } from './drizzle';
-import { activityLogs, Team, teamMembers, teams, users } from './schema';
-import { auth } from '@/auth';
+import { desc, and, eq, isNull } from "drizzle-orm";
+import { db } from "./drizzle";
+import { activityLogs, Team, teamMembers, teams, users } from "./schema";
+import { auth } from "@/auth";
 
 export async function getUser() {
   const session = await auth();
@@ -19,10 +19,9 @@ export async function getUser() {
   if (user.length === 0) {
     return null;
   }
-  
+
   return user[0];
 }
-
 
 export async function updateTeamSubscription({
   teamid,
@@ -31,23 +30,26 @@ export async function updateTeamSubscription({
   planName,
   stepPayProductCode,
   stepPayPriceCode,
-}:{
-  teamid:number,
-  subscriptionStatus:string | null,
-  stepPaySubscriptionId:string | null,
-  planName:string | null,
-  stepPayProductCode:string | null,
-  stepPayPriceCode:string | null,
-  updatedAt: Date,
+}: {
+  teamid: number;
+  subscriptionStatus: string | null;
+  stepPaySubscriptionId: string | null;
+  planName: string | null;
+  stepPayProductCode: string | null;
+  stepPayPriceCode: string | null;
+  updatedAt: Date;
 }) {
-  await db.update(teams).set({
-    subscriptionStatus,
-    stepPaySubscriptionId,
-    planName,
-    stepPayProductCode,
-    stepPayPriceCode,
-    updatedAt: new Date(),
-  }).where(eq(teams.id, teamid));
+  await db
+    .update(teams)
+    .set({
+      subscriptionStatus,
+      stepPaySubscriptionId,
+      planName,
+      stepPayProductCode,
+      stepPayPriceCode,
+      updatedAt: new Date(),
+    })
+    .where(eq(teams.id, teamid));
 }
 
 export async function getUserWithTeam(userId: number) {
@@ -69,7 +71,7 @@ export async function getUserWithTeam(userId: number) {
 export async function getActivityLogs() {
   const user = await getUser();
   if (!user) {
-    throw new Error('User not authenticated');
+    throw new Error("User not authenticated");
   }
 
   return await db
