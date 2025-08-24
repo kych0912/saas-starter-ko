@@ -1,57 +1,69 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
-import { removeTeamMember } from '@/app/[lng]/(login)/actions';
-import { InviteTeamMember } from './invite-team';
-import { useTranslation } from '@/app/i18n/useTranslation/client';
-import { createCustomPortalSessionAction } from '@/lib/payments/actions';
-
+import {
+  Button,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@saas/ui";
+import { useActionState } from "react";
+import { TeamDataWithMembers, User } from "@/lib/db/schema";
+import { removeTeamMember } from "@/app/[lng]/(login)/actions";
+import { InviteTeamMember } from "./invite-team";
+import { useTranslation } from "@/app/i18n/useTranslation/client";
+import { createCustomPortalSessionAction } from "@/lib/payments/actions";
 
 type ActionState = {
   error?: string;
   success?: string;
 };
 
-export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng: string }) {
-  const { t } = useTranslation(lng, 'setting', {})
+export function Settings({
+  teamData,
+  lng,
+}: {
+  teamData: TeamDataWithMembers;
+  lng: string;
+}) {
+  const { t } = useTranslation(lng, "setting", {});
   const [removeState, removeAction, isRemovePending] = useActionState<
     ActionState,
     FormData
-  >(removeTeamMember, { error: '', success: '' });
+  >(removeTeamMember, { error: "", success: "" });
 
-  const getUserDisplayName = (user: Pick<User, 'id' | 'name' | 'email'>) => {
-    return user.name || user.email || 'Unknown User';
+  const getUserDisplayName = (user: Pick<User, "id" | "name" | "email">) => {
+    return user.name || user.email || "Unknown User";
   };
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium mb-6">{t('title')}</h1>
+      <h1 className="text-lg lg:text-2xl font-medium mb-6">{t("title")}</h1>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>{t('subscription')}</CardTitle>
+          <CardTitle>{t("subscription")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
                 <p className="font-medium">
-                  {t('current_plan')}: {teamData.planName || t('free')}
+                  {t("current_plan")}: {teamData.planName || t("free")}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {teamData.subscriptionStatus === 'ACTIVE'
-                    ? t('monthly')
-                    : teamData.subscriptionStatus === 'trialing'
-                      ? t('trial')
-                      : t('no_subscription')}
+                  {teamData.subscriptionStatus === "ACTIVE"
+                    ? t("monthly")
+                    : teamData.subscriptionStatus === "trialing"
+                    ? t("trial")
+                    : t("no_subscription")}
                 </p>
               </div>
               <form action={createCustomPortalSessionAction}>
                 <Button type="submit" variant="outline">
-                  {t('manage')}
+                  {t("manage")}
                 </Button>
               </form>
             </div>
@@ -60,7 +72,7 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
       </Card>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>{t('members')}</CardTitle>
+          <CardTitle>{t("members")}</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
@@ -74,9 +86,9 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
                     />
                     <AvatarFallback>
                       {getUserDisplayName(member.user)
-                        .split(' ')
+                        .split(" ")
                         .map((n) => n[0])
-                        .join('')}
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
@@ -97,7 +109,7 @@ export function Settings({ teamData, lng }: { teamData: TeamDataWithMembers, lng
                       size="sm"
                       disabled={isRemovePending}
                     >
-                      {isRemovePending ? t('removing') : t('remove')}
+                      {isRemovePending ? t("removing") : t("remove")}
                     </Button>
                   </form>
                 ) : null}

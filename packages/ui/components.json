@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "prefix": "",
+    "cssVariables": true,
+    "baseColor": "neutral",
+    "css": "src/globals.css"
+  },
+  "aliases": {
+    "components": "@saas/components",
+    "ui": "@saas/components/base",
+    "utils": "@saas/lib/utils",
+    "hooks": "@saas/hooks",
+    "lib": "@saas/lib"
+  },
+  "iconLibrary": "lucide"
+}
