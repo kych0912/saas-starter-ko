@@ -1,15 +1,16 @@
 {
   "extends": "@saas/tsconfig/app.json",
   "compilerOptions": {
+    "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
-    "app/api/steppay/webhook/Utils.js",
-    "app/i18n/CsvToLocales.js",
-    "tailwind.config.js",
+    "app",
     ".next/types/**/*.ts"
   ]
 }
