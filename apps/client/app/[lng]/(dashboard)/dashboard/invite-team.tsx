@@ -42,6 +42,7 @@ export function InviteTeamMember({ lng }: { lng: string }) {
       <CardContent>
         <form action={inviteAction} className="space-y-4">
           <div>
+            <input type="hidden" name="lng" value={lng} />
             <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
