@@ -58,6 +58,7 @@ export async function getUserWithTeam(userId: number) {
       user: users,
       teamId: teamMembers.teamId,
       stepPayCustomerId: teams.stepPayCustomerId,
+      role: teamMembers.role,
     })
     .from(users)
     .leftJoin(teamMembers, eq(users.id, teamMembers.userId))

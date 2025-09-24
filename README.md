@@ -73,6 +73,22 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
 
+## Resend (Email) Usage
+
+We use Resend for transactional emails such as team invitations. Currently, the dashboard “invite team” action sends an email that includes an invitation link.
+
+Template
+
+```
+apps/client/components/email/invite-team.tsx
+```
+
+This template is built with React Email.
+
+### Recommended: Domain Authentication (SPF/DKIM)
+
+For better deliverability, connect a custom domain in Resend and complete DNS (SPF/DKIM) verification. You can test without a domain, but in production there’s a higher chance of emails being filtered as spam.
+
 ## Excel to i18n JSON Translation Guide
 
 This guide explains how to use the translation script in the Next.js SaaS Starter project to convert Excel files to i18n JSON format.
@@ -222,3 +238,5 @@ In your Vercel project settings (or during deployment), add all the necessary en
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
 6. `GOOGLE_ID, NAVER_ID`: Set these to your Google and NAVER OAuth client IDs.
 7. `GOOGLE_SECRET, NAVER_SECRET`: Set these to your Google and NAVER OAuth client secrets.
+8. `RESEND_API_KEY`: Your API key issued by Resend.
+9. `RESEND_FROM`: The email address to send from via Resend. If not set, it defaults to onboarding@resend.dev.
