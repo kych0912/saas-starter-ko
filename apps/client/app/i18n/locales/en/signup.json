@@ -6,5 +6,6 @@
   "submit": "Sign up",
   "border": "Already have an account?",
   "login": "Sign in to existing account",
-  "invalid_email_or_password": "Invalid email or password. Please try again"
+  "invalid_email_or_password": "Invalid email or password. Please try again",
+  "sign_up_failed": "Failed to Sign up"
 }

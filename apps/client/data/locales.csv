@@ -7,6 +7,7 @@ signup.submit,Sign up,회원가입
 signup.border,Already have an account?,이미 계정이 있으신가요?
 signup.login,Sign in to existing account,계정 로그인하기
 signup.invalid_email_or_password,Invalid email or password. Please try again,유효하지 않은 계정 정보입니다. 다시 시도해주세요
+signup.sign_up_failed,Failed to Sign up,회원가입에 실패했습니다. 다시 시도해주세요.
 ,,
 signin.title,Sign in to your account,로그인
 signin.email,email,이메일
@@ -15,6 +16,7 @@ signin.submit,Sign in,로그인
 signin.border,New to our platform?,저희 서비스는 처음이신가요?
 signin.login,Create an account,새로운 계정 생성하기
 signin.invalid_email_or_password,Invalid email or password. Please try again,유효하지 않은 계정 정보입니다. 다시 시도해주세요
+signin.sign_in_failed,Failed to Sign in,로그인에 실패했습니다. 다시 시도해주세요.
 ,,
 hero.title,Build your SaaS,SaaS 비즈니스 구축
 hero.subtitle,Faster Than Ever,이전보다 훨씬 빠르게
@@ -39,61 +41,61 @@ features.description_third,Focus on what matters.,중요한 것에만 집중하�
 ,,
 features.authentication_title,Authentication,인증 시스템
 features.authentication_description,Full authentication system powered by Auth.js with JWT tokens stored securely in cookies.,Auth.js를 사용한 완전한 인증 시스템으로 JWT 토큰을 쿠키에 안전하게 저장합니다.
-features.authentication_timeSaved,8-10,8-10
+features.authentication_timeSaved,08월 10일,08월 10일
 features.email_login_title,Email & Password Login,이메일 및 비밀번호 로그인
 features.email_login_description,Simple and secure login flow with email and password validation.,이메일과 비밀번호 검증을 포함한 간단하고 안전한 로그인 프로세스입니다.
-features.email_login_timeSaved,4-6,4-6
+features.email_login_timeSaved,04월 06일,04월 06일
 features.oauth_title,Social OAuth Integration,소셜 OAuth 통합
 features.oauth_description,Ready-to-use OAuth social logins with Google and Facebook authentication.,Google과 Facebook 인증을 지원하는 바로 사용 가능한 OAuth 소셜 로그인입니다.
-features.oauth_timeSaved,5-7,5-7
+features.oauth_timeSaved,05월 07일,05월 07일
 features.protected_routes_title,Protected Routes,보호된 라우트
 features.protected_routes_description,Global middleware to protect logged-in routes and validate user sessions.,로그인된 라우트를 보호하고 사용자 세션을 검증하는 글로벌 미들웨어입니다.
-features.protected_routes_timeSaved,3-5,3-5
+features.protected_routes_timeSaved,03월 05일,03월 05일
 features.ui_components_title,Shadcn UI Components,Shadcn UI 컴포넌트
 features.ui_components_description,Beautiful UI components built with Radix UI primitives and styled with Tailwind CSS.,Radix UI 기본 요소로 구축되고 Tailwind CSS로 스타일링된 아름다운 UI 컴포넌트입니다.
-features.ui_components_timeSaved,6-8,6-8
+features.ui_components_timeSaved,06월 08일,06월 08일
 features.responsive_title,Mobile Responsive Design,모바일 반응형 디자인
 features.responsive_description,"Fully responsive layouts that look great on mobile, tablet, and desktop devices.","모바일, 태블릿 및 데스크톱 기기에서 멋지게 보이는 완전 반응형 레이아웃"
-features.responsive_timeSaved,4-6,4-6
+features.responsive_timeSaved,04월 06일,04월 06일
 features.dark_mode_title,Dark Mode,다크 모드
 features.dark_mode_description,Complete theme system with light and dark modes that users can toggle based on preference.,사용자가 선호도에 따라 선택할 수 있는 라이트 및 다크 모드를 포함한 완전한 테마 시스템입니다.
-features.dark_mode_timeSaved,3-5,3-5
+features.dark_mode_timeSaved,03월 05일,03월 05일
 features.user_management_title,User Management,사용자 관리
 features.user_management_description,Dashboard CRUD operations for managing users with intuitive admin interfaces.,직관적인 관리자 인터페이스를 갖춘 사용자 관리를 위한 대시보드 CRUD 기능입니다.
-features.user_management_timeSaved,5-7,5-7
+features.user_management_timeSaved,05월 07일,05월 07일
 features.team_management_title,Team Management,팀 관리
 features.team_management_description,Multi-user teams with invitation system and member management tools.,초대 시스템과 멤버 관리 도구를 갖춘 다중 사용자 팀 기능입니다.
-features.team_management_timeSaved,6-8,6-8
+features.team_management_timeSaved,06월 08일,06월 08일
 features.rbac_title,Role-Based Access Control,역할 기반 접근 제어
 features.rbac_description,Basic RBAC with Owner and Member roles to control permissions and access levels.,권한과 접근 수준을 제어하는 소유자(Owner)와 멤버(Member) 역할의 기본 RBAC 시스템입니다.
-features.rbac_timeSaved,4-6,4-6
+features.rbac_timeSaved,04월 06일,04월 06일
 features.activity_logging_title,Activity Logging,활동 로깅
 features.activity_logging_description,Comprehensive activity tracking system for auditing user events and actions.,사용자 이벤트와 작업을 감사하기 위한 포괄적인 활동 추적 시스템입니다.
-features.activity_logging_timeSaved,3-5,3-5
+features.activity_logging_timeSaved,03월 05일,03월 05일
 features.steppay_title,StepPay Integration,StepPay 통합
 features.steppay_description,Seamless payment processing with StepPay checkout for subscription handling.,구독 처리를 위한 StepPay 결제 시스템의 원활한 통합입니다.
-features.steppay_timeSaved,6-8,6-8
+features.steppay_timeSaved,06월 08일,06월 08일
 features.webhook_title,Webhook Support,웹훅 지원
 features.webhook_description,Webhook infrastructure for subscription events and payment notifications.,구독 이벤트와 결제 알림을 위한 웹훅 인프라입니다.
-features.webhook_timeSaved,3-5,3-5
+features.webhook_timeSaved,03월 05일,03월 05일
 features.customer_portal_title,Customer Portal,고객 포털
 features.customer_portal_description,User-facing portal where customers can manage their subscriptions and billing details.,고객이 구독과 결제 정보를 관리할 수 있는 사용자 대면 포털입니다.
-features.customer_portal_timeSaved,5-7,5-7
+features.customer_portal_timeSaved,05월 07일,05월 07일
 features.i18n_title,Multi-Language Support,다국어 지원
 features.i18n_description,i18next and react-i18next integration for translating your application into any language.,애플리케이션을 어떤 언어로든 번역할 수 있는 i18next 및 react-i18next 통합입니다.
-features.i18n_timeSaved,4-6,4-6
+features.i18n_timeSaved,04월 06일,04월 06일
 features.translation_tools_title,Translation Tools,번역 도구
 features.translation_tools_description,Parsing scripts to convert Excel translation files to JSON format for i18next.,Excel 번역 파일을 i18next용 JSON 형식으로 변환하는 파싱 스크립트입니다.
-features.translation_tools_timeSaved,3-5,3-5
+features.translation_tools_timeSaved,03월 05일,03월 05일
 features.database_title,Database Setup,데이터베이스 설정
 features.database_description,Quick database configuration with Drizzle ORM for type-safe database operations.,타입 안전한 데이터베이스 작업을 위한 Drizzle ORM을 사용한 빠른 데이터베이스 구성입니다.
-features.database_timeSaved,3-5,3-5
+features.database_timeSaved,03월 05일,03월 05일
 features.migration_title,Migration System,마이그레이션 시스템
 features.migration_description,Database schema management and migration tools for evolving your data model.,데이터 모델을 발전시키기 위한 데이터베이스 스키마 관리 및 마이그레이션 도구입니다.
-features.migration_timeSaved,3-4,3-4
+features.migration_timeSaved,03월 04일,03월 04일
 features.serverless_title,Serverless Architecture,서버리스 아키텍처
 features.serverless_description,"Compatible with serverless deployments for modern, scalable hosting options.",최신 확장 가능한 호스팅 옵션을 위한 서버리스 배포와 호환됩니다.
-features.serverless_timeSaved,3-5,3-5
+features.serverless_timeSaved,03월 05일,03월 05일
 features.opensource_title,Open Source Codebase,오픈 소스 코드베이스
 features.opensource_description,Full access to all code with MIT license for complete customization freedom.,완전한 커스터마이징 자유를 위한 MIT 라이선스의 모든 코드에 대한 전체 접근 권한입니다.
 features.time_savings_title,Development Time Savings,개발 시간 절약

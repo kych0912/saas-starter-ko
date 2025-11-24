@@ -10,6 +10,14 @@ import { ActionState } from "@/lib/auth/middleware";
 import { useTranslation } from "@/app/i18n/useTranslation/client";
 import { signIn as signInNextAuth } from "next-auth/react";
 
+type ErrorKey = "AccessDenied" | "OAuthSignin" | "OAuthCallback";
+
+const errorKeyMap: Record<ErrorKey, string> = {
+  AccessDenied: "sign_in_failed",
+  OAuthSignin: "sign_in_failed",
+  OAuthCallback: "sign_in_failed",
+};
+
 export function Login({
   lng,
   mode = "signin",
@@ -18,6 +26,10 @@ export function Login({
   mode?: "signin" | "signup";
 }) {
   const searchParams = useSearchParams();
+  const rawErrorQuery = searchParams.get("error");
+  const errorQuery = rawErrorQuery
+    ? errorKeyMap[rawErrorQuery as ErrorKey] ?? "invalid_email_or_password"
+    : null;
   const redirect = searchParams.get("redirect");
   const priceCode = searchParams.get("priceCode");
   const productCode = searchParams.get("productCode");
@@ -121,6 +133,10 @@ export function Login({
             <div className="text-red-500 text-sm">{t(`${state.error}`)}</div>
           )}
 
+          {errorQuery && (
+            <div className="text-red-500 text-sm">{t(errorQuery)}</div>
+          )}
+
           <div>
             <Button
               type="submit"
@@ -155,6 +171,7 @@ export function Login({
                 "google",
                 {
                   redirectTo: "/dashboard",
+                  redirect: false,
                 },
                 {
                   inviteId,
@@ -202,6 +219,7 @@ export function Login({
                 "naver",
                 {
                   redirectTo: "/dashboard",
+                  redirect: false,
                 },
                 {
                   inviteId,
