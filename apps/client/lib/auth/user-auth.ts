@@ -43,46 +43,57 @@ export function logErrorResult<T, E extends AuthError>(
 export async function findUserTeam(
   email: string
 ): Promise<Result<{ user: User; team: Team }>> {
-  const userWithTeam = await db
-    .select({
-      user: users,
-      team: teams,
-    })
-    .from(users)
-    .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    .leftJoin(teams, eq(teamMembers.teamId, teams.id))
-    .where(eq(users.email, email))
-    .limit(1);
+  try {
+    const userWithTeam = await db
+      .select({
+        user: users,
+        team: teams,
+      })
+      .from(users)
+      .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
+      .leftJoin(teams, eq(teamMembers.teamId, teams.id))
+      .where(eq(users.email, email))
+      .limit(1);
 
-  if (userWithTeam.length === 0) {
+    if (userWithTeam.length === 0) {
+      return {
+        ok: false,
+        error: {
+          error: "team_not_found",
+          message: { email },
+        },
+      };
+    }
+
+    const result = userWithTeam[0];
+
+    if (!result.user || !result.team) {
+      return {
+        ok: false,
+        error: {
+          error: "invalid_email_or_password",
+          message: { email },
+        },
+      };
+    }
+
+    return {
+      ok: true,
+      value: {
+        user: result.user,
+        team: result.team,
+      },
+    };
+  } catch (error) {
+    console.error(error);
     return {
       ok: false,
       error: {
-        error: "team_not_found",
+        error: "user_team_not_found",
         message: { email },
       },
     };
   }
-
-  const result = userWithTeam[0];
-
-  if (!result.user || !result.team) {
-    return {
-      ok: false,
-      error: {
-        error: "invalid_email_or_password",
-        message: { email },
-      },
-    };
-  }
-
-  return {
-    ok: true,
-    value: {
-      user: result.user,
-      team: result.team,
-    },
-  };
 }
 
 // 비밀번호 검증 함수
@@ -256,31 +267,41 @@ export async function signInUserInterface(
   email: string,
   password: string
 ): Promise<Result<User>> {
-  //유저 팀 찾기
-  const userResult = await findUserTeam(email);
-  console.log("userResul1t", userResult);
-  if (!userResult.ok) {
+  try {
+    //유저 팀 찾기
+    const userResult = await findUserTeam(email);
+
+    if (!userResult.ok) {
+      return {
+        ok: false,
+        error: userResult.error,
+      };
+    }
+
+    const { user, team } = userResult.value;
+
+    //비밀번호 검증
+    const passwordResult = await validateUserPassword(user, password);
+
+    if (!passwordResult.ok) {
+      return {
+        ok: false,
+        error: passwordResult.error,
+      };
+    }
+
+    await logActivity(team.id, user.id, ActivityType.SIGN_IN);
+
+    return { ok: true, value: user };
+  } catch (error) {
     return {
       ok: false,
-      error: userResult.error,
+      error: {
+        error: "sign_in_failed",
+        message: { detail: "Failed to sign in." },
+      },
     };
   }
-
-  const { user, team } = userResult.value;
-
-  //비밀번호 검증
-  const passwordResult = await validateUserPassword(user, password);
-
-  if (!passwordResult.ok) {
-    return {
-      ok: false,
-      error: passwordResult.error,
-    };
-  }
-
-  await logActivity(team.id, user.id, ActivityType.SIGN_IN);
-
-  return { ok: true, value: user };
 }
 
 export async function signUpUserInterface({
@@ -294,108 +315,118 @@ export async function signUpUserInterface({
   password: string;
   inviteId: string | undefined;
 }): Promise<Result<User>> {
-  //유저 팀 찾기
-  const userWithTeamResult = await findUserTeam(email);
+  try {
+    //유저 팀 찾기
+    const userWithTeamResult = await findUserTeam(email);
 
-  // 유저 팀이 있으면 에러
-  if (userWithTeamResult.ok) {
-    return {
-      ok: false,
-      error: {
-        error: "team_not_found",
-        message: { email },
-      },
-    };
-  }
-
-  //유저 생성
-  const createdUser = await createUser({
-    username,
-    email,
-    password,
-  });
-
-  if (!createdUser.ok) {
-    return {
-      ok: false,
-      error: createdUser.error,
-    };
-  }
-
-  const user = createdUser.value;
-
-  let teamId: number;
-  let userRole: string;
-  let createdTeam: typeof teams.$inferSelect | null = null;
-
-  if (inviteId) {
-    // 유효한 초대가 있는지 확인
-    const invitationResult = await findInvitation(inviteId, email);
-
-    if (!invitationResult.ok) {
-      return {
-        ok: false,
-        error: invitationResult.error,
-      };
-    }
-
-    const invitation = invitationResult.value;
-
-    // 초대가 있으면 초대 수락
-    if (invitation) {
-      teamId = invitation.teamId;
-      userRole = invitation.role;
-
-      await acceptInvitation(invitation.id);
-
-      await logActivity(teamId, user.id, ActivityType.ACCEPT_INVITATION);
-
-      [createdTeam] = await db
-        .select()
-        .from(teams)
-        .where(eq(teams.id, teamId))
-        .limit(1);
-    } else {
+    // 유저 팀이 있으면 에러
+    if (userWithTeamResult.ok) {
       return {
         ok: false,
         error: {
-          error: "invalid_or_expired_invitation",
-          message: { email, password },
+          error: "team_not_found",
+          message: { email },
         },
       };
     }
-  } else {
-    // 초대가 없으면 새로운 팀 생성
-    const createdTeamResult = await createTeam(username);
 
-    if (!createdTeamResult.ok) {
+    //유저 생성
+    const createdUser = await createUser({
+      username,
+      email,
+      password,
+    });
+
+    if (!createdUser.ok) {
       return {
         ok: false,
-        error: createdTeamResult.error,
+        error: createdUser.error,
       };
     }
 
-    createdTeam = createdTeamResult.value;
+    const user = createdUser.value;
 
-    teamId = createdTeam.id;
-    userRole = "owner";
+    let teamId: number;
+    let userRole: string;
+    let createdTeam: typeof teams.$inferSelect | null = null;
 
-    await logActivity(teamId, user.id, ActivityType.CREATE_TEAM);
+    if (inviteId) {
+      // 유효한 초대가 있는지 확인
+      const invitationResult = await findInvitation(inviteId, email);
+
+      if (!invitationResult.ok) {
+        return {
+          ok: false,
+          error: invitationResult.error,
+        };
+      }
+
+      const invitation = invitationResult.value;
+
+      // 초대가 있으면 초대 수락
+      if (invitation) {
+        teamId = invitation.teamId;
+        userRole = invitation.role;
+
+        await acceptInvitation(invitation.id);
+
+        await logActivity(teamId, user.id, ActivityType.ACCEPT_INVITATION);
+
+        [createdTeam] = await db
+          .select()
+          .from(teams)
+          .where(eq(teams.id, teamId))
+          .limit(1);
+      } else {
+        return {
+          ok: false,
+          error: {
+            error: "invalid_or_expired_invitation",
+            message: { email, password },
+          },
+        };
+      }
+    } else {
+      // 초대가 없으면 새로운 팀 생성
+      const createdTeamResult = await createTeam(username);
+
+      if (!createdTeamResult.ok) {
+        return {
+          ok: false,
+          error: createdTeamResult.error,
+        };
+      }
+
+      createdTeam = createdTeamResult.value;
+
+      teamId = createdTeam.id;
+      userRole = "owner";
+
+      await logActivity(teamId, user.id, ActivityType.CREATE_TEAM);
+    }
+
+    await Promise.all([
+      db.insert(teamMembers).values({
+        userId: user.id,
+        teamId: teamId,
+        role: userRole,
+      }),
+      logActivity(teamId, user.id, ActivityType.SIGN_UP),
+    ]);
+
+    return {
+      ok: true,
+      value: user,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: {
+        error: "sign_up_failed",
+        message: { detail: "Failed to sign up." },
+      },
+    };
   }
-
-  await Promise.all([
-    db.insert(teamMembers).values({
-      userId: user.id,
-      teamId: teamId,
-      role: userRole,
-    }),
-    logActivity(teamId, user.id, ActivityType.SIGN_UP),
-  ]);
-
-  return {
-    ok: true,
-    value: user,
-  };
 }
 
 export async function deleteCustomer(customerId: string) {

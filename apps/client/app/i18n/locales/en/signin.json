@@ -5,5 +5,6 @@
   "submit": "Sign in",
   "border": "New to our platform?",
   "login": "Create an account",
-  "invalid_email_or_password": "Invalid email or password. Please try again"
+  "invalid_email_or_password": "Invalid email or password. Please try again",
+  "sign_in_failed": "Failed to Sign in"
 }

@@ -32,26 +32,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         if (!credentials) throw new Error("No credentials provided");
 
-        const user = await db
-          .select({
-            id: users.id,
-            name: users.name,
-            email: users.email,
-            role: users.role,
-          })
-          .from(users)
-          .where(eq(users.email, credentials.email as string))
-          .limit(1)
-          .then((res) => res[0]);
+        try {
+          const user = await db
+            .select({
+              id: users.id,
+              name: users.name,
+              email: users.email,
+              role: users.role,
+            })
+            .from(users)
+            .where(eq(users.email, credentials.email as string))
+            .limit(1)
+            .then((res) => res[0]);
 
-        if (!user) return null;
+          if (!user) throw new Error("No credentials provided");
 
-        return {
-          id: user.id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+          return {
+            id: user.id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error(error);
+          throw new Error("No credentials provided");
+        }
       },
     }),
   ],
@@ -84,7 +89,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         case true:
           const signInResult = await signInUserInterface(email, password);
           if (!signInResult.ok) {
-            console.log(signInResult.error);
             return false;
           }
           break;
@@ -129,6 +133,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: "/sign-in",
+    error: "/sign-in",
   },
   secret: process.env.AUTH_SECRET,
 });

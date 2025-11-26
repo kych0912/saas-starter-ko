@@ -59,7 +59,6 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const { email, password } = data;
 
   const userResult = await signInUserInterface(email, password);
-  console.log("userResult", userResult);
   if (!userResult.ok) {
     return userResult.error;
   }
@@ -363,7 +362,9 @@ export const inviteTeamMember = validatedActionWithUser(
       }
 
       const invitationLink = `${app.url}/${lng}/sign-up?inviteId=${inv.id}`;
-      const subject = `[${app.name}] You have been invited to join the ${team?.name ?? "your"} team`;
+      const subject = `[${app.name}] You have been invited to join the ${
+        team?.name ?? "your"
+      } team`;
 
       const resend = new Resend(process.env.RESEND_API_KEY);
       const from = process.env.RESEND_FROM ?? "onboarding@resend.dev";

@@ -5,5 +5,6 @@
   "submit": "로그인",
   "border": "저희 서비스는 처음이신가요?",
   "login": "새로운 계정 생성하기",
-  "invalid_email_or_password": "유효하지 않은 계정 정보입니다. 다시 시도해주세요"
+  "invalid_email_or_password": "유효하지 않은 계정 정보입니다. 다시 시도해주세요",
+  "sign_in_failed": "로그인에 실패했습니다. 다시 시도해주세요."
 }
